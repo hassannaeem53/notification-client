@@ -1,7 +1,13 @@
-import React from 'react'
+import React from 'react';
+import Header from '../components/Header';
 
-export const PreviewPage = () => {
+const PreviewPage = () => {
   return (
-    <div>PreviewPage</div>
-  )
-}
+    <>
+      <Header />
+      <h1>Welcome to Preview Page</h1>
+    </>
+  );
+};
+
+export default PreviewPage;
