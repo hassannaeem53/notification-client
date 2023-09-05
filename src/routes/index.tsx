@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { PreviewPage } from '../pages/PreviewPage';
+import  PreviewPage  from '../pages/PreviewPage'
 
 const AppRouter = () => (
   <Routes>
