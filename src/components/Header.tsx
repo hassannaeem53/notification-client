@@ -9,7 +9,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 const Header = () => {
   return (
     <>
-      <AppBar position='static' style={{ backgroundColor: 'blue' }}>
+      <AppBar position='static' style={{ backgroundColor: '#FF240' }}>
         <Toolbar>
           <Typography variant='h5' component='div' sx={{ flexGrow: 1 }}>
             Notify
