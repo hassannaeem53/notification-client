@@ -4,23 +4,26 @@ import Tile from "../components/Tile";
 import useData from "../hooks/useData";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import Carousel from "react-material-ui-carousel";
 
-// const apps = [
-//   {
-//     name: "App1",
-//     description: "desc1",
-//   },
-//   {
-//     name: "App2",
-//     description: "desc2",
-//   },
-//   {
-//     name: "App3",
-//     description: "desc3",
-//   },
-// ];
+const dummyApps = [
+  [
+    {
+      name: "App1",
+      description: "desc1",
+    },
+    {
+      name: "App2",
+      description: "desc2",
+    },
+    {
+      name: "App3",
+      description: "desc3",
+    },
+  ],
+];
 
-interface App {
+export interface App {
   id: number;
   name: string;
   description?: string;
@@ -31,6 +34,8 @@ interface App {
 
 const Application = () => {
   const [page, setPage] = useState<number>(1);
+  const [selectedApp, setSelectedApp] = useState<number>(0);
+
   const pageSize = 4;
   const {
     data: apps,
@@ -46,6 +51,7 @@ const Application = () => {
     },
     [page]
   );
+  console.log("selected app:", selectedApp);
 
   const previousPage = () => page > 1 && setPage(page - 1);
   const nextPage = () => {
@@ -57,13 +63,38 @@ const Application = () => {
   return (
     <>
       {error && <p>error</p>}
-      {apps.length &&
-        apps.map((app, index) => (
-          <Grid item xs={12} md={3} style={{ display: "flex" }} key={index}>
-            <Tile appName={app.name} appDescription={app.description} />
-          </Grid>
-        ))}
-      <Grid
+      <Carousel
+        next={nextPage}
+        prev={previousPage}
+        indicators={false}
+        swipe={false}
+        animation="slide"
+        duration={100}
+        autoPlay={false}
+      >
+        {apps.length &&
+          [apps].map(
+            (appArray, index) => (
+              // <Grid item xs={12} md={3} style={{ display: "flex" }} key={index}>
+              <Grid container spacing={3} key={index}>
+                {appArray.map((app) => (
+                  <Grid item xs={12} sm={6} md={3} key={app.id}>
+                    <Tile
+                      appName={app.name}
+                      appDescription={app.description}
+                      appId={app.id}
+                      selectedApp={selectedApp}
+                      setSelectedApp={setSelectedApp}
+                    />
+                  </Grid>
+                ))}
+              </Grid>
+            )
+
+            // </Grid>
+          )}
+      </Carousel>
+      {/* <Grid
         item
         xs={12}
         justifyContent="flex-end"
@@ -79,7 +110,7 @@ const Application = () => {
             <ArrowForwardIosIcon />
           </IconButton>
         </ButtonGroup>
-      </Grid>
+      </Grid> */}
     </>
   );
 };
