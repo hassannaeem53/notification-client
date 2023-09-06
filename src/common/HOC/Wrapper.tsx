@@ -1,6 +1,6 @@
-import Header from '../../components/Header';
+import Header from "../../components/Header";
 
-const Wrapper = (props: never) => {
+const Wrapper = (props: unknown) => {
   return (
     <div>
       <Header />

@@ -1,17 +1,12 @@
-import React from "react";
-import { BrowserRouter } from "react-router-dom";
-import AppRouter from "./routes";
-import React from "react";
-import { BrowserRouter } from "react-router-dom";
-import { createTheme, ThemeProvider } from "@mui/material/styles"; // Import ThemeProvider
 import CssBaseline from "@mui/material/CssBaseline"; // For global CSS reset
+import { createTheme, ThemeProvider } from "@mui/material/styles"; // Import ThemeProvider
+import { BrowserRouter } from "react-router-dom";
 import AppRouter from "./routes";
 
 // Create a dark theme using createTheme
 const darkTheme = createTheme({
   palette: {
     mode: "light", // Set the theme type to 'dark' for dark mode
-    mode: "light", // Set the theme type to 'light' for light mode
     background: {
       //default: '#FF240', // Set the default background color
       // You can add more specific background colors as needed
