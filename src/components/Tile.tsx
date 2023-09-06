@@ -1,20 +1,28 @@
 import { Card, CardActions, CardContent, Typography } from "@mui/material";
 import Buttons from "../common/Buttons/Buttons";
+import { App } from "../containers/Application";
+import { AxiosError } from "axios";
 
 interface Props {
-  appName: string;
-  appDescription?: string;
-  appId: number;
+  app: App;
   selectedApp: number;
   setSelectedApp: (appId: number) => void;
+  onDelete: (id: number) => void;
+  openToast: (err: AxiosError) => void;
+  closeToast: () => void;
+  open: boolean;
+  toastError: string;
 }
 
 const Tile = ({
-  appName,
-  appDescription,
-  appId,
+  app,
   selectedApp,
   setSelectedApp,
+  open,
+  openToast,
+  closeToast,
+  onDelete,
+  toastError,
 }: Props) => {
   return (
     <Card
@@ -28,9 +36,9 @@ const Tile = ({
         flexDirection: "column",
         justifyContent: "center",
         width: "100%",
-        border: selectedApp === appId ? "3px solid #303030" : "",
+        border: selectedApp === app.id ? "3px solid #303030" : "",
       }}
-      onClick={() => setSelectedApp(appId)}
+      onClick={() => setSelectedApp(app.id)}
     >
       <CardContent
         sx={{
@@ -41,11 +49,19 @@ const Tile = ({
           justifyContent: "center",
         }}
       >
-        <Typography variant="h6">{appName}</Typography>
-        <Typography variant="caption">{appDescription}</Typography>
+        <Typography variant="h6">{app.name}</Typography>
+        <Typography variant="caption">{app.description}</Typography>
       </CardContent>
       <CardActions>
-        <Buttons />
+        <Buttons
+          selectedAppId={app.id}
+          isActive={app.is_active}
+          openToast={openToast}
+          closeToast={closeToast}
+          open={open}
+          onDelete={onDelete}
+          error={toastError}
+        />
       </CardActions>
     </Card>
   );

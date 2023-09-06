@@ -1,9 +1,10 @@
 import { AxiosRequestConfig, CanceledError } from "axios";
 import { useEffect, useState } from "react";
-import apiClient from "../services/apiClient";
+import HttpService from "../services/httpService";
 
 const useData = <T>(
-  endpoint: string,
+  // endpoint: string,
+  serviceInstance: HttpService,
   requestConfig?: AxiosRequestConfig,
   deps?: unknown[]
 ) => {
@@ -13,14 +14,10 @@ const useData = <T>(
 
   useEffect(
     () => {
-      const controller = new AbortController();
-
       setLoading(true);
-      apiClient
-        .get<T[]>(endpoint, {
-          signal: controller.signal,
-          ...requestConfig,
-        })
+      // const serviceInstance = new HttpService(endpoint);
+      const { request, cancel } = serviceInstance.getAll<T>(requestConfig);
+      request
         .then((res) => {
           setData(res.data);
           setLoading(false);
@@ -31,7 +28,7 @@ const useData = <T>(
           setLoading(false);
         });
 
-      return () => controller.abort();
+      return () => cancel();
     },
     deps ? [...deps] : []
   );

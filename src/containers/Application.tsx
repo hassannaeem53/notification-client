@@ -5,6 +5,9 @@ import useData from "../hooks/useData";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import Carousel from "react-material-ui-carousel";
+import useModifyData from "../hooks/useModifyData";
+import appService from "../services/appService";
+import { AxiosError } from "axios";
 
 const dummyApps = [
   [
@@ -27,33 +30,61 @@ export interface App {
   id: number;
   name: string;
   description?: string;
-  // created_at: string;
-  // created_by: string;
   is_active: boolean;
 }
 
 const Application = () => {
   const [page, setPage] = useState<number>(1);
-  const [selectedApp, setSelectedApp] = useState<number>(0);
+  const [selectedAppId, setSelectedApp] = useState<number>(0);
+  const [open, setOpen] = useState(false);
+  const [toastError, setToastError] = useState<string | unknown>();
+  const [dataUpdateTrigger, setDataUpdateTrigger] = useState(true);
 
   const pageSize = 4;
+
   const {
     data: apps,
     isLoading,
     error,
   } = useData<App>(
-    "/apps",
+    appService,
     {
       params: {
         page_size: pageSize,
         current_page: page,
       },
     },
-    [page]
+    [page, dataUpdateTrigger]
   );
-  console.log("selected app:", selectedApp);
+  console.log("selected app:", selectedAppId);
+
+  const onDelete = (id: number) => {
+    appService
+      .delete(id)
+      .then(() => setDataUpdateTrigger(!dataUpdateTrigger))
+      .catch((err) => onOpenToast(err));
+  };
+
+  //functions to open and close the toast
+  const onOpenToast = (err: AxiosError) => {
+    setToastError(err?.response?.data);
+
+    setOpen(true);
+  };
+
+  const onCloseToast = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
 
   const previousPage = () => page > 1 && setPage(page - 1);
+
   const nextPage = () => {
     apps.length === 4 && setPage(page + 1);
   };
@@ -78,13 +109,24 @@ const Application = () => {
               // <Grid item xs={12} md={3} style={{ display: "flex" }} key={index}>
               <Grid container spacing={3} key={index}>
                 {appArray.map((app) => (
-                  <Grid item xs={12} sm={6} md={3} key={app.id}>
+                  <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={3}
+                    key={app.id}
+                    display="grid"
+                    gridAutoFlow="column"
+                  >
                     <Tile
-                      appName={app.name}
-                      appDescription={app.description}
-                      appId={app.id}
-                      selectedApp={selectedApp}
+                      app={app}
+                      selectedApp={selectedAppId}
                       setSelectedApp={setSelectedApp}
+                      onDelete={onDelete}
+                      openToast={onOpenToast}
+                      open={open}
+                      closeToast={onCloseToast}
+                      toastError={toastError}
                     />
                   </Grid>
                 ))}
