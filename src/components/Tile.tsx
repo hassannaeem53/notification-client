@@ -1,7 +1,5 @@
 import { Card, CardActions, CardContent, Typography } from "@mui/material";
 import Buttons from "../common/Buttons/Buttons";
-import { useState } from "react";
-import { App } from "../containers/Application";
 
 interface Props {
   appName: string;
@@ -27,23 +25,27 @@ const Tile = ({
         display: "flex",
         minHeight: "15vw",
         alignItems: "center",
-        justifyContent: "space-between",
+        flexDirection: "column",
+        justifyContent: "center",
         width: "100%",
         border: selectedApp === appId ? "3px solid #303030" : "",
       }}
       onClick={() => setSelectedApp(appId)}
     >
-      <CardContent sx={{ flex: 1 }}>
+      <CardContent
+        sx={{
+          flex: 1,
+          display: "flex",
+          textAlign: "center",
+          flexDirection: "column",
+          justifyContent: "center",
+        }}
+      >
         <Typography variant="h6">{appName}</Typography>
         <Typography variant="caption">{appDescription}</Typography>
       </CardContent>
-      <CardActions
-        sx={{
-          flexDirection: "column",
-          alignItems: "flex-end",
-        }}
-      >
-        <Buttons orientation="vertical" />
+      <CardActions>
+        <Buttons />
       </CardActions>
     </Card>
   );
