@@ -1,10 +1,11 @@
-import Header from "../../components/Header";
+import { ReactNode } from 'react';
+import Header from '../../components/Header';
 
-const Wrapper = (props: unknown) => {
+const Wrapper = ({ children }: { children: ReactNode }) => {
   return (
     <div>
       <Header />
-      <div>{props.children}</div>
+      <div>{children}</div>
     </div>
   );
 };
