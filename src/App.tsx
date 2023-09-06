@@ -7,7 +7,11 @@ import AppRouter from './routes';
 // Create a dark theme using createTheme
 const darkTheme = createTheme({
   palette: {
-    mode: 'light', // Set the theme type to 'dark' for dark mode
+    mode: 'light', // Set the theme type to 'light' for light mode
+    background: {
+      //default: '#FF240', // Set the default background color
+      // You can add more specific background colors as needed
+    },
   },
   // Add other custom theme settings here
 });

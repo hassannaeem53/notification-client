@@ -1,5 +1,5 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
-import { Button, TextField, Typography, Paper, Grid } from '@mui/material';
+import { Button, TextField, Paper } from '@mui/material';
 import { MentionsInput, Mention } from 'react-mentions'; // Import the MentionsInput and Mention components
 import { Tag } from 'react-tag-autocomplete'; // Import the Tag type
 import './NotificationForm.css';
@@ -35,13 +35,12 @@ const NotificationForm: React.FC<Props> = ({ onChange }) => {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // Handle form submission, e.g., send data to an API
-    console.log(formData); // Replace with your actual form submission logic
+    console.log(formData);
   };
 
   return (
     <Paper elevation={3} style={{ padding: '20px' }}>
-      <Typography variant='h5'>Add/Edit Notification</Typography>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} style={{ height: '420px' }}>
         <TextField
           label='Notification Name'
           variant='outlined'

@@ -1,7 +1,6 @@
 // src/components/NotificationPreview.tsx
 import React from 'react';
 import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
 
 interface FormValues {
   name: string;
@@ -26,12 +25,9 @@ const NotificationPreview: React.FC<Props> = ({ formData }) => {
         borderRadius: '8px',
       }}
     >
-      <Typography variant='h5' style={{ marginBottom: '16px' }}>
-        Notification Preview
-      </Typography>
       <div
         style={{
-          height: '365px',
+          height: '420px',
           overflowY: 'auto',
         }}
       >
