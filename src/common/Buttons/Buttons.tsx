@@ -1,16 +1,10 @@
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import {
-  Alert,
-  Box,
-  ButtonGroup,
-  IconButton,
-  Snackbar,
-  Switch,
-} from "@mui/material";
+import { Box, ButtonGroup, IconButton, Switch } from "@mui/material";
 import { useState } from "react";
 import { AxiosError } from "axios";
 import appService from "../../services/appService";
+import useDeleteApp from "../../hooks/useDeleteApp";
 
 interface Props {
   selectedAppId: number;
@@ -18,22 +12,17 @@ interface Props {
   openToast: (err: AxiosError) => void;
   closeToast: () => void;
   open: boolean;
-  onDelete: (id: number) => void;
-  error: string;
+  // onDelete: (id: number) => void;
+  error: string | undefined;
+  page: number;
 }
 
 const styles = { backgroundColor: "#BABABA", borderRadius: 2 };
 
-const Buttons = ({
-  selectedAppId,
-  isActive,
-  openToast,
-  closeToast,
-  open,
-  error,
-  onDelete,
-}: Props) => {
+const Buttons = ({ selectedAppId, isActive, openToast, page }: Props) => {
   const [checked, setChecked] = useState(isActive);
+
+  const deleteApp = useDeleteApp(page, () => setChecked(false));
 
   const onToggle = () => {
     const updatedEntity = [{ is_active: !checked }];
@@ -45,6 +34,10 @@ const Buttons = ({
       });
   };
 
+  const onDelete = () => {
+    deleteApp.mutate(selectedAppId);
+  };
+
   return (
     <Box>
       <ButtonGroup size="medium" aria-label="medium button group" sx={styles}>
@@ -53,15 +46,10 @@ const Buttons = ({
           <EditIcon color="action" />
         </IconButton>
 
-        <IconButton color="inherit" onClick={() => onDelete(selectedAppId)}>
+        <IconButton color="inherit" onClick={onDelete}>
           <DeleteIcon color="error" />
         </IconButton>
       </ButtonGroup>
-      <Snackbar open={open} autoHideDuration={6000} onClose={closeToast}>
-        <Alert onClose={closeToast} severity="error" sx={{ width: "100%" }}>
-          {error || "Something Went Wrong"}
-        </Alert>
-      </Snackbar>
     </Box>
   );
 };

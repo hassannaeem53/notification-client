@@ -11,31 +11,36 @@ export interface UpdateEntity {
   is_active?: boolean;
 }
 
-class HttpService {
+class HttpService<T> {
   endpoint: string;
 
   constructor(endpoint: string) {
     this.endpoint = endpoint;
   }
-  getAll = <T>(requestConfig?: AxiosRequestConfig) => {
+  getAll = (requestConfig?: AxiosRequestConfig) => {
     const controller = new AbortController();
-    const request = apiClient.get<T[]>(this.endpoint, {
-      signal: controller.signal,
-      ...requestConfig,
-    });
-    return { request, cancel: () => controller.abort() };
+    return apiClient
+      .get<T[]>(this.endpoint, {
+        signal: controller.signal,
+        ...requestConfig,
+      })
+      .then((res) => res.data);
   };
 
   delete = (id: number) => {
-    return apiClient.delete(this.endpoint + "/" + id);
+    return apiClient
+      .delete<T[]>(this.endpoint + "/" + id)
+      .then((res) => res.data);
   };
 
-  create = <T>(entity: T) => {
-    return apiClient.post<T[]>(this.endpoint, entity);
+  create = (entity: T) => {
+    return apiClient.post<T[]>(this.endpoint, entity).then((res) => res.data);
   };
 
-  update = <T>(id: number, entity: UpdateEntity[]) => {
-    return apiClient.patch<T[]>(this.endpoint + "/" + id, entity);
+  update = (id: number, entity: UpdateEntity[]) => {
+    return apiClient
+      .patch<T[]>(this.endpoint + "/" + id, entity)
+      .then((res) => res.data);
   };
 }
 

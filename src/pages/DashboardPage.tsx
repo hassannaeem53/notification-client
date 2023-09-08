@@ -4,7 +4,6 @@ import Application from "../containers/Application";
 const Dashboard = () => {
   return (
     <Grid container spacing={3} sx={{ padding: 4 }}>
-      {/* <Grid container item spacing={4}> */}
       <Grid item sm={12}>
         <Application />
       </Grid>

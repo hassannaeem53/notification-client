@@ -1,17 +1,18 @@
 import { Card, CardActions, CardContent, Typography } from "@mui/material";
 import Buttons from "../common/Buttons/Buttons";
-import { App } from "../containers/Application";
 import { AxiosError } from "axios";
+import { App } from "../hooks/useApps";
 
 interface Props {
   app: App;
   selectedApp: number;
   setSelectedApp: (appId: number) => void;
-  onDelete: (id: number) => void;
+  // onDelete: (id: number) => void;
   openToast: (err: AxiosError) => void;
   closeToast: () => void;
   open: boolean;
-  toastError: string;
+  toastError: string | undefined;
+  page: number;
 }
 
 const Tile = ({
@@ -21,7 +22,8 @@ const Tile = ({
   open,
   openToast,
   closeToast,
-  onDelete,
+  // onDelete,
+  page,
   toastError,
 }: Props) => {
   return (
@@ -59,7 +61,8 @@ const Tile = ({
           openToast={openToast}
           closeToast={closeToast}
           open={open}
-          onDelete={onDelete}
+          // onDelete={onDelete}
+          page={page}
           error={toastError}
         />
       </CardActions>
