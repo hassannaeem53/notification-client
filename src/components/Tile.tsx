@@ -1,5 +1,5 @@
 import { Card, CardActions, CardContent, Typography } from "@mui/material";
-import Buttons from "../common/Buttons/Buttons";
+import Buttons from "../common/Buttons";
 import { AxiosError } from "axios";
 import { App } from "../hooks/useApps";
 
@@ -13,6 +13,7 @@ interface Props {
   open: boolean;
   toastError: string | undefined;
   page: number;
+  onEdit: () => void;
 }
 
 const Tile = ({
@@ -25,6 +26,7 @@ const Tile = ({
   // onDelete,
   page,
   toastError,
+  onEdit,
 }: Props) => {
   return (
     <Card
@@ -64,6 +66,7 @@ const Tile = ({
           // onDelete={onDelete}
           page={page}
           error={toastError}
+          onEdit={onEdit}
         />
       </CardActions>
     </Card>

@@ -12,12 +12,14 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import { AxiosError } from "axios";
 import useApps from "../hooks/useApps";
+import FormModal from "../common/FormModal";
 
 const Application = () => {
   const pageSize = 4;
   const [page, setPage] = useState<number>(1);
   const [selectedAppId, setSelectedApp] = useState<number>(0);
   const [open, setOpen] = useState(false);
+  const [openModal, setOpenModal] = useState<boolean>(false);
   const [toastError, setToastError] = useState<string>();
 
   const { data: apps, error, isLoading } = useApps(page);
@@ -46,6 +48,8 @@ const Application = () => {
     apps?.length === 4 && setPage(page + 1);
   };
 
+  const onEdit = () => setOpen(true);
+
   if (isLoading) return <CircularProgress className="mx-auto" />;
 
   return (
@@ -73,6 +77,7 @@ const Application = () => {
               open={open}
               closeToast={onCloseToast}
               toastError={toastError}
+              onEdit={onEdit}
             />
           </Grid>
         ))}
@@ -99,6 +104,7 @@ const Application = () => {
           {/* {error || "Something Went Wrong"} */}
         </Alert>
       </Snackbar>
+      <FormModal open={openModal} setOpen={setOpenModal} />
     </>
   );
 };

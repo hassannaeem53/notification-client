@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import PreviewPage from "../pages/PreviewPage";
-import Wrapper from "../common/HOC/Wrapper";
+import Wrapper from "../common/Wrapper";
 import DashboardPage from "../pages/DashboardPage";
 
 const AppRouter = () => (

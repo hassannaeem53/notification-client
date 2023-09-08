@@ -3,8 +3,9 @@ import EditIcon from "@mui/icons-material/Edit";
 import { Box, ButtonGroup, IconButton, Switch } from "@mui/material";
 import { useState } from "react";
 import { AxiosError } from "axios";
-import useDeleteApp from "../../hooks/useDeleteApp";
-import useToggleApp from "../../hooks/useToggleApp";
+import useDeleteApp from "../hooks/useDeleteApp";
+import useToggleApp from "../hooks/useToggleApp";
+import FormModal from "./FormModal";
 
 interface Props {
   selectedAppId: number;
@@ -15,12 +16,14 @@ interface Props {
   // onDelete: (id: number) => void;
   error: string | undefined;
   page: number;
+  // onEdit: () => void;
 }
 
 const styles = { backgroundColor: "#BABABA", borderRadius: 2 };
 
 const Buttons = ({ selectedAppId, isActive, page }: Props) => {
   const [checked, setChecked] = useState(isActive);
+  const [open, setOpen] = useState<boolean>(false);
 
   const deleteApp = useDeleteApp(page, () => setChecked(false));
   const onDelete = () => {
@@ -33,19 +36,25 @@ const Buttons = ({ selectedAppId, isActive, page }: Props) => {
     toggleApp.mutate({ id: selectedAppId, entity: updatedEntity });
   };
 
-  return (
-    <Box>
-      <ButtonGroup size="medium" aria-label="medium button group" sx={styles}>
-        <Switch checked={checked} onClick={onToggle} color="primary" />
-        <IconButton color="inherit">
-          <EditIcon color="action" />
-        </IconButton>
+  const onEdit = () => setOpen(true);
 
-        <IconButton color="inherit" onClick={onDelete}>
-          <DeleteIcon color="error" />
-        </IconButton>
-      </ButtonGroup>
-    </Box>
+  return (
+    <>
+      <Box>
+        <ButtonGroup size="medium" aria-label="medium button group" sx={styles}>
+          <Switch checked={checked} onClick={onToggle} color="primary" />
+
+          <IconButton color="inherit" onClick={onEdit}>
+            <EditIcon color="action" />
+          </IconButton>
+
+          <IconButton color="inherit" onClick={onDelete}>
+            <DeleteIcon color="error" />
+          </IconButton>
+        </ButtonGroup>
+      </Box>
+      <FormModal open={open} setOpen={setOpen} title="Add" />
+    </>
   );
 };
 
