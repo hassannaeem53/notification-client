@@ -3,8 +3,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import { Box, ButtonGroup, IconButton, Switch } from "@mui/material";
 import { useState } from "react";
 import { AxiosError } from "axios";
-import appService from "../../services/appService";
 import useDeleteApp from "../../hooks/useDeleteApp";
+import useToggleApp from "../../hooks/useToggleApp";
 
 interface Props {
   selectedAppId: number;
@@ -19,23 +19,18 @@ interface Props {
 
 const styles = { backgroundColor: "#BABABA", borderRadius: 2 };
 
-const Buttons = ({ selectedAppId, isActive, openToast, page }: Props) => {
+const Buttons = ({ selectedAppId, isActive, page }: Props) => {
   const [checked, setChecked] = useState(isActive);
 
   const deleteApp = useDeleteApp(page, () => setChecked(false));
-
-  const onToggle = () => {
-    const updatedEntity = [{ is_active: !checked }];
-    appService
-      .update(selectedAppId, updatedEntity)
-      .then(() => setChecked(!checked))
-      .catch((err) => {
-        openToast(err);
-      });
-  };
-
   const onDelete = () => {
     deleteApp.mutate(selectedAppId);
+  };
+
+  const toggleApp = useToggleApp(page, () => setChecked(!checked));
+  const onToggle = () => {
+    const updatedEntity = [{ is_active: !checked }];
+    toggleApp.mutate({ id: selectedAppId, entity: updatedEntity });
   };
 
   return (

@@ -1,29 +1,37 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import appService from "../services/appService";
 import { App } from "./useApps";
+import { UpdateEntity } from "../services/httpService";
 
-const useDeleteApp = (page: number, onDelete: () => void) => {
+interface UpdateObj {
+  id: number;
+  entity: UpdateEntity[];
+}
+
+const useToggleApp = (page: number, onUpdate: () => void) => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: appService.delete,
+    mutationFn: ({ id, entity }: UpdateObj) => appService.update(id, entity),
 
-    onMutate: (id: number) => {
+    onMutate: ({ id, entity }: UpdateObj) => {
       const previousAppsData =
         queryClient.getQueryData<App[]>(["apps", page]) || [];
 
       queryClient.setQueryData<App[]>(["apps", page], (apps) =>
-        apps?.map((app) => (app.id == id ? { ...app, is_active: false } : app))
+        apps?.map((app) => (app.id === id ? { ...app, ...entity[0] } : app))
       );
+
+      onUpdate();
 
       return { previousAppsData };
     },
-    onSuccess: () => onDelete(),
 
     onError: (error, id, context) => {
+      onUpdate();
       if (!context) return;
       queryClient.setQueryData<App[]>(["apps", page], context.previousAppsData);
     },
   });
 };
 
-export default useDeleteApp;
+export default useToggleApp;
