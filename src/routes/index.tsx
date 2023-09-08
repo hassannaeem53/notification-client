@@ -3,6 +3,7 @@ import PreviewPage from '../pages/PreviewPage';
 import Wrapper from '../common/HOC/Wrapper';
 import DashboardPage from '../pages/DashboardPage';
 import Login from '../pages/Login';
+import NotFoundPage from '../pages/NotFound';
 
 const AppRouter = () => (
   <Routes>
@@ -23,7 +24,7 @@ const AppRouter = () => (
       }
     />
     <Route path='/login' element={<Login />} />
-    <Route path='*' element={<h1>Not Found</h1>} />
+    <Route path='*' element={<NotFoundPage />} />
     {/* Define more routes as needed */}
   </Routes>
 );
