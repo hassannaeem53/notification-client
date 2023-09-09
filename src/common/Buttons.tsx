@@ -6,6 +6,7 @@ import { AxiosError } from "axios";
 import useDeleteApp from "../hooks/useDeleteApp";
 import useToggleApp from "../hooks/useToggleApp";
 import FormModal from "./FormModal";
+import { App } from "../hooks/useApps";
 
 interface Props {
   selectedApp: App;
