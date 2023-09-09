@@ -1,20 +1,22 @@
 import {
   Box,
   Button,
-  FormControl,
-  Input,
-  InputLabel,
   Modal,
   TextField,
   Typography,
-  ButtonGroup,
   Stack,
 } from "@mui/material";
+import { ChangeEvent, FormEvent, useState } from "react";
+import useModifyApp from "../hooks/useModifyApp";
+import { UpdateEntity } from "../services/httpService";
+import { App } from "../hooks/useApps";
 
 interface Props {
   open: boolean;
   setOpen: (value: boolean) => void;
   title: string;
+  app: App;
+  page: number;
 }
 
 const style = {
@@ -24,38 +26,72 @@ const style = {
   transform: "translate(-50%, -50%)",
   width: 400,
   bgcolor: "background.paper",
-  // border: "2px solid #000",
+  borderRadius: 4,
   boxShadow: 24,
   p: 4,
   textAlign: "center",
 };
 
-const FormModal = ({ open, setOpen, title }: Props) => {
-  const handleOpen = () => setOpen(true);
+const FormModal = ({ open, setOpen, title, app, page }: Props) => {
+  const [formData, setFormData] = useState<UpdateEntity>({});
+
+  const modifyApp = useModifyApp(page, () => setFormData({}));
+
   const handleClose = () => setOpen(false);
+
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    const newData = { ...formData, [name]: value };
+    setFormData(newData);
+  };
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    modifyApp.mutate({ id: app.id, entity: [formData] });
+    handleClose();
+  };
 
   return (
     <Modal open={open} onClose={handleClose} sx={{ alignItems: "center" }}>
       <Box sx={style}>
         <Typography variant="h4">{title}</Typography>
-        <FormControl>
-          <TextField label="Name" sx={{ marginY: 3 }} />
-          <TextField label="Description" multiline rows={3} />
-        </FormControl>
-        <Stack
-          spacing={2}
-          direction="row"
-          sx={{
-            marginTop: 3,
-            display: "flex",
-            justifyContent: "center",
-          }}
-        >
-          <Button variant="contained">{title}</Button>
-          <Button variant="contained" color="error">
-            Close
-          </Button>
-        </Stack>
+        <form noValidate onSubmit={handleSubmit}>
+          <TextField
+            label="Name"
+            name="name"
+            margin="normal"
+            fullWidth
+            value={formData?.name}
+            onChange={handleChange}
+          />
+          <TextField
+            label="Description"
+            name="description"
+            multiline
+            rows={3}
+            fullWidth
+            value={formData?.description}
+            onChange={handleChange}
+          />
+          <Stack
+            spacing={2}
+            direction="row"
+            sx={{
+              marginTop: 3,
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <Button variant="contained" color="error" onClick={handleClose}>
+              Close
+            </Button>
+            <Button variant="contained" type="submit">
+              {title}
+            </Button>
+          </Stack>
+        </form>
       </Box>
     </Modal>
   );

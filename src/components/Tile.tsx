@@ -58,15 +58,13 @@ const Tile = ({
       </CardContent>
       <CardActions>
         <Buttons
-          selectedAppId={app.id}
+          selectedApp={app}
           isActive={app.is_active}
           openToast={openToast}
           closeToast={closeToast}
           open={open}
-          // onDelete={onDelete}
           page={page}
           error={toastError}
-          onEdit={onEdit}
         />
       </CardActions>
     </Card>

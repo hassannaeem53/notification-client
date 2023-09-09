@@ -25,8 +25,6 @@ const useApps = (page: number) => {
       return lastPage.length ? allPages.length + 1 : undefined;
     },
     getPreviousPageParam: (firstPage, allPages) => {
-      // console.log("🚀 ~ file: useApps.ts:27 ~ useApps ~ firstPage:", firstPage);
-
       return allPages.length - 1;
     },
   });
