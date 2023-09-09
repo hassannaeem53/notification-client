@@ -26,7 +26,6 @@ const Tile = ({
   // onDelete,
   page,
   toastError,
-  onEdit,
 }: Props) => {
   return (
     <Card

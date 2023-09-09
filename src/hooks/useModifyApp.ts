@@ -21,13 +21,14 @@ const useModifyApp = (page: number, onUpdate?: () => void) => {
         apps?.map((app) => (app.id === id ? { ...app, ...entity[0] } : app))
       );
 
-      onUpdate && onUpdate();
-
       return { previousAppsData };
     },
 
+    onSuccess: () => {
+      onUpdate && onUpdate();
+    },
+
     onError: (error, id, context) => {
-      // onUpdate && onUpdate();
       if (!context) return;
       queryClient.setQueryData<App[]>(["apps", page], context.previousAppsData);
     },

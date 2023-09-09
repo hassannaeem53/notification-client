@@ -4,9 +4,9 @@ import { Box, ButtonGroup, IconButton, Switch } from "@mui/material";
 import { useState } from "react";
 import { AxiosError } from "axios";
 import useDeleteApp from "../hooks/useDeleteApp";
-import useToggleApp from "../hooks/useToggleApp";
 import FormModal from "./FormModal";
 import { App } from "../hooks/useApps";
+import useModifyApp from "../hooks/useModifyApp";
 
 interface Props {
   selectedApp: App;
@@ -31,7 +31,7 @@ const Buttons = ({ selectedApp, isActive, page }: Props) => {
     deleteApp.mutate(selectedApp.id);
   };
 
-  const toggleApp = useToggleApp(page, () => setChecked(!checked));
+  const toggleApp = useModifyApp(page, () => setChecked(!checked));
   const onToggle = () => {
     const updatedEntity = [{ is_active: !checked }];
     toggleApp.mutate({ id: selectedApp.id, entity: updatedEntity });
