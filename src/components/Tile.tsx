@@ -29,6 +29,7 @@ const Tile = ({
 }: Props) => {
   return (
     <Card
+      elevation={8}
       sx={{
         padding: 1,
         backgroundColor: "#EEEEEE",

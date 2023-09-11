@@ -50,7 +50,7 @@ const Application = () => {
 
   const onEdit = () => setOpen(true);
 
-  if (isLoading) return <CircularProgress className="mx-auto" />;
+  const applications = responseData?.applications || [];
 
   return (
     <>

@@ -28,6 +28,7 @@
     "react-material-ui-carousel": "^3.4.2",
     "react-mentions": "^4.4.10",
     "react-mentions-input": "^0.0.0-development",
+    "react-query": "^3.39.3",
     "react-router-dom": "^6.15.0",
     "react-tag-autocomplete": "^7.0.1",
     "styled-components": "^5.3.11"
