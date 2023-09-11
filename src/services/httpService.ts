@@ -1,6 +1,6 @@
-import { AxiosRequestConfig } from 'axios';
-import apiClient from './apiClient';
-import { AppInterface } from '../hooks/useApps';
+import { AxiosRequestConfig } from "axios";
+import apiClient from "./apiClient";
+import { AppInterface } from "../hooks/useApps";
 
 export interface Entity {
   id: number;
@@ -29,19 +29,13 @@ class HttpService<T> {
       .then((res) => res.data);
   };
 
-  // delete = (id: string) => {
-  //   return apiClient
-  //     .delete<T[]>(this.endpoint + '/' + id)
-  //     .then((res) => res.data);
-  // };
-
   create = (entity: T) => {
     return apiClient.post<T[]>(this.endpoint, entity).then((res) => res.data);
   };
 
   update = (id: string, entity: UpdateEntity) => {
     return apiClient
-      .patch<T[]>(this.endpoint + '/' + id, entity)
+      .patch<T[]>(this.endpoint + "/" + id, entity)
       .then((res) => res.data);
   };
 }

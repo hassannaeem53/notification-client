@@ -1,29 +1,29 @@
 import {
   Alert,
+  AlertTitle,
   ButtonGroup,
-  CircularProgress,
   Grid,
   IconButton,
+  Paper,
+  Skeleton,
   Snackbar,
-} from '@mui/material';
-import { useEffect, useState } from 'react';
-import Tile from '../components/Tile';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import { AxiosError } from 'axios';
-import useApps from '../hooks/useApps';
-import FormModal from '../common/FormModal';
+} from "@mui/material";
+import { useEffect, useState } from "react";
+import Tile from "../components/Tile";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import { AxiosError } from "axios";
+import useApps from "../hooks/useApps";
+import ErrorIcon from "@mui/icons-material/Error"; // Import the Error icon from Material-UI
 
 const Application = ({ onSet }) => {
   const pageSize = 4;
   const [page, setPage] = useState<number>(1);
   const [selectedAppId, setSelectedAppId] = useState<string>();
   const [open, setOpen] = useState(false);
-  const [openModal, setOpenModal] = useState<boolean>(false);
   const [toastError, setToastError] = useState<string>();
 
   const { data: apps, error, isLoading } = useApps(page);
-
 
   useEffect(() => {
     onSet(selectedAppId);
@@ -40,7 +40,7 @@ const Application = ({ onSet }) => {
     event?: React.SyntheticEvent | Event,
     reason?: string
   ) => {
-    if (reason === 'clickaway') {
+    if (reason === "clickaway") {
       return;
     }
 
@@ -57,10 +57,65 @@ const Application = ({ onSet }) => {
 
   // const applications = responseData?.applications || [];
 
+  if (isLoading) {
+    // Display skeleton placeholders when data is loading
+    const skeletonItems = Array.from({ length: 4 }).map((_, index) => (
+      <Grid
+        item
+        xs={12}
+        sm={6}
+        md={4}
+        lg={3}
+        key={index}
+        display="grid"
+        gridAutoFlow="column"
+      >
+        <Paper
+          elevation={8}
+          sx={{
+            padding: 1,
+            backgroundColor: "#EEEEEE",
+            borderRadius: 4,
+            display: "flex",
+            minHeight: "15vw",
+            flexDirection: "column",
+            justifyContent: "center",
+            minWidth: "15vw",
+          }}
+        >
+          <Skeleton animation="wave" variant="text" width="60%" />
+          <Skeleton animation="wave" variant="text" width="80%" />
+          <Skeleton animation="wave" variant="text" width="60%" />
+          <Skeleton animation="wave" variant="text" width="80%" />
+        </Paper>
+      </Grid>
+    ));
+
+    return (
+      <Grid container spacing={3}>
+        {skeletonItems}
+      </Grid>
+    );
+  }
+
+  if (error) {
+    return (
+      <Alert
+        iconMapping={{
+          error: <ErrorIcon fontSize="large" />, // Customize the error icon size
+        }}
+        severity="error"
+        variant="outlined"
+        sx={{ marginTop: "20px" }}
+      >
+        <AlertTitle>Error</AlertTitle>
+        Unable to Fetch Apps<strong> {error.message}</strong>
+      </Alert>
+    );
+  }
+
   return (
     <>
-      {error && <p>{error.message}</p>}
-
       <Grid container spacing={3}>
         {apps?.applications?.map((app) => (
           <Grid
@@ -69,9 +124,9 @@ const Application = ({ onSet }) => {
             sm={6}
             md={4}
             lg={3}
-            display='grid'
-            gridAutoFlow='column'
-            key={app.id}
+            display="grid"
+            gridAutoFlow="column"
+            key={app._id}
           >
             <Tile
               app={app}
@@ -89,9 +144,9 @@ const Application = ({ onSet }) => {
         <Grid
           item
           xs={12}
-          justifyContent='flex-end'
+          justifyContent="flex-end"
           sx={{
-            textAlign: 'center',
+            textAlign: "center",
           }}
         >
           <ButtonGroup>
@@ -108,11 +163,10 @@ const Application = ({ onSet }) => {
         </Grid>
       </Grid>
       <Snackbar open={open} autoHideDuration={6000} onClose={onCloseToast}>
-        <Alert onClose={onCloseToast} severity='error' sx={{ width: '100%' }}>
+        <Alert onClose={onCloseToast} severity="error" sx={{ width: "100%" }}>
           {/* {error || "Something Went Wrong"} */}
         </Alert>
       </Snackbar>
-      <FormModal open={openModal} setOpen={setOpenModal} />
     </>
   );
 };

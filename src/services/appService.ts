@@ -1,4 +1,4 @@
-import { App } from '../hooks/useApps';
-import HttpService from './httpService';
+import { App } from "../hooks/useApps";
+import HttpService from "./httpService";
 
-export default new HttpService<App>('/applications');
+export default new HttpService<App>("/applications");
