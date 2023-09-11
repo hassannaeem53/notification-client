@@ -24,6 +24,8 @@ const Application = () => {
 
   const { data: apps, error, isLoading } = useApps(page);
 
+  console.log("code is working");
+
   //functions to open and close the toast
   const onOpenToast = (err: AxiosError) => {
     setToastError(err?.response?.data);
