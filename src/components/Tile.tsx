@@ -27,7 +27,7 @@ const Tile = ({
   page,
   toastError,
 }: Props) => {
-  console.log('app:', app);
+  // console.log('app:', app);
 
   return (
     <Card

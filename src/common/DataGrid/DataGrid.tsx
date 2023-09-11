@@ -36,22 +36,24 @@ export interface PaginationResponse {
   };
 }
 
-interface DataGridProps {
+export interface DataGridProps {
   title: string;
   fetchData: (page: number) => Promise<PaginationResponse>;
+  parentId: string;
   //   renderItem: (item: DataItem) => React.ReactNode;
 }
 
 const DataGrid: React.FC<DataGridProps> = ({
   title,
   fetchData,
+  parentId,
   //   renderItem,
 }) => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
   const { data, error, isLoading } = useQuery<DataItem[], Error>({
-    queryKey: [`${title}`, page],
+    queryKey: [`${title}`, page, parentId],
     queryFn: () => fetchData(page),
     keepPreviousData: true,
   });

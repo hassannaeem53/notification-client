@@ -6,7 +6,7 @@ import {
   IconButton,
   Snackbar,
 } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Tile from '../components/Tile';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
@@ -14,7 +14,7 @@ import { AxiosError } from 'axios';
 import useApps from '../hooks/useApps';
 import FormModal from '../common/FormModal';
 
-const Application = () => {
+const Application = ({ onSet }) => {
   const pageSize = 4;
   const [page, setPage] = useState<number>(1);
   const [selectedAppId, setSelectedAppId] = useState<string>();
@@ -24,6 +24,10 @@ const Application = () => {
 
   const { data: apps, error, isLoading } = useApps(page);
 
+  useEffect(() => {
+    onSet(selectedAppId);
+    //console.log(selectedAppId);
+  }, [selectedAppId]);
   //functions to open and close the toast
   const onOpenToast = (err: AxiosError) => {
     setToastError(err?.response?.data);
