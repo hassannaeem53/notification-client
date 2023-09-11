@@ -1,7 +1,7 @@
 import { Card, CardActions, CardContent, Typography } from "@mui/material";
 import Buttons from "../common/Buttons/Buttons";
 import { AxiosError } from "axios";
-import { App } from "../hooks/useApps";
+import { App } from "../services/appService";
 
 interface Props {
   app: App;

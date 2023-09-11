@@ -1,6 +1,6 @@
 import { AxiosRequestConfig } from "axios";
 import apiClient from "./apiClient";
-import { AppInterface } from "../hooks/useApps";
+import { AppInterface } from "./appService";
 
 export interface Entity {
   id: number;

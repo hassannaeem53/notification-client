@@ -13,8 +13,9 @@ import Tile from "../components/Tile";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import { AxiosError } from "axios";
-import useApps from "../hooks/useApps";
 import ErrorIcon from "@mui/icons-material/Error"; // Import the Error icon from Material-UI
+import useData from "../hooks/useData";
+import { App } from "../services/appService";
 
 const Application = ({ onSet }) => {
   const pageSize = 4;
@@ -23,7 +24,9 @@ const Application = ({ onSet }) => {
   const [open, setOpen] = useState(false);
   const [toastError, setToastError] = useState<string>();
 
-  const { data: apps, error, isLoading } = useApps(page);
+  //getting all apps
+  const { data: apps, error, isLoading } = useData<App>(page, "apps");
+  console.log("🚀 ~ file: Application.tsx:29 ~ Application ~ error:", error);
 
   useEffect(() => {
     onSet(selectedAppId);

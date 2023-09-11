@@ -1,28 +1,26 @@
-import { useQuery } from '@tanstack/react-query';
-import ms from 'ms';
-import appService from '../services/appService';
-import { PaginationResponse } from '../common/DataGrid/DataGrid';
+import { useQuery } from "@tanstack/react-query";
+import appService, { AppInterface } from "../services/appService";
 
-export interface App {
-  _id: string;
-  name: string;
-  description?: string;
-  is_active: boolean;
-}
+// export interface App {
+//   _id: string;
+//   name: string;
+//   description?: string;
+//   is_active: boolean;
+// }
 
-export interface AppInterface {
-  applications: App[];
-  pagination: {
-    totalPages: number;
-    pageSize: number;
-    currentPage: number;
-    totalCount: number;
-  };
-}
+// export interface AppInterface {
+//   applications: App[];
+//   pagination: {
+//     totalPages: number;
+//     pageSize: number;
+//     currentPage: number;
+//     totalCount: number;
+//   };
+// }
 
 const useApps = (page: number) => {
-  return useQuery<AppInterface, Error>({
-    queryKey: ['apps', page],
+  return useQuery<AppInterface, Error, AppInterface>({
+    queryKey: ["apps", page],
     queryFn: () =>
       appService.getAll({
         params: {
