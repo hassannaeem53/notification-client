@@ -40,6 +40,7 @@ export interface DataGridProps {
   title: string;
   fetchData: (page: number) => Promise<PaginationResponse>;
   parentId: string;
+  onSet?: (id: string) => void;
   //   renderItem: (item: DataItem) => React.ReactNode;
 }
 
@@ -47,10 +48,13 @@ const DataGrid: React.FC<DataGridProps> = ({
   title,
   fetchData,
   parentId,
+  onSet,
   //   renderItem,
 }) => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+
+  const [selectedId, setSelectedId] = useState<string>('');
 
   const { data, error, isLoading } = useQuery<DataItem[], Error>({
     queryKey: [`${title}`, page, parentId],
@@ -63,6 +67,7 @@ const DataGrid: React.FC<DataGridProps> = ({
       setTotalPages(data.pagination.totalPages);
     }
   }, [data]);
+
   if (error)
     return (
       <Alert
@@ -84,39 +89,59 @@ const DataGrid: React.FC<DataGridProps> = ({
       <HeaderToolbar title={title.toUpperCase()} />
       <Container style={{ marginTop: '20px' }}>
         <Grid container spacing={2}>
-          {isLoading
-            ? Array.from({ length: 4 }).map((_, index) => (
-                <Grid item xs={6} key={index}>
-                  <Paper elevation={3} style={{ padding: '20px' }}>
-                    <Skeleton animation='wave' variant='text' width='60%' />
-                    <Skeleton animation='wave' variant='text' width='80%' />
+          {isLoading ? (
+            // Loading skeleton
+            Array.from({ length: 4 }).map((_, index) => (
+              <Grid item xs={6} key={index}>
+                <Paper elevation={3} style={{ padding: '20px' }}>
+                  <Skeleton animation='wave' variant='text' width='60%' />
+                  <Skeleton animation='wave' variant='text' width='80%' />
+                </Paper>
+              </Grid>
+            ))
+          ) : data?.[title]?.length === 0 ? (
+            // No items found error
+            <Grid item xs={12}>
+              <Alert severity='info' sx={{ marginTop: '20px' }}>
+                No Items Found
+              </Alert>
+            </Grid>
+          ) : (
+            // Render data items
+            data?.[title]?.map((item) => (
+              <Grow in={true} timeout={1000} key={item._id}>
+                <Grid item xs={6}>
+                  <Paper
+                    elevation={16}
+                    style={{ padding: '20px' }}
+                    onClick={() => {
+                      setSelectedId(item._id);
+                      if (onSet) {
+                        onSet(item._id);
+                      }
+                    }}
+                  >
+                    <Grid container spacing={6}>
+                      <Grid item xs={12} md={8}>
+                        <Typography variant='h6'>{item.name}</Typography>
+                        <Typography variant='body2'>
+                          {item.description}
+                        </Typography>
+                      </Grid>
+                      <Grid
+                        item
+                        xs={12}
+                        md={4}
+                        style={{ display: 'flex', alignItems: 'center' }}
+                      >
+                        <Buttons />
+                      </Grid>
+                    </Grid>
                   </Paper>
                 </Grid>
-              ))
-            : data?.[title]?.map((item) => (
-                <Grow in={true} timeout={1000} key={item._id}>
-                  <Grid item xs={6}>
-                    <Paper elevation={16} style={{ padding: '20px' }}>
-                      <Grid container spacing={6}>
-                        <Grid item xs={12} md={8}>
-                          <Typography variant='h6'>{item.name}</Typography>
-                          <Typography variant='body2'>
-                            {item.description}
-                          </Typography>
-                        </Grid>
-                        <Grid
-                          item
-                          xs={12}
-                          md={4}
-                          style={{ display: 'flex', alignItems: 'center' }}
-                        >
-                          <Buttons />
-                        </Grid>
-                      </Grid>
-                    </Paper>
-                  </Grid>
-                </Grow>
-              ))}
+              </Grow>
+            ))
+          )}
           <Grid
             xs={12}
             item

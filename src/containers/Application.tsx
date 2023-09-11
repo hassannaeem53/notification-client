@@ -26,8 +26,8 @@ const Application = ({ onSet }) => {
 
   useEffect(() => {
     onSet(selectedAppId);
-    //console.log(selectedAppId);
-  }, [selectedAppId]);
+  }, [selectedAppId, onSet]);
+
   //functions to open and close the toast
   const onOpenToast = (err: AxiosError) => {
     setToastError(err?.response?.data);

@@ -8,6 +8,7 @@ import HeaderToolbar from '../common/Toolbar/HeaderToolbar';
 const Dashboard = () => {
   // Function to fetch events data
   const [applicationId, setApplicationId] = React.useState<string>(''); // Add the applicationId state variable
+  const [eventId, setEventId] = React.useState<string>(''); // Add the eventId state variable
   //const applicationId = '64df17415dd7e8e52ed734fd'; // Replace with the actual application ID
   const fetchEvents = async (page: number) => {
     const queryParams = {
@@ -23,7 +24,7 @@ const Dashboard = () => {
   };
 
   // Function to fetch notifications data
-  const eventId = '64df246d4b72ae713b0ebb0e';
+  //const eventId = '64df246d4b72ae713b0ebb0e';
   const fetchNotifications = async (page: number) => {
     const queryParams = {
       eventId: eventId,
@@ -48,10 +49,15 @@ const Dashboard = () => {
           title='events'
           fetchData={fetchEvents}
           parentId={applicationId}
+          onSet={(id) => setEventId(id)}
         />
       </Grid>
       <Grid item sm={12}>
-        {/* <DataGrid title='notifications' fetchData={fetchNotifications} /> */}
+        <DataGrid
+          title='notifications'
+          fetchData={fetchNotifications}
+          parentId={eventId}
+        />
       </Grid>
     </Grid>
   );
