@@ -26,7 +26,7 @@ interface DataItem {
   applicationId: string;
 }
 
-interface PaginationResponse {
+export interface PaginationResponse {
   data: DataItem[];
   pagination: {
     totalPages: number;
@@ -36,22 +36,28 @@ interface PaginationResponse {
   };
 }
 
-interface DataGridProps {
+export interface DataGridProps {
   title: string;
   fetchData: (page: number) => Promise<PaginationResponse>;
+  parentId: string;
+  onSet?: (id: string) => void;
   //   renderItem: (item: DataItem) => React.ReactNode;
 }
 
 const DataGrid: React.FC<DataGridProps> = ({
   title,
   fetchData,
+  parentId,
+  onSet,
   //   renderItem,
 }) => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
+  const [selectedId, setSelectedId] = useState<string>('');
+
   const { data, error, isLoading } = useQuery<DataItem[], Error>({
-    queryKey: [`${title}`, page],
+    queryKey: [`${title}`, page, parentId],
     queryFn: () => fetchData(page),
     keepPreviousData: true,
   });
@@ -62,12 +68,29 @@ const DataGrid: React.FC<DataGridProps> = ({
     }
   }, [data]);
 
+  if (error)
+    return (
+      <Alert
+        iconMapping={{
+          error: <ErrorIcon fontSize='large' />,
+        }}
+        severity='error'
+        variant='outlined'
+        sx={{ marginTop: '20px' }}
+      >
+        <AlertTitle>Error</AlertTitle>
+        Unable to Fetch {title}
+        <strong> {error.message}</strong>
+      </Alert>
+    );
+
   return (
     <>
       <HeaderToolbar title={title.toUpperCase()} />
       <Container style={{ marginTop: '20px' }}>
         <Grid container spacing={2}>
           {isLoading ? (
+            // Loading skeleton
             Array.from({ length: 4 }).map((_, index) => (
               <Grid item xs={6} key={index}>
                 <Paper elevation={3} style={{ padding: '20px' }}>
@@ -76,24 +99,28 @@ const DataGrid: React.FC<DataGridProps> = ({
                 </Paper>
               </Grid>
             ))
-          ) : error ? (
-            <Alert
-              iconMapping={{
-                error: <ErrorIcon fontSize='large' />,
-              }}
-              severity='error'
-              variant='outlined'
-              sx={{ marginTop: '20px' }}
-            >
-              <AlertTitle>Error</AlertTitle>
-              Unable to Fetch {title}
-              <strong> {error.message}</strong>
-            </Alert>
+          ) : data?.[title]?.length === 0 ? (
+            // No items found error
+            <Grid item xs={12}>
+              <Alert severity='info' sx={{ marginTop: '20px' }}>
+                No Items Found
+              </Alert>
+            </Grid>
           ) : (
+            // Render data items
             data?.[title]?.map((item) => (
               <Grow in={true} timeout={1000} key={item._id}>
                 <Grid item xs={6}>
-                  <Paper elevation={16} style={{ padding: '20px' }}>
+                  <Paper
+                    elevation={16}
+                    style={{ padding: '20px' }}
+                    onClick={() => {
+                      setSelectedId(item._id);
+                      if (onSet) {
+                        onSet(item._id);
+                      }
+                    }}
+                  >
                     <Grid container spacing={6}>
                       <Grid item xs={12} md={8}>
                         <Typography variant='h6'>{item.name}</Typography>

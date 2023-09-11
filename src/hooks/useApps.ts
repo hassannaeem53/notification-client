@@ -1,32 +1,37 @@
-import { useQuery } from "@tanstack/react-query";
-import ms from "ms";
-import appService from "../services/appService";
+import { useQuery } from '@tanstack/react-query';
+import ms from 'ms';
+import appService from '../services/appService';
+import { PaginationResponse } from '../common/DataGrid/DataGrid';
 
 export interface App {
-  id: number;
+  _id: string;
   name: string;
   description?: string;
   is_active: boolean;
 }
 
+export interface AppInterface {
+  applications: App[];
+  pagination: {
+    totalPages: number;
+    pageSize: number;
+    currentPage: number;
+    totalCount: number;
+  };
+}
+
 const useApps = (page: number) => {
-  return useQuery<App[], Error>({
-    queryKey: ["apps", page],
+  return useQuery<AppInterface, Error>({
+    queryKey: ['apps', page],
     queryFn: () =>
       appService.getAll({
         params: {
-          current_page: page,
-          page_size: 4,
+          page: page,
+          limit: 4,
         },
       }),
-    staleTime: ms("24h"),
+    //staleTime: ms('24h'),
     keepPreviousData: true,
-    getNextPageParam: (lastPage, allPages) => {
-      return lastPage.length ? allPages.length + 1 : undefined;
-    },
-    getPreviousPageParam: (firstPage, allPages) => {
-      return allPages.length - 1;
-    },
   });
 };
 
