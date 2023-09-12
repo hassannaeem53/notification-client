@@ -13,6 +13,7 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { AxiosError } from 'axios';
 import useApps from '../hooks/useApps';
 import FormModal from '../common/FormModal';
+import HeaderToolbar from '../common/Toolbar/HeaderToolbar';
 
 const Application = ({ onSet }) => {
   const pageSize = 4;
@@ -58,6 +59,7 @@ const Application = ({ onSet }) => {
 
   return (
     <>
+      <HeaderToolbar title={'applications'.toUpperCase()} />
       {error && <p>{error.message}</p>}
 
       <Grid container spacing={3}>

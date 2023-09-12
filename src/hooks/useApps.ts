@@ -1,7 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import ms from 'ms';
 import appService from '../services/appService';
-import { PaginationResponse } from '../common/DataGrid/DataGrid';
 
 export interface App {
   _id: string;
