@@ -1,24 +1,24 @@
 import {
   Alert,
   AlertTitle,
-  ButtonGroup,
   Grid,
-  IconButton,
   Paper,
   Skeleton,
   Snackbar,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import Tile from "../components/Tile";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import { AxiosError } from "axios";
 import ErrorIcon from "@mui/icons-material/Error"; // Import the Error icon from Material-UI
 import useData from "../hooks/useData";
 import { App } from "../services/appService";
+import NavButtons from "../common/NavButtons";
 
-const Application = ({ onSet }) => {
-  const pageSize = 4;
+interface Props {
+  onSet: (id: string) => void;
+}
+
+const Application = ({ onSet }: Props) => {
   const [page, setPage] = useState<number>(1);
   const [selectedAppId, setSelectedAppId] = useState<string>();
   const [open, setOpen] = useState(false);
@@ -49,15 +49,7 @@ const Application = ({ onSet }) => {
     setOpen(false);
   };
 
-  const prevPage = () => page > 1 && setPage(page - 1);
-
-  const nextPage = () => {
-    apps?.applications?.length === 4 && setPage(page + 1);
-  };
-
   const onEdit = () => setOpen(true);
-
-  // const applications = responseData?.applications || [];
 
   if (isLoading) {
     // Display skeleton placeholders when data is loading
@@ -143,26 +135,11 @@ const Application = ({ onSet }) => {
             />
           </Grid>
         ))}
-        <Grid
-          item
-          xs={12}
-          justifyContent="flex-end"
-          sx={{
-            textAlign: "center",
-          }}
-        >
-          <ButtonGroup>
-            <IconButton onClick={prevPage} disabled={page === 1}>
-              <ArrowBackIosIcon />
-            </IconButton>
-            <IconButton
-              onClick={nextPage}
-              disabled={apps?.applications?.length < pageSize}
-            >
-              <ArrowForwardIosIcon />
-            </IconButton>
-          </ButtonGroup>
-        </Grid>
+        <NavButtons
+          currentPage={page}
+          totalPages={apps.pagination?.totalPages}
+          setPage={setPage}
+        />
       </Grid>
       <Snackbar open={open} autoHideDuration={6000} onClose={onCloseToast}>
         <Alert onClose={onCloseToast} severity="error" sx={{ width: "100%" }}>

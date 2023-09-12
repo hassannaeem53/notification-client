@@ -1,24 +1,19 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
+import React, { useState } from "react";
 import {
   AlertTitle,
   Alert,
   Grid,
-  IconButton,
   Paper,
   Typography,
   Skeleton,
   Grow,
 } from "@mui/material";
-import { ButtonGroup, Container } from "react-bootstrap";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import { Container } from "react-bootstrap";
 import ErrorIcon from "@mui/icons-material/Error";
 import HeaderToolbar from "../Toolbar/HeaderToolbar";
 import Buttons from "../Buttons/Buttons";
 import useData from "../../hooks/useData";
-import useEvents from "../../hooks/events/useEvents";
+import NavButtons from "../NavButtons";
 
 interface DataItem {
   _id: string;
@@ -40,31 +35,16 @@ export interface PaginationResponse {
 
 export interface DataGridProps {
   title: string;
-  fetchData: (page: number) => Promise<PaginationResponse>;
   parentId: string;
   onSet?: (id: string) => void;
-  //   renderItem: (item: DataItem) => React.ReactNode;
 }
 
-const DataGrid: React.FC<DataGridProps> = ({
-  title,
-  fetchData,
-  parentId,
-  onSet,
-  //   renderItem,
-}) => {
+const DataGrid: React.FC<DataGridProps> = ({ title, parentId, onSet }) => {
   const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
 
   const [selectedId, setSelectedId] = useState<string>("");
 
   const { data, error, isLoading } = useData(page, title, parentId);
-
-  useEffect(() => {
-    if (data?.pagination) {
-      setTotalPages(data.pagination.totalPages);
-    }
-  }, [data]);
 
   if (error)
     return (
@@ -140,38 +120,11 @@ const DataGrid: React.FC<DataGridProps> = ({
               </Grow>
             ))
           )}
-          <Grid
-            xs={12}
-            item
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              padding: "20px",
-            }}
-          >
-            <ButtonGroup>
-              <IconButton
-                onClick={() => {
-                  if (page > 1) {
-                    setPage((prevPage) => prevPage - 1);
-                  }
-                }}
-                disabled={page === 1}
-              >
-                <ArrowBackIosIcon />
-              </IconButton>
-              <IconButton
-                onClick={() => {
-                  if (page < totalPages) {
-                    setPage((prevPage) => prevPage + 1);
-                  }
-                }}
-                disabled={page === totalPages}
-              >
-                <ArrowForwardIosIcon />
-              </IconButton>
-            </ButtonGroup>
-          </Grid>
+          <NavButtons
+            currentPage={page}
+            totalPages={data?.pagination?.totalPages}
+            setPage={setPage}
+          />
         </Grid>
       </Container>
     </>
