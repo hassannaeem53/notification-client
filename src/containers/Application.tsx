@@ -25,6 +25,7 @@ const Application = ({ onSet }) => {
 
   const { data: apps, error, isLoading } = useApps(page);
 
+
   useEffect(() => {
     onSet(selectedAppId);
   }, [selectedAppId, onSet]);
