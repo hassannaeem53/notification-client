@@ -1,36 +1,21 @@
-import { useQuery } from "@tanstack/react-query";
-import appService, { AppInterface } from "../services/appService";
+// import { useQuery } from "@tanstack/react-query";
+// import appService, { App } from "../../services/appService";
+// import { ResponseInterface } from "../../services/httpService";
+// import ms from "ms";
 
-// export interface App {
-//   _id: string;
-//   name: string;
-//   description?: string;
-//   is_active: boolean;
-// }
+// const useApps = (page: number) => {
+//   return useQuery<ResponseInterface<App>, Error, ResponseInterface<App>>({
+//     queryKey: ["apps", page],
+//     queryFn: () =>
+//       appService.getAll({
+//         params: {
+//           page: page,
+//           limit: 4,
+//         },
+//       }),
+//     staleTime: ms("24h"),
+//     keepPreviousData: true,
+//   });
+// };
 
-// export interface AppInterface {
-//   applications: App[];
-//   pagination: {
-//     totalPages: number;
-//     pageSize: number;
-//     currentPage: number;
-//     totalCount: number;
-//   };
-// }
-
-const useApps = (page: number) => {
-  return useQuery<AppInterface, Error, AppInterface>({
-    queryKey: ["apps", page],
-    queryFn: () =>
-      appService.getAll({
-        params: {
-          page: page,
-          limit: 4,
-        },
-      }),
-    //staleTime: ms('24h'),
-    keepPreviousData: true,
-  });
-};
-
-export default useApps;
+// export default useApps;

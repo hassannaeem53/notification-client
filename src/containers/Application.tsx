@@ -25,8 +25,7 @@ const Application = ({ onSet }) => {
   const [toastError, setToastError] = useState<string>();
 
   //getting all apps
-  const { data: apps, error, isLoading } = useData<App>(page, "apps");
-  console.log("🚀 ~ file: Application.tsx:29 ~ Application ~ error:", error);
+  const { data: apps, error, isLoading } = useData<App>(page, "applications");
 
   useEffect(() => {
     onSet(selectedAppId);

@@ -7,16 +7,4 @@ export interface App {
   is_active: boolean;
 }
 
-export interface AppInterface {
-  applications: App[] | undefined;
-  pagination?:
-    | {
-        totalPages: number;
-        pageSize: number;
-        currentPage: number;
-        totalCount: number;
-      }
-    | undefined;
-}
-
-export default new HttpService<AppInterface>("/xapplications");
+export default new HttpService<App>("/applications");

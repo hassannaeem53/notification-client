@@ -1,42 +1,28 @@
 import { useQuery } from "@tanstack/react-query";
 import ms from "ms";
-import appService from "../services/appService";
-import eventService from "../services/eventService";
-import notificationService from "../services/notificationService";
+import HttpService, { ResponseInterface } from "../services/httpService";
 
-export interface App {
-  _id: string;
-  name: string;
-  description?: string;
-  is_active: boolean;
+interface QueryInterface {
+  page: number;
+  limit: number;
+  applicationId?: string;
+  eventId?: string;
 }
 
-export interface ResponseInterface<T> {
-  applications: T[];
-  pagination: {
-    totalPages: number;
-    pageSize: number;
-    currentPage: number;
-    totalCount: number;
-  };
-}
+const useData = <T>(page: number, entityName: string, parentId?: string) => {
+  const service = new HttpService<T>(entityName);
 
-const useData = <T>(page: number, entityName: string) => {
-  const service =
-    entityName == "apps"
-      ? appService
-      : entityName == "events"
-      ? eventService
-      : notificationService;
+  let queryParams: QueryInterface = { page: page, limit: 4 };
+  if (entityName == "events")
+    queryParams = { ...queryParams, applicationId: parentId };
+  else if (entityName == "notifications")
+    queryParams = { ...queryParams, eventId: parentId };
 
   return useQuery<ResponseInterface<T>, Error, ResponseInterface<T>>({
-    queryKey: [entityName, page],
+    queryKey: parentId ? [entityName, page, parentId] : [entityName, page],
     queryFn: () =>
       service.getAll({
-        params: {
-          page: page,
-          limit: 4,
-        },
+        params: queryParams,
       }),
     staleTime: ms("24h"),
     keepPreviousData: true,
