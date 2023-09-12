@@ -12,7 +12,7 @@ import { AxiosError } from "axios";
 import ErrorIcon from "@mui/icons-material/Error"; // Import the Error icon from Material-UI
 import useData from "../hooks/useData";
 import { App } from "../services/appService";
-import NavButtons from "../common/NavButtons";
+import PaginationButtons from "../common/NavButtons";
 
 interface Props {
   onSet: (id: string) => void;
@@ -135,7 +135,7 @@ const Application = ({ onSet }: Props) => {
             />
           </Grid>
         ))}
-        <NavButtons
+        <PaginationButtons
           currentPage={page}
           totalPages={apps.pagination?.totalPages}
           setPage={setPage}

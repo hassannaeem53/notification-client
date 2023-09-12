@@ -13,7 +13,7 @@ import ErrorIcon from "@mui/icons-material/Error";
 import HeaderToolbar from "../Toolbar/HeaderToolbar";
 import Buttons from "../Buttons/Buttons";
 import useData from "../../hooks/useData";
-import NavButtons from "../NavButtons";
+import PaginationButtons from "../NavButtons";
 
 interface DataItem {
   _id: string;
@@ -120,7 +120,7 @@ const DataGrid: React.FC<DataGridProps> = ({ title, parentId, onSet }) => {
               </Grow>
             ))
           )}
-          <NavButtons
+          <PaginationButtons
             currentPage={page}
             totalPages={data?.pagination?.totalPages}
             setPage={setPage}

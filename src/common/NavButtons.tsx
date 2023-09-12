@@ -1,7 +1,4 @@
-import { Grid, IconButton } from "@mui/material";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
-import { ButtonGroup } from "react-bootstrap";
+import { Grid, Pagination, Stack } from "@mui/material";
 
 interface Props {
   currentPage: number;
@@ -9,10 +6,14 @@ interface Props {
   setPage: (page: number) => void;
 }
 
-const NavButtons = ({ currentPage = 1, totalPages = 1, setPage }: Props) => {
-  const prevPage = () => setPage(currentPage - 1);
-
-  const nextPage = () => setPage(currentPage + 1);
+const PaginationButtons = ({
+  currentPage = 1,
+  totalPages = 1,
+  setPage,
+}: Props) => {
+  const handleChange = (_event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value);
+  };
 
   return (
     <Grid
@@ -22,16 +23,22 @@ const NavButtons = ({ currentPage = 1, totalPages = 1, setPage }: Props) => {
         textAlign: "center",
       }}
     >
-      <ButtonGroup>
-        <IconButton onClick={prevPage} disabled={currentPage === 1}>
-          <ArrowBackIosIcon />
-        </IconButton>
-        <IconButton onClick={nextPage} disabled={currentPage === totalPages}>
-          <ArrowForwardIosIcon />
-        </IconButton>
-      </ButtonGroup>
+      <Stack
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          flexDirection: "column",
+        }}
+      >
+        <Pagination
+          count={totalPages}
+          page={currentPage}
+          onChange={handleChange}
+          color="primary"
+        />
+      </Stack>
     </Grid>
   );
 };
 
-export default NavButtons;
+export default PaginationButtons;
