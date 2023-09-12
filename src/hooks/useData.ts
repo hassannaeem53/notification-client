@@ -24,8 +24,9 @@ const useData = <T>(page: number, entityName: string, parentId?: string) => {
       service.getAll({
         params: queryParams,
       }),
-    staleTime: ms("24h"),
+    staleTime: ms("10m"),
     keepPreviousData: true,
+    refetchOnWindowFocus: "always",
   });
 };
 
