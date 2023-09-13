@@ -1,6 +1,5 @@
-import { AxiosRequestConfig } from 'axios';
-import apiClient from './apiClient';
-import { AppInterface } from '../hooks/useApps';
+import { AxiosRequestConfig } from "axios";
+import apiClient from "./apiClient";
 
 export interface Entity {
   id: number;
@@ -13,6 +12,19 @@ export interface UpdateEntity {
   is_deleted?: boolean;
 }
 
+export interface ResponseInterface<T> {
+  applications?: T[];
+  events?: T[];
+  notifications?: T[];
+
+  pagination?: {
+    totalPages: number;
+    pageSize: number;
+    currentPage: number;
+    totalCount: number;
+  };
+}
+
 class HttpService<T> {
   endpoint: string;
 
@@ -22,26 +34,20 @@ class HttpService<T> {
   getAll = (requestConfig?: AxiosRequestConfig) => {
     const controller = new AbortController();
     return apiClient
-      .get<AppInterface>(this.endpoint, {
+      .get<ResponseInterface<T>>(this.endpoint, {
         signal: controller.signal,
         ...requestConfig,
       })
       .then((res) => res.data);
   };
 
-  // delete = (id: string) => {
-  //   return apiClient
-  //     .delete<T[]>(this.endpoint + '/' + id)
-  //     .then((res) => res.data);
-  // };
-
   create = (entity: T) => {
-    return apiClient.post<T[]>(this.endpoint, entity).then((res) => res.data);
+    return apiClient.post<T>(this.endpoint, entity).then((res) => res.data);
   };
 
   update = (id: string, entity: UpdateEntity) => {
     return apiClient
-      .patch<T[]>(this.endpoint + '/' + id, entity)
+      .patch<T>(this.endpoint + "/" + id, entity)
       .then((res) => res.data);
   };
 }

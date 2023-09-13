@@ -9,7 +9,7 @@ import {
 import { ChangeEvent, FormEvent, useState } from "react";
 import useModifyApp from "../hooks/useModifyApp";
 import { UpdateEntity } from "../services/httpService";
-import { App } from "../hooks/useApps";
+import { App } from "../services/appService";
 
 interface Props {
   open: boolean;
@@ -49,7 +49,7 @@ const FormModal = ({ open, setOpen, title, app, page }: Props) => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    modifyApp.mutate({ id: app.id, entity: [formData] });
+    modifyApp.mutate({ id: app._id, entity: formData });
     handleClose();
   };
 
