@@ -1,17 +1,17 @@
 // src/pages/PreviewPage.tsx
 
-import React, { useState } from "react";
-import Container from "@mui/material/Container";
-import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
-import NotificationForm from "../components/NotificationForm/NotificationForm";
-import NotificationPreview from "../components/NotificationPreview";
+import React, { useState } from 'react';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import NotificationForm from '../components/NotificationForm/NotificationForm';
+import NotificationPreview from '../components/NotificationPreview';
 
 const PreviewPage: React.FC = () => {
   const [formData, setFormData] = useState({
-    name: "",
-    description: "",
-    templateBody: "",
+    name: '',
+    description: '',
+    templatebody: '',
   });
 
   const handleFormChange = (newData: typeof formData) => {
@@ -20,7 +20,7 @@ const PreviewPage: React.FC = () => {
 
   return (
     <>
-      <Container style={{ marginTop: "20px", padding: "20px" }}>
+      <Container style={{ marginTop: '20px', padding: '20px' }}>
         <Grid container spacing={6}>
           <Grid item xs={12} sm={12} md={6} lg={6}>
             <Paper
