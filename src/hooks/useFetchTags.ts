@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { DataFunc, SuggestionDataItem } from 'react-mentions';
 
 const useFetchTags = () => {
-  const [tags, setTags] = useState<any>([]);
+  const [tags, setTags] = useState<SuggestionDataItem[] | DataFunc>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -10,12 +11,14 @@ const useFetchTags = () => {
     const fetchTagsFromDatabase = async () => {
       try {
         const tagsResponse = await axios.get('http://localhost:3000/api/tags');
-        const tagsData = tagsResponse.data;
+        const tags = tagsResponse.data;
 
-        // Extract the tag strings from the response data
-        const tagStrings = tagsData.map((tag) => tag.toString());
+        const tagData = tags.map((tag) => ({
+          id: tag,
+          display: tag,
+        }));
 
-        setTags(tagStrings);
+        setTags(tagData);
         setLoading(false);
       } catch (error) {
         setError('Error fetching tags');

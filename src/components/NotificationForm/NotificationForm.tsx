@@ -14,12 +14,10 @@ import {
   DataFunc,
 } from 'react-mentions';
 import './NotificationForm.css';
-import axios from 'axios';
 import useCreateNotification from '../../hooks/useCreateNotification';
 import useFetchTags from '../../hooks/useFetchTags';
 import notificationSchema from './notificationSchema';
 
-// Noote needf to check why tags array is empty after succesfuul saving
 interface FormValues {
   name: string;
   description: string;
@@ -46,27 +44,11 @@ const NotificationForm: React.FC<Props> = ({ onChange }) => {
   const { tags: tagData, loading, error } = useFetchTags();
 
   useEffect(() => {
-    const fetchTagsFromDatabase = async () => {
-      try {
-        const tagsResponse = await axios.get('http://localhost:3000/api/tags');
-        const tags = tagsResponse.data;
-
-        const tagData = tags.map((tag) => ({
-          id: tag,
-          display: tag,
-        }));
-
-        setFormData((prevData) => ({
-          ...prevData,
-          tags: tagData,
-        }));
-      } catch (error) {
-        console.error('Error fetching tags:', error);
-      }
-    };
-
-    fetchTagsFromDatabase();
-  }, []);
+    setFormData((prevData) => ({
+      ...prevData,
+      tags: tagData,
+    }));
+  }, [tagData]);
 
   useEffect(() => {
     // Handle status.error from useCreateNotification
@@ -170,7 +152,7 @@ const NotificationForm: React.FC<Props> = ({ onChange }) => {
             margin='normal'
             required
           />
-          {console.log('tags', formData.tags)}
+
           <div onKeyDown={(e) => handleMentionsInputKeyDown(e)}>
             <MentionsInput
               className='custom-mentions-input'
