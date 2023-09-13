@@ -28,9 +28,10 @@ interface FormValues {
 
 interface Props {
   onChange: (formData: FormValues) => void;
+  eventId?: string;
 }
 
-const NotificationForm: React.FC<Props> = ({ onChange }) => {
+const NotificationForm: React.FC<Props> = ({ onChange, eventId }) => {
   const [formData, setFormData] = useState<FormValues>({
     name: '',
     description: '',
@@ -78,6 +79,7 @@ const NotificationForm: React.FC<Props> = ({ onChange }) => {
         description: formData.description,
         templatebody: formData.templatebody,
         templatesubject: formData.templatesubject,
+        eventId: eventId,
       };
       await createNotification(inputData);
       // Reset the form data on successful submission

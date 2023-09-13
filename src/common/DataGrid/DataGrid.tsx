@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   AlertTitle,
   Alert,
@@ -7,13 +7,13 @@ import {
   Typography,
   Skeleton,
   Grow,
-} from "@mui/material";
-import { Container } from "react-bootstrap";
-import ErrorIcon from "@mui/icons-material/Error";
-import HeaderToolbar from "../Toolbar/HeaderToolbar";
-import Buttons from "../Buttons/Buttons";
-import useData from "../../hooks/useData";
-import PaginationButtons from "../NavButtons";
+} from '@mui/material';
+import { Container } from 'react-bootstrap';
+import ErrorIcon from '@mui/icons-material/Error';
+import HeaderToolbar from '../Toolbar/HeaderToolbar';
+import Buttons from '../Buttons/Buttons';
+import useData from '../../hooks/useData';
+import PaginationButtons from '../NavButtons';
 
 interface DataItem {
   _id: string;
@@ -42,7 +42,7 @@ export interface DataGridProps {
 const DataGrid: React.FC<DataGridProps> = ({ title, parentId, onSet }) => {
   const [page, setPage] = useState(1);
 
-  const [selectedId, setSelectedId] = useState<string>("");
+  const [selectedId, setSelectedId] = useState<string>('');
 
   const { data, error, isLoading } = useData(page, title, parentId);
 
@@ -50,11 +50,11 @@ const DataGrid: React.FC<DataGridProps> = ({ title, parentId, onSet }) => {
     return (
       <Alert
         iconMapping={{
-          error: <ErrorIcon fontSize="large" />,
+          error: <ErrorIcon fontSize='large' />,
         }}
-        severity="error"
-        variant="outlined"
-        sx={{ marginTop: "20px" }}
+        severity='error'
+        variant='outlined'
+        sx={{ marginTop: '20px' }}
       >
         <AlertTitle>Error</AlertTitle>
         Unable to Fetch {title}
@@ -64,23 +64,23 @@ const DataGrid: React.FC<DataGridProps> = ({ title, parentId, onSet }) => {
 
   return (
     <>
-      <HeaderToolbar title={title.toUpperCase()} />
-      <Container style={{ marginTop: "20px" }}>
+      <HeaderToolbar title={title.toUpperCase()} id={parentId} />
+      <Container style={{ marginTop: '20px' }}>
         <Grid container spacing={2}>
           {isLoading ? (
             // Loading skeleton
             Array.from({ length: 4 }).map((_, index) => (
               <Grid item xs={6} key={index}>
-                <Paper elevation={3} style={{ padding: "20px" }}>
-                  <Skeleton animation="wave" variant="text" width="60%" />
-                  <Skeleton animation="wave" variant="text" width="80%" />
+                <Paper elevation={3} style={{ padding: '20px' }}>
+                  <Skeleton animation='wave' variant='text' width='60%' />
+                  <Skeleton animation='wave' variant='text' width='80%' />
                 </Paper>
               </Grid>
             ))
           ) : data?.[title]?.length === 0 ? (
             // No items found error
             <Grid item xs={12}>
-              <Alert severity="info" sx={{ marginTop: "20px" }}>
+              <Alert severity='info' sx={{ marginTop: '20px' }}>
                 No Items Found
               </Alert>
             </Grid>
@@ -91,7 +91,7 @@ const DataGrid: React.FC<DataGridProps> = ({ title, parentId, onSet }) => {
                 <Grid item xs={6}>
                   <Paper
                     elevation={16}
-                    style={{ padding: "20px" }}
+                    style={{ padding: '20px' }}
                     onClick={() => {
                       setSelectedId(item._id);
                       if (onSet) {
@@ -101,8 +101,8 @@ const DataGrid: React.FC<DataGridProps> = ({ title, parentId, onSet }) => {
                   >
                     <Grid container spacing={6}>
                       <Grid item xs={12} md={8}>
-                        <Typography variant="h6">{item.name}</Typography>
-                        <Typography variant="body2">
+                        <Typography variant='h6'>{item.name}</Typography>
+                        <Typography variant='body2'>
                           {item.description}
                         </Typography>
                       </Grid>
@@ -110,7 +110,7 @@ const DataGrid: React.FC<DataGridProps> = ({ title, parentId, onSet }) => {
                         item
                         xs={12}
                         md={4}
-                        style={{ display: "flex", alignItems: "center" }}
+                        style={{ display: 'flex', alignItems: 'center' }}
                       >
                         <Buttons />
                       </Grid>

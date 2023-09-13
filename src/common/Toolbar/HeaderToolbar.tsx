@@ -15,9 +15,10 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 
 interface HeaderToolbarProps {
   title: string;
+  id?: string;
 }
 
-const HeaderToolbar: React.FC<HeaderToolbarProps> = ({ title }) => {
+const HeaderToolbar: React.FC<HeaderToolbarProps> = ({ title, id }) => {
   // Sample filter options
   const filterOptions = [
     { label: 'All', value: 'all' },
@@ -28,7 +29,7 @@ const HeaderToolbar: React.FC<HeaderToolbarProps> = ({ title }) => {
     if (title == 'NOTIFICATIONS') {
       // If props.title is 'notification', render as a Link
       return (
-        <Link to='/notification-preview'>
+        <Link to={`/notification-preview/${id}`}>
           <IconButton color='primary'>
             <AddCircleIcon fontSize='large' />
           </IconButton>

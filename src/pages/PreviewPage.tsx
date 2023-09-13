@@ -6,8 +6,11 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import NotificationForm from '../components/NotificationForm/NotificationForm';
 import NotificationPreview from '../components/NotificationPreview';
+import { useParams } from 'react-router-dom';
 
 const PreviewPage: React.FC = () => {
+  // Get eventId from URL
+  const { eventId } = useParams();
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -34,7 +37,7 @@ const PreviewPage: React.FC = () => {
               <h1 style={{ textAlign: 'center', padding: '20px' }}>
                 Notification Add/Edit
               </h1>
-              <NotificationForm onChange={handleFormChange} />
+              <NotificationForm onChange={handleFormChange} eventId={eventId} />
             </Paper>
           </Grid>
           <Grid item xs={12} sm={12} md={6} lg={6}>

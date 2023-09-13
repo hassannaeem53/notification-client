@@ -8,7 +8,7 @@ import NotFoundPage from '../pages/NotFound';
 const AppRouter = () => (
   <Routes>
     <Route
-      path='/notification-preview'
+      path='/notification-preview/:eventId'
       element={
         <Wrapper>
           <PreviewPage />

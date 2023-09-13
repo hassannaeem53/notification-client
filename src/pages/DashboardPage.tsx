@@ -3,7 +3,6 @@ import { Alert, Grid } from '@mui/material';
 import Application from '../containers/Application';
 import DataGrid from '../common/DataGrid/DataGrid'; // Import the DataGrid component
 import axios from 'axios';
-import HeaderToolbar from '../common/Toolbar/HeaderToolbar';
 
 const Dashboard = () => {
   // Function to fetch events data
@@ -64,7 +63,10 @@ const Dashboard = () => {
             </Grid>
           ) : (
             <Grid item xs={12}>
-              <Alert severity='info' sx={{ marginTop: '20px' }}>
+              <Alert
+                severity='info'
+                sx={{ marginTop: '20px', fontSize: '1.2rem' }}
+              >
                 Please select an Event to view Notifications.
               </Alert>
             </Grid>
@@ -73,7 +75,7 @@ const Dashboard = () => {
       ) : (
         // Render a message or component when applicationId is not set
         <Grid item xs={12}>
-          <Alert severity='info' sx={{ marginTop: '20px' }}>
+          <Alert severity='info' sx={{ marginTop: '20px', fontSize: '1.2rem' }}>
             Please select an Application to view Events.
           </Alert>
         </Grid>
