@@ -5,15 +5,15 @@ import {
   Paper,
   Skeleton,
   Snackbar,
-} from "@mui/material";
-import { useEffect, useState } from "react";
-import Tile from "../components/Tile";
-import { AxiosError } from "axios";
-import ErrorIcon from "@mui/icons-material/Error"; // Import the Error icon from Material-UI
-import useData from "../hooks/useData";
-import { App } from "../services/appService";
-import PaginationButtons from "../common/NavButtons";
-
+} from '@mui/material';
+import { useEffect, useState } from 'react';
+import Tile from '../components/Tile';
+import { AxiosError } from 'axios';
+import ErrorIcon from '@mui/icons-material/Error'; // Import the Error icon from Material-UI
+import useData from '../hooks/useData';
+import { App } from '../services/appService';
+import PaginationButtons from '../common/NavButtons';
+import HeaderToolbar from '../common/Toolbar/HeaderToolbar';
 
 interface Props {
   onSet: (id: string) => void;
@@ -26,7 +26,7 @@ const Application = ({ onSet }: Props) => {
   const [toastError, setToastError] = useState<string>();
 
   //getting all apps
-  const { data: apps, error, isLoading } = useData<App>(page, "applications");
+  const { data: apps, error, isLoading } = useData<App>(page, 'applications');
 
   useEffect(() => {
     onSet(selectedAppId);
@@ -43,7 +43,7 @@ const Application = ({ onSet }: Props) => {
     event?: React.SyntheticEvent | Event,
     reason?: string
   ) => {
-    if (reason === "clickaway") {
+    if (reason === 'clickaway') {
       return;
     }
 
@@ -62,26 +62,26 @@ const Application = ({ onSet }: Props) => {
         md={4}
         lg={3}
         key={index}
-        display="grid"
-        gridAutoFlow="column"
+        display='grid'
+        gridAutoFlow='column'
       >
         <Paper
           elevation={8}
           sx={{
             padding: 1,
-            backgroundColor: "#EEEEEE",
+            backgroundColor: '#EEEEEE',
             borderRadius: 4,
-            display: "flex",
-            minHeight: "15vw",
-            flexDirection: "column",
-            justifyContent: "center",
-            minWidth: "15vw",
+            display: 'flex',
+            minHeight: '15vw',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            minWidth: '15vw',
           }}
         >
-          <Skeleton animation="wave" variant="text" width="60%" />
-          <Skeleton animation="wave" variant="text" width="80%" />
-          <Skeleton animation="wave" variant="text" width="60%" />
-          <Skeleton animation="wave" variant="text" width="80%" />
+          <Skeleton animation='wave' variant='text' width='60%' />
+          <Skeleton animation='wave' variant='text' width='80%' />
+          <Skeleton animation='wave' variant='text' width='60%' />
+          <Skeleton animation='wave' variant='text' width='80%' />
         </Paper>
       </Grid>
     ));
@@ -97,11 +97,11 @@ const Application = ({ onSet }: Props) => {
     return (
       <Alert
         iconMapping={{
-          error: <ErrorIcon fontSize="large" />, // Customize the error icon size
+          error: <ErrorIcon fontSize='large' />, // Customize the error icon size
         }}
-        severity="error"
-        variant="outlined"
-        sx={{ marginTop: "20px" }}
+        severity='error'
+        variant='outlined'
+        sx={{ marginTop: '20px' }}
       >
         <AlertTitle>Error</AlertTitle>
         Unable to Fetch Apps<strong> {error.message}</strong>
@@ -111,7 +111,6 @@ const Application = ({ onSet }: Props) => {
 
   return (
     <>
-
       <HeaderToolbar title={'applications'.toUpperCase()} />
       {error && <p>{error.message}</p>}
 
@@ -123,8 +122,8 @@ const Application = ({ onSet }: Props) => {
             sm={6}
             md={4}
             lg={3}
-            display="grid"
-            gridAutoFlow="column"
+            display='grid'
+            gridAutoFlow='column'
             key={app._id}
           >
             <Tile
@@ -147,7 +146,7 @@ const Application = ({ onSet }: Props) => {
         />
       </Grid>
       <Snackbar open={open} autoHideDuration={6000} onClose={onCloseToast}>
-        <Alert onClose={onCloseToast} severity="error" sx={{ width: "100%" }}>
+        <Alert onClose={onCloseToast} severity='error' sx={{ width: '100%' }}>
           {/* {error || "Something Went Wrong"} */}
         </Alert>
       </Snackbar>

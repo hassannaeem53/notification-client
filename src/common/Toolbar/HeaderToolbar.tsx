@@ -8,6 +8,7 @@ import {
   Select,
   MenuItem,
 } from '@mui/material';
+import { Link } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import FilterListIcon from '@mui/icons-material/FilterList';
@@ -23,6 +24,25 @@ const HeaderToolbar: React.FC<HeaderToolbarProps> = ({ title }) => {
     { label: 'Option 1', value: 'option1' },
     { label: 'Option 2', value: 'option2' },
   ];
+  const renderButton = () => {
+    if (title == 'NOTIFICATIONS') {
+      // If props.title is 'notification', render as a Link
+      return (
+        <Link to='/notification-preview'>
+          <IconButton color='primary'>
+            <AddCircleIcon fontSize='large' />
+          </IconButton>
+        </Link>
+      );
+    } else {
+      // Otherwise, render without Link
+      return (
+        <IconButton color='primary'>
+          <AddCircleIcon fontSize='large' />
+        </IconButton>
+      );
+    }
+  };
 
   return (
     <Toolbar
@@ -100,11 +120,7 @@ const HeaderToolbar: React.FC<HeaderToolbarProps> = ({ title }) => {
       </div>
 
       {/* Create Icon */}
-      <Tooltip title='Create'>
-        <IconButton color='primary'>
-          <AddCircleIcon fontSize='large' />
-        </IconButton>
-      </Tooltip>
+      <Tooltip title='Create'>{renderButton()}</Tooltip>
     </Toolbar>
   );
 };
