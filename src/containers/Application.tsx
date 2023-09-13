@@ -24,9 +24,16 @@ const Application = ({ onSet }: Props) => {
   const [selectedAppId, setSelectedAppId] = useState<string>();
   const [open, setOpen] = useState(false);
   const [toastError, setToastError] = useState<string>();
+  const [searchInput, setSearchInput] = useState<string>('');
+  const [sort, setSort] = useState<string>('asc');
+  const [sortby, setSortby] = useState<string>('name');
 
   //getting all apps
-  const { data: apps, error, isLoading } = useData<App>(page, 'applications');
+  const {
+    data: apps,
+    error,
+    isLoading,
+  } = useData(page, 'applications', undefined, searchInput, sort, sortby);
 
   useEffect(() => {
     onSet(selectedAppId);
@@ -111,7 +118,12 @@ const Application = ({ onSet }: Props) => {
 
   return (
     <>
-      <HeaderToolbar title={'applications'.toUpperCase()} />
+      <HeaderToolbar
+        title={'applications'.toUpperCase()}
+        onSet={setSearchInput}
+        setSort={setSort}
+        setSortby={setSortby}
+      />
       {error && <p>{error.message}</p>}
 
       <Grid container spacing={3}>

@@ -41,10 +41,20 @@ export interface DataGridProps {
 
 const DataGrid: React.FC<DataGridProps> = ({ title, parentId, onSet }) => {
   const [page, setPage] = useState(1);
-
   const [selectedId, setSelectedId] = useState<string>('');
 
-  const { data, error, isLoading } = useData(page, title, parentId);
+  const [searchInput, setSearchInput] = useState<string>('');
+  const [sort, setSort] = useState<string>('asc');
+  const [sortby, setSortby] = useState<string>('name');
+
+  const { data, error, isLoading } = useData(
+    page,
+    title,
+    parentId,
+    searchInput,
+    sort,
+    sortby
+  );
 
   if (error)
     return (
@@ -64,7 +74,13 @@ const DataGrid: React.FC<DataGridProps> = ({ title, parentId, onSet }) => {
 
   return (
     <>
-      <HeaderToolbar title={title.toUpperCase()} id={parentId} />
+      <HeaderToolbar
+        title={title.toUpperCase()}
+        id={parentId}
+        onSet={setSearchInput}
+        setSort={setSort}
+        setSortby={setSortby}
+      />
       <Container style={{ marginTop: '20px' }}>
         <Grid container spacing={2}>
           {isLoading ? (
