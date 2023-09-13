@@ -1,11 +1,10 @@
-// src/components/NotificationPreview.tsx
 import React from 'react';
 import Paper from '@mui/material/Paper';
 
 interface FormValues {
   name: string;
   description: string;
-  templateBody: string;
+  templatebody: string;
 }
 
 interface Props {
@@ -13,7 +12,15 @@ interface Props {
 }
 
 const NotificationPreview: React.FC<Props> = ({ formData }) => {
-  const { name, description, templateBody } = formData;
+  const { templatesubject, templatebody } = formData;
+
+  // Replace newline characters with <br> tags
+  const formattedTemplatebody = templatebody.replace(/\n/g, '<br>');
+  // Use regular expression to find text enclosed in {{}} and apply a different color and bold style
+  const coloredTemplatebody = formattedTemplatebody.replace(
+    /{{(.*?)}}/g,
+    '<span style="color: blue; font-weight: bold;">{{$1}}</span>'
+  );
 
   return (
     <Paper
@@ -27,13 +34,12 @@ const NotificationPreview: React.FC<Props> = ({ formData }) => {
     >
       <div
         style={{
-          height: '420px',
+          height: '470px',
           overflowY: 'auto',
         }}
       >
-        <h2>{name}</h2>
-        <p>{description}</p>
-        <div dangerouslySetInnerHTML={{ __html: templateBody }} />
+        <h2>Subject: {templatesubject}</h2>
+        <div dangerouslySetInnerHTML={{ __html: coloredTemplatebody }} />
       </div>
     </Paper>
   );

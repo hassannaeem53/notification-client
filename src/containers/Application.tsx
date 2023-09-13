@@ -14,6 +14,7 @@ import useData from "../hooks/useData";
 import { App } from "../services/appService";
 import PaginationButtons from "../common/PaginationButtons";
 
+
 interface Props {
   onSet: (id: string) => void;
 }
@@ -110,6 +111,10 @@ const Application = ({ onSet }: Props) => {
 
   return (
     <>
+
+      <HeaderToolbar title={'applications'.toUpperCase()} />
+      {error && <p>{error.message}</p>}
+
       <Grid container spacing={3}>
         {apps?.applications?.map((app) => (
           <Grid

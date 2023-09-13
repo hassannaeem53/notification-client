@@ -8,6 +8,7 @@ const darkTheme = createTheme({
   palette: {
     mode: 'light', // Set the theme type to 'dark' for dark mode
     background: {
+      default: '#F4F0E0',
       //default: '#FF240', // Set the default background color
       // You can add more specific background colors as needed
     },
