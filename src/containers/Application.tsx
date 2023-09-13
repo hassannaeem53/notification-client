@@ -12,7 +12,7 @@ import { AxiosError } from "axios";
 import ErrorIcon from "@mui/icons-material/Error"; // Import the Error icon from Material-UI
 import useData from "../hooks/useData";
 import { App } from "../services/appService";
-import PaginationButtons from "../common/NavButtons";
+import PaginationButtons from "../common/PaginationButtons";
 
 interface Props {
   onSet: (id: string) => void;
