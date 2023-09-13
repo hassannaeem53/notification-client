@@ -13,7 +13,7 @@ import ErrorIcon from "@mui/icons-material/Error"; // Import the Error icon from
 import useData from "../hooks/useData";
 import { App } from "../services/appService";
 import PaginationButtons from "../common/NavButtons";
-
+import HeaderToolbar from "../common/Toolbar/HeaderToolbar";
 
 interface Props {
   onSet: (id: string) => void;
@@ -111,11 +111,9 @@ const Application = ({ onSet }: Props) => {
 
   return (
     <>
+      <HeaderToolbar title={"applications".toUpperCase()} />
 
-      <HeaderToolbar title={'applications'.toUpperCase()} />
-      {error && <p>{error.message}</p>}
-
-      <Grid container spacing={3}>
+      <Grid container spacing={3} sx={{ marginTop: 0.05 }}>
         {apps?.applications?.map((app) => (
           <Grid
             item
