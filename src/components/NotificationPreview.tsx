@@ -12,7 +12,7 @@ interface Props {
 }
 
 const NotificationPreview: React.FC<Props> = ({ formData }) => {
-  const { name, templatebody } = formData;
+  const { templatesubject, templatebody } = formData;
 
   // Replace newline characters with <br> tags
   const formattedTemplatebody = templatebody.replace(/\n/g, '<br>');
@@ -38,7 +38,7 @@ const NotificationPreview: React.FC<Props> = ({ formData }) => {
           overflowY: 'auto',
         }}
       >
-        <h2>Subject: {name}</h2>
+        <h2>Subject: {templatesubject}</h2>
         <div dangerouslySetInnerHTML={{ __html: coloredTemplatebody }} />
       </div>
     </Paper>

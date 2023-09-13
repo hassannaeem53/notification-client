@@ -1,22 +1,31 @@
 import React, { useState, ChangeEvent, FormEvent, useEffect } from 'react';
-import { Button, TextField, Paper } from '@mui/material';
+import {
+  Button,
+  TextField,
+  Paper,
+  CircularProgress,
+  Snackbar,
+  Alert,
+} from '@mui/material';
 import {
   MentionsInput,
   Mention,
   SuggestionDataItem,
   DataFunc,
-} from 'react-mentions'; // Import the MentionsInput and Mention components
-import { Tag } from 'react-tag-autocomplete'; // Import the Tag type
+} from 'react-mentions';
 import './NotificationForm.css';
-import createNotification from '../../services/notificationServices';
 import axios from 'axios';
-import TextEditor from '../TextEditor';
+import useCreateNotification from '../../hooks/useCreateNotification';
+import useFetchTags from '../../hooks/useFetchTags';
+import notificationSchema from './notificationSchema';
 
+// Noote needf to check why tags array is empty after succesfuul saving
 interface FormValues {
   name: string;
   description: string;
   templatebody: string;
-  tags: SuggestionDataItem[] | DataFunc; // Add a tags field to store the selected tags
+  tags: SuggestionDataItem[] | DataFunc;
+  templatesubject: string;
 }
 
 interface Props {
@@ -28,19 +37,22 @@ const NotificationForm: React.FC<Props> = ({ onChange }) => {
     name: '',
     description: '',
     templatebody: '',
-    tags: [], // Initialize tags as an empty array
+    tags: [],
+    templatesubject: '',
   });
+  const [validationError, setValidationError] = useState<string | null>(null);
+  const { createNotification, status } = useCreateNotification();
+  const [apiError, setApiError] = useState<string | null>(null); // Store API error message
+  const { tags: tagData, loading, error } = useFetchTags();
 
   useEffect(() => {
-    // Fetch the list of tags from the server using Axios when the component mounts
     const fetchTagsFromDatabase = async () => {
       try {
         const tagsResponse = await axios.get('http://localhost:3000/api/tags');
         const tags = tagsResponse.data;
 
-        // Populate formData.tags with your tag data
         const tagData = tags.map((tag) => ({
-          id: tag, // Assuming your tag data is simple strings
+          id: tag,
           display: tag,
         }));
 
@@ -56,34 +68,71 @@ const NotificationForm: React.FC<Props> = ({ onChange }) => {
     fetchTagsFromDatabase();
   }, []);
 
+  useEffect(() => {
+    // Handle status.error from useCreateNotification
+    if (status.error) {
+      setApiError(status.error);
+    }
+  }, [status.error]);
+
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
     const newData = { ...formData, [name]: value };
     setFormData(newData);
-    onChange(newData); // Notify changes to the parent
+    onChange(newData);
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const [formSubmitted, setFormSubmitted] = useState(false);
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const inputData = {
-      name: formData.name,
-      description: formData.description,
-      templatebody: formData.templatebody,
-    };
-    createNotification(inputData);
-    // Handle form submission, e.g., send data to an API
+
+    try {
+      notificationSchema.parse(formData);
+      const inputData = {
+        name: formData.name,
+        description: formData.description,
+        templatebody: formData.templatebody,
+        templatesubject: formData.templatesubject,
+      };
+      await createNotification(inputData);
+      // Reset the form data on successful submission
+      if (!status.error && !apiError) {
+        setFormData((prevData) => ({
+          ...prevData,
+          name: '',
+          description: '',
+          templatebody: '',
+          templatesubject: '',
+        }));
+
+        //console.log('tags', tagData);
+        // Set form submission status to true
+        setFormSubmitted(true);
+      } else {
+        setApiError(status.error);
+      }
+    } catch (error) {
+      if (error.message) {
+        setValidationError(error.message);
+        setFormSubmitted(false);
+      }
+      // Handle other errors (e.g., API error)
+      // You can set status.error or display a different error message to the user
+    }
   };
+
   const handleMentionsInputKeyDown = (e) => {
     if (e.key === 'Enter') {
-      e.preventDefault(); // Prevent the default behavior of Enter (submitting the form)
-      const newTemplatebody = formData.templatebody + '\n'; // Append a newline character
+      e.preventDefault();
+      const newTemplatebody = formData.templatebody + '\n';
 
       handleChange({
         target: { name: 'templatebody', value: newTemplatebody },
       });
-      console.log('newTemplatebody', formData.templatebody);
+      // console.log('newTemplatebody', formData.templatebody);
     }
   };
 
@@ -115,13 +164,13 @@ const NotificationForm: React.FC<Props> = ({ onChange }) => {
             label='Template Subject'
             variant='outlined'
             fullWidth
-            name='templateSubject'
-            value={formData.description}
+            name='templatesubject'
+            value={formData.templatesubject}
             onChange={handleChange}
             margin='normal'
             required
           />
-          {/* Use MentionsInput for the Template Body field */}
+          {console.log('tags', formData.tags)}
           <div onKeyDown={(e) => handleMentionsInputKeyDown(e)}>
             <MentionsInput
               className='custom-mentions-input'
@@ -132,7 +181,8 @@ const NotificationForm: React.FC<Props> = ({ onChange }) => {
                 })
               }
               readOnly={false}
-              placeholder='Template Body *'
+              placeholder='Template Body'
+              required
             >
               <Mention
                 trigger='{{'
@@ -181,6 +231,51 @@ const NotificationForm: React.FC<Props> = ({ onChange }) => {
           </div>
         </form>
       </Paper>
+      {status.loading && (
+        <div className='loading-overlay'>
+          <CircularProgress size={60} />
+        </div>
+      )}
+      <Snackbar
+        open={validationError !== null}
+        autoHideDuration={5000}
+        message={validationError || ''}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        onClose={() => {
+          setValidationError(null);
+        }}
+      >
+        <Alert severity='error' sx={{ width: '100%' }} variant='filled'>
+          {validationError}
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={apiError !== null} // Display Snackbar for API error
+        autoHideDuration={5000}
+        message={apiError || ''}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        onClose={() => {
+          setApiError(null); // Reset API error
+        }}
+      >
+        <Alert severity='error' sx={{ width: '100%' }} variant='filled'>
+          {apiError}
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={formSubmitted && status.success}
+        autoHideDuration={5000}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        onClose={() => {
+          // Reset form submission status and hide the Snackbar
+          setFormSubmitted(false);
+          status.success = false;
+        }}
+      >
+        <Alert severity='success' sx={{ width: '100%' }} variant='filled'>
+          Notification Created Successfully
+        </Alert>
+      </Snackbar>
     </>
   );
 };
