@@ -1,5 +1,6 @@
 import { AxiosRequestConfig } from "axios";
 import apiClient from "./apiClient";
+import { App } from "./appService";
 
 export interface Entity {
   id: number;
@@ -25,6 +26,27 @@ export interface ResponseInterface<T> {
   };
 }
 
+interface Event {
+  _id: string;
+  name: string;
+  description?: string;
+  is_active: boolean;
+  applicationId: string;
+}
+
+interface Notification {
+  _id: string;
+  name: string;
+  description?: string;
+  is_active: boolean;
+  eventId: string;
+}
+
+export interface UpdateResponseInterface {
+  applications?: App;
+  events?: Event;
+  notifications?: Notification;
+}
 class HttpService<T> {
   endpoint: string;
 
@@ -47,7 +69,7 @@ class HttpService<T> {
 
   update = (id: string, entity: UpdateEntity) => {
     return apiClient
-      .patch<T>(this.endpoint + "/" + id, entity)
+      .patch<UpdateResponseInterface>(this.endpoint + "/" + id, entity)
       .then((res) => res.data);
   };
 }

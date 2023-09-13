@@ -69,6 +69,7 @@ const Tile = ({
           open={open}
           page={page}
           error={toastError}
+          entity="applications"
         />
       </CardActions>
     </Card>
