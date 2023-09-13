@@ -14,6 +14,7 @@ interface Props {
   toastError: string | undefined;
   page: number;
   onEdit: () => void;
+  setPage: (page: number) => void;
 }
 
 const Tile = ({
@@ -26,6 +27,7 @@ const Tile = ({
   // onDelete,
   page,
   toastError,
+  setPage,
 }: Props) => {
   // console.log('app:', app);
 
@@ -70,6 +72,7 @@ const Tile = ({
           page={page}
           error={toastError}
           entity="applications"
+          setPage={setp}
         />
       </CardActions>
     </Card>

@@ -13,7 +13,7 @@ const useModifyData = <T>(
   page: number,
   entityName: string,
   parentId?: string,
-  onUpdate?: () => void
+  onUpdate?: (page: number) => void
 ) => {
   const queryClient = useQueryClient();
   const service = new HttpService<T>(entityName);
@@ -26,27 +26,34 @@ const useModifyData = <T>(
     onMutate: ({ id }: UpdateObj) => {
       const previousData = queryClient.getQueryData<ResponseInterface<T>>(key);
 
-      queryClient.setQueryData<ResponseInterface<T>>(key, (oldData) => {
-        const newEntitites =
-          oldData &&
-          oldData[entityName as keyof ResponseInterface<T>]?.map(
-            (entity: { _id: string }) =>
-              entity._id == id ? { ...entity, ...entity } : entity
-          );
+      const invalidateQueryKey = [...key];
+      if (previousData[entityName]?.length == 1) {
+        invalidateQueryKey[1] = page - 1;
+        onUpdate && onUpdate(page - 1);
+      }
 
-        return { ...oldData, [entityName]: newEntitites || [] };
-      });
+      queryClient.invalidateQueries({ queryKey: invalidateQueryKey });
 
       return { previousData };
     },
 
     onSuccess: () => {
-      onUpdate && onUpdate();
+      //   console.log("🚀 ~ file: useModifyData.ts:44 ~ context:", context);
+      //   onUpdate && onUpdate();
+      //   const invalidateQueryKey = [...key];
+      //   if (context?.previousData[entityName]?.length == 1) {
+      //     invalidateQueryKey[1] = page - 1;
+      //     onUpdate && onUpdate(page - 1);
+      //   }
+      //   queryClient.invalidateQueries({ queryKey: invalidateQueryKey });
     },
 
-    onError: (_error, _id, context) => {
-      if (!context) return;
-      queryClient.setQueryData(key, context.previousData);
+    onError: () => {
+      //   if (!context) return;
+      //   queryClient.setQueryData(key, context.previousData);
+      queryClient.invalidateQueries({ queryKey: key });
+
+      console.log("err occured");
     },
   });
 };

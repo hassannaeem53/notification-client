@@ -135,6 +135,7 @@ const Application = ({ onSet }: Props) => {
               closeToast={onCloseToast}
               toastError={toastError}
               onEdit={onEdit}
+              setPage={setPage}
             />
           </Grid>
         ))}
