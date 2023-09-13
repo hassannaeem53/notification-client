@@ -72,7 +72,7 @@ const Tile = ({
           page={page}
           error={toastError}
           entity="applications"
-          setPage={setp}
+          setPage={setPage}
         />
       </CardActions>
     </Card>
