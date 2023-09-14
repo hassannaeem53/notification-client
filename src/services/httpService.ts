@@ -60,7 +60,9 @@ class HttpService<T> {
   };
 
   create = (entity: T) => {
-    return apiClient.post<T>(this.endpoint, entity).then((res) => res.data);
+    return apiClient
+      .post<T | string>(this.endpoint, entity)
+      .then((res) => res.data);
   };
 
   update = (id: string, entity: UpdateEntity) => {
