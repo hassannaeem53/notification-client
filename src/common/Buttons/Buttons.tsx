@@ -23,6 +23,7 @@ const styles = { backgroundColor: "#BABABA", borderRadius: 2 };
 
 const Buttons = ({ selectedApp, isActive, page, entity, setPage }: Props) => {
   const [checked, setChecked] = useState(isActive);
+
   const [open, setOpen] = useState<boolean>(false);
 
   const deleteApp = useModifyData(page, entity, undefined, (page: number) =>
@@ -32,7 +33,9 @@ const Buttons = ({ selectedApp, isActive, page, entity, setPage }: Props) => {
     deleteApp.mutate({ id: selectedApp._id, entity: { is_deleted: true } });
   };
 
-  const toggleApp = useModifyData(page, entity);
+  const toggleApp = useModifyData(page, entity, undefined, () =>
+    setChecked(!checked)
+  );
   const onToggle = () => {
     const updatedEntity = { is_active: !checked };
     toggleApp.mutate({ id: selectedApp._id, entity: updatedEntity });
