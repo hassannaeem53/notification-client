@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Container,
   Paper,
@@ -38,8 +38,6 @@ const Login = () => {
   };
 
   const handleSubmit = async (e) => {
-    validateEmail();
-
     if (emailValidation.length == 0) {
       e.preventDefault();
 
@@ -52,6 +50,10 @@ const Login = () => {
       navigate("/");
     }
   };
+
+  useEffect(() => {
+    validateEmail();
+  }, [formData.email]);
 
   const validateEmail = () => {
     try {
