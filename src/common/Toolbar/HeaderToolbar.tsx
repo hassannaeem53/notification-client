@@ -29,7 +29,7 @@ const HeaderToolbar: React.FC<HeaderToolbarProps> = ({
   ];
 
   const addEntity = () => {
-    if (title === "EVENTS") {
+    if (title === "EVENTS" || "APPLICATIONS") {
       setOpenAddModal(true);
     }
   };

@@ -6,7 +6,7 @@ import {
   Typography,
   Stack,
 } from "@mui/material";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { UpdateEntity } from "../services/httpService";
 import { App } from "../services/appService";
 import { Entity } from "./Buttons/Buttons";
@@ -59,6 +59,13 @@ const FormModal = ({
     description: selectedEntity?.description,
   });
 
+  useEffect(() => {
+    setFormData({
+      name: selectedEntity?.name,
+      description: selectedEntity?.description,
+    });
+  }, [selectedEntity]);
+
   const modifyEntity = useModifyData(page, entityName, parentId, () =>
     setFormData({ name: "", description: "" })
   );
@@ -66,7 +73,10 @@ const FormModal = ({
   const addEntity = useAddData(entityName, finalPage, parentId);
 
   const handleClose = () => {
-    setFormData({});
+    // setFormData({
+    //   name: selectedEntity?.name,
+    //   description: selectedEntity?.description,
+    // });
     setOpen(false);
   };
 
