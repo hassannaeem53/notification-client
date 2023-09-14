@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import {
   Toolbar,
   Typography,
@@ -14,7 +14,7 @@ import FilterListIcon from "@mui/icons-material/FilterList";
 
 interface HeaderToolbarProps {
   title: string;
-  setOpenAddModal: (value: string) => void;
+  setOpenAddModal: Dispatch<SetStateAction<boolean>>;
 }
 
 const HeaderToolbar: React.FC<HeaderToolbarProps> = ({
@@ -27,6 +27,12 @@ const HeaderToolbar: React.FC<HeaderToolbarProps> = ({
     { label: "Option 1", value: "option1" },
     { label: "Option 2", value: "option2" },
   ];
+
+  const addEntity = () => {
+    if (title === "EVENTS") {
+      setOpenAddModal(true);
+    }
+  };
 
   return (
     <Toolbar
@@ -105,7 +111,7 @@ const HeaderToolbar: React.FC<HeaderToolbarProps> = ({
 
       {/* Create Icon */}
       <Tooltip title="Create">
-        <IconButton color="primary" onClick={() => setOpenAddModal(true)}>
+        <IconButton color="primary" onClick={addEntity}>
           <AddCircleIcon fontSize="large" />
         </IconButton>
       </Tooltip>
