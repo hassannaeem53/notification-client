@@ -7,7 +7,7 @@ import useModifyData from "../hooks/useModifyData";
 interface Props {
   app: App;
   selectedApp: string | undefined;
-  setSelectedApp: (app: string) => void;
+  setSelectedApp: (app: string | undefined) => void;
   // onDelete: (id: number) => void;
   openToast: (err: AxiosError) => void;
   closeToast: () => void;
@@ -75,6 +75,7 @@ const Tile = ({
           entity="applications"
           setPage={setPage}
           finalPage={finalPage}
+          setSelectedApp={setSelectedApp} //to ensure that events & ntoifications of deleted app dont appear
         />
       </CardActions>
     </Card>
