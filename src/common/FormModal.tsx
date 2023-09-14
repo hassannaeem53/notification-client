@@ -7,16 +7,18 @@ import {
   Stack,
 } from "@mui/material";
 import { ChangeEvent, FormEvent, useState } from "react";
-import useModifyApp from "../hooks/useModifyApp";
 import { UpdateEntity } from "../services/httpService";
 import { App } from "../services/appService";
+import { Entity } from "./Buttons/Buttons";
+import useModifyData from "../hooks/useModifyData";
 
 interface Props {
   open: boolean;
   setOpen: (value: boolean) => void;
   title: string;
-  app: App;
+  selectedEntity: Entity | App;
   page: number;
+  entityName: string;
 }
 
 const style = {
@@ -32,12 +34,27 @@ const style = {
   textAlign: "center",
 };
 
-const FormModal = ({ open, setOpen, title, app, page }: Props) => {
-  const [formData, setFormData] = useState<UpdateEntity>({});
+const FormModal = ({
+  open,
+  setOpen,
+  title,
+  selectedEntity,
+  page,
+  entityName,
+}: Props) => {
+  const [formData, setFormData] = useState<UpdateEntity>({
+    name: selectedEntity.name,
+    description: selectedEntity.description,
+  });
 
-  const modifyApp = useModifyApp(page, () => setFormData({}));
+  const modifyEntity = useModifyData(page, entityName, undefined, () =>
+    setFormData({ name: "", description: "" })
+  );
 
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setFormData({});
+    setOpen(false);
+  };
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -49,7 +66,7 @@ const FormModal = ({ open, setOpen, title, app, page }: Props) => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    modifyApp.mutate({ id: app._id, entity: formData });
+    modifyEntity.mutate({ id: selectedEntity._id, entity: formData });
     handleClose();
   };
 

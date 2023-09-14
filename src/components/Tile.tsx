@@ -29,8 +29,6 @@ const Tile = ({
   toastError,
   setPage,
 }: Props) => {
-  // console.log('app:', app);
-
   return (
     <Card
       elevation={8}
@@ -64,7 +62,7 @@ const Tile = ({
       </CardContent>
       <CardActions>
         <Buttons
-          selectedApp={app}
+          selectedEntity={app}
           isActive={app.is_active}
           openToast={openToast}
           closeToast={closeToast}

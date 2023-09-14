@@ -31,11 +31,15 @@ const useModifyData = <T>(
 
     onSuccess: (_data, variables, context) => {
       const invalidateQueryKey = [...key];
-      if (context?.previousData[entityName]?.length == 1) {
+      if (
+        context?.previousData[entityName]?.length == 1 &&
+        variables.entity.is_deleted
+      ) {
         invalidateQueryKey[1] = page - 1;
-        if (variables.entity.is_deleted) onUpdate && onUpdate(page - 1);
+
+        onUpdate && onUpdate(page - 1);
       }
-      onUpdate && onUpdate();
+      if (!variables.entity.is_deleted) onUpdate && onUpdate();
 
       queryClient.invalidateQueries({ queryKey: invalidateQueryKey });
     },

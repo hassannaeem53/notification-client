@@ -2,10 +2,6 @@ import { AxiosRequestConfig } from "axios";
 import apiClient from "./apiClient";
 import { App } from "./appService";
 
-export interface Entity {
-  id: number;
-}
-
 export interface UpdateEntity {
   name?: string;
   description?: string;

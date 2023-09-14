@@ -112,7 +112,13 @@ const DataGrid: React.FC<DataGridProps> = ({ title, parentId, onSet }) => {
                         md={4}
                         style={{ display: "flex", alignItems: "center" }}
                       >
-                        <Buttons />
+                        <Buttons
+                          selectedEntity={item}
+                          page={page}
+                          entity={title}
+                          setPage={setPage}
+                          isActive={item.is_active}
+                        />
                       </Grid>
                     </Grid>
                   </Paper>
