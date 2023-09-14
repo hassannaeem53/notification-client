@@ -17,6 +17,7 @@ const Dashboard = () => {
           title="events"
           parentId={applicationId}
           onSet={(id) => setEventId(id)}
+          setEventId={setEventId}
         />
       </Grid>
       <Grid item sm={12}>

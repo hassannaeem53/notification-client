@@ -28,7 +28,8 @@ interface Props {
   setPage: (page: number) => void;
   parentId?: string;
   finalPage: number;
-  setSelectedApp: (appId: string | undefined) => void;
+  setSelectedApp?: (appId: string | undefined) => void;
+  setEventId?: React.Dispatch<React.SetStateAction<string | undeinfed>>;
 }
 
 const styles = { backgroundColor: "#BABABA", borderRadius: 2 };
@@ -42,6 +43,7 @@ const Buttons = ({
   parentId,
   finalPage,
   setSelectedApp,
+  setEventId,
 }: Props) => {
   const [checked, setChecked] = useState(isActive);
 
@@ -53,7 +55,8 @@ const Buttons = ({
     parentId,
     (page: number | undefined) => {
       setPage(page || 1);
-      setSelectedApp(undefined);
+      setSelectedApp && setSelectedApp(undefined);
+      entity === "events" && setEventId && setEventId(undefined);
     }
   );
   const onDelete = () => {

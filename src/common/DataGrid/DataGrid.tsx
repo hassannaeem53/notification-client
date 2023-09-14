@@ -38,9 +38,15 @@ export interface DataGridProps {
   title: string;
   parentId: string;
   onSet?: (id: string) => void;
+  setEventId?: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const DataGrid: React.FC<DataGridProps> = ({ title, parentId, onSet }) => {
+const DataGrid: React.FC<DataGridProps> = ({
+  title,
+  parentId,
+  onSet,
+  setEventId,
+}) => {
   const [page, setPage] = useState(1);
 
   const [selectedId, setSelectedId] = useState<string>("");
@@ -125,6 +131,7 @@ const DataGrid: React.FC<DataGridProps> = ({ title, parentId, onSet }) => {
                           isActive={item.is_active}
                           parentId={parentId}
                           finalPage={data.pagination?.totalPages || 1}
+                          setEventId={setEventId}
                         />
                       </Grid>
                     </Grid>
