@@ -26,6 +26,8 @@ interface Props {
   page: number;
   entity: string;
   setPage: (page: number) => void;
+  parentId?: string;
+  finalPage: number;
 }
 
 const styles = { backgroundColor: "#BABABA", borderRadius: 2 };
@@ -36,6 +38,8 @@ const Buttons = ({
   page,
   entity,
   setPage,
+  parentId,
+  finalPage,
 }: Props) => {
   const [checked, setChecked] = useState(isActive);
 
@@ -44,14 +48,14 @@ const Buttons = ({
   const deleteApp = useModifyData(
     page,
     entity,
-    undefined,
+    parentId,
     (page: number | undefined) => setPage(page || 1)
   );
   const onDelete = () => {
     deleteApp.mutate({ id: selectedEntity._id, entity: { is_deleted: true } });
   };
 
-  const toggleApp = useModifyData(page, entity, undefined, () =>
+  const toggleApp = useModifyData(page, entity, parentId, () =>
     setChecked(!checked)
   );
 
@@ -85,6 +89,8 @@ const Buttons = ({
         selectedEntity={selectedEntity}
         page={page}
         entityName={entity}
+        parentId={parentId}
+        finalPage={finalPage}
       />
     </>
   );

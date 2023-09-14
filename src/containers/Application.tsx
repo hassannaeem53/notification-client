@@ -14,6 +14,7 @@ import useData from "../hooks/useData";
 import { App } from "../services/appService";
 import PaginationButtons from "../common/NavButtons";
 import HeaderToolbar from "../common/Toolbar/HeaderToolbar";
+import FormModal from "../common/FormModal";
 
 interface Props {
   onSet: (id: string) => void;
@@ -23,6 +24,7 @@ const Application = ({ onSet }: Props) => {
   const [page, setPage] = useState<number>(1);
   const [selectedAppId, setSelectedAppId] = useState<string>();
   const [open, setOpen] = useState(false);
+  const [openAddModal, setOpenAddModal] = useState<boolean>(false);
   const [toastError, setToastError] = useState<string>();
 
   //getting all apps
@@ -111,7 +113,10 @@ const Application = ({ onSet }: Props) => {
 
   return (
     <>
-      <HeaderToolbar title={"applications".toUpperCase()} />
+      <HeaderToolbar
+        title={"applications".toUpperCase()}
+        setOpenAddModal={setOpenAddModal}
+      />
 
       <Grid container spacing={3} sx={{ marginTop: 0.05 }}>
         {apps?.applications?.map((app) => (
@@ -136,6 +141,7 @@ const Application = ({ onSet }: Props) => {
               toastError={toastError}
               onEdit={onEdit}
               setPage={setPage}
+              finalPage={apps.pagination?.totalPages || 1}
             />
           </Grid>
         ))}
@@ -150,6 +156,15 @@ const Application = ({ onSet }: Props) => {
           {/* {error || "Something Went Wrong"} */}
         </Alert>
       </Snackbar>
+
+      <FormModal
+        open={openAddModal}
+        setOpen={setOpenAddModal}
+        title="Add"
+        page={page}
+        entityName="applications"
+        finalPage={apps.pagination?.totalPages || 1}
+      />
     </>
   );
 };

@@ -2,6 +2,7 @@ import { Card, CardActions, CardContent, Typography } from "@mui/material";
 import Buttons from "../common/Buttons/Buttons";
 import { AxiosError } from "axios";
 import { App } from "../services/appService";
+import useModifyData from "../hooks/useModifyData";
 
 interface Props {
   app: App;
@@ -15,6 +16,7 @@ interface Props {
   page: number;
   onEdit: () => void;
   setPage: (page: number) => void;
+  finalPage: number;
 }
 
 const Tile = ({
@@ -28,6 +30,7 @@ const Tile = ({
   page,
   toastError,
   setPage,
+  finalPage,
 }: Props) => {
   return (
     <Card
@@ -71,6 +74,7 @@ const Tile = ({
           error={toastError}
           entity="applications"
           setPage={setPage}
+          finalPage={finalPage}
         />
       </CardActions>
     </Card>

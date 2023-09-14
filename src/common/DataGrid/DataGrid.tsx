@@ -118,6 +118,8 @@ const DataGrid: React.FC<DataGridProps> = ({ title, parentId, onSet }) => {
                           entity={title}
                           setPage={setPage}
                           isActive={item.is_active}
+                          parentId={parentId}
+                          finalPage={data.pagination?.totalPages || 1}
                         />
                       </Grid>
                     </Grid>

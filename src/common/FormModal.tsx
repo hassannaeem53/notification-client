@@ -11,14 +11,24 @@ import { UpdateEntity } from "../services/httpService";
 import { App } from "../services/appService";
 import { Entity } from "./Buttons/Buttons";
 import useModifyData from "../hooks/useModifyData";
+import useAddData from "../hooks/useAddData";
 
 interface Props {
   open: boolean;
   setOpen: (value: boolean) => void;
   title: string;
-  selectedEntity: Entity | App;
+  selectedEntity?: Entity | App;
   page: number;
   entityName: string;
+  parentId?: string;
+  finalPage: number;
+}
+
+interface AddEntity {
+  name: string;
+  description?: string;
+  applicationId?: string;
+  eventId?: string;
 }
 
 const style = {
@@ -41,15 +51,19 @@ const FormModal = ({
   selectedEntity,
   page,
   entityName,
+  parentId,
+  finalPage,
 }: Props) => {
-  const [formData, setFormData] = useState<UpdateEntity>({
-    name: selectedEntity.name,
-    description: selectedEntity.description,
+  const [formData, setFormData] = useState<UpdateEntity | AddEntity>({
+    name: selectedEntity?.name,
+    description: selectedEntity?.description,
   });
 
-  const modifyEntity = useModifyData(page, entityName, undefined, () =>
+  const modifyEntity = useModifyData(page, entityName, parentId, () =>
     setFormData({ name: "", description: "" })
   );
+
+  const addEntity = useAddData(entityName, finalPage, parentId);
 
   const handleClose = () => {
     setFormData({});
@@ -66,7 +80,17 @@ const FormModal = ({
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    modifyEntity.mutate({ id: selectedEntity._id, entity: formData });
+    if (title === "Edit")
+      modifyEntity.mutate({ id: selectedEntity?._id || "", entity: formData });
+    else {
+      //add case
+      let entityToAdd = { ...formData };
+      if (entityName == "events")
+        entityToAdd = { ...entityToAdd, applicationId: parentId };
+      else if (entityName == "notifications")
+        entityToAdd = { ...entityToAdd, eventId: parentId };
+      addEntity.mutate(entityToAdd);
+    }
     handleClose();
   };
 
