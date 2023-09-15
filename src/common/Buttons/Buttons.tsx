@@ -1,4 +1,3 @@
-
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { Box, ButtonGroup, IconButton, Switch } from "@mui/material";
@@ -7,8 +6,8 @@ import { AxiosError } from "axios";
 import FormModal from "../FormModal";
 import { App } from "../../services/appService";
 import useModifyData from "../../hooks/useModifyData";
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import CancelIcon from '@mui/icons-material/Cancel';
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import CancelIcon from "@mui/icons-material/Cancel";
 
 export interface Entity {
   _id: string;
@@ -32,7 +31,7 @@ interface Props {
   parentId?: string;
   finalPage: number;
   setSelectedApp?: (appId: string | undefined) => void;
-  setEventId?: React.Dispatch<React.SetStateAction<string | undeinfed>>;
+  setEventId?: React.Dispatch<React.SetStateAction<string | undefined>>;
 }
 
 const styles = {};
@@ -48,6 +47,7 @@ const Buttons = ({
   setSelectedApp,
   setEventId,
 }: Props) => {
+  // console.log("🚀 ~ file: Buttons.tsx:51 ~ selectedEntity:", selectedEntity);
   const [checked, setChecked] = useState(isActive);
 
   const [open, setOpen] = useState<boolean>(false);
@@ -81,21 +81,21 @@ const Buttons = ({
   return (
     <>
       <Box>
-        <ButtonGroup size='medium' aria-label='medium button group' sx={styles}>
+        <ButtonGroup size="medium" aria-label="medium button group" sx={styles}>
           <Switch
             checked={checked}
             onClick={onToggle}
             //color='primary'
-            size='medium'
-            checkedIcon={<CheckCircleIcon color='primary' />}
+            size="medium"
+            checkedIcon={<CheckCircleIcon color="primary" />}
           />
 
-          <IconButton color='inherit' onClick={onEdit}>
-            <EditIcon color='action' />
+          <IconButton color="inherit" onClick={onEdit}>
+            <EditIcon color="action" />
           </IconButton>
 
-          <IconButton color='inherit' onClick={onDelete}>
-            <DeleteIcon color='error' />
+          <IconButton color="inherit" onClick={onDelete}>
+            <DeleteIcon color="error" />
           </IconButton>
         </ButtonGroup>
       </Box>

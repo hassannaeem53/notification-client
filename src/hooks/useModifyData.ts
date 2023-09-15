@@ -19,6 +19,7 @@ const useModifyData = <T>(
   const service = new HttpService<T>(entityName);
 
   const key = parentId ? [entityName, page, parentId] : [entityName, page];
+  console.log("🚀 ~ file: useModifyData.ts:22 ~ key:", key);
 
   return useMutation({
     mutationFn: ({ id, entity }: UpdateObj) => service.update(id, entity),
@@ -31,6 +32,8 @@ const useModifyData = <T>(
 
     onSuccess: (_data, variables, context) => {
       const invalidateQueryKey = [...key];
+      console.log("context:", context);
+
       if (
         context?.previousData[entityName]?.length == 1 &&
         variables.entity.is_deleted &&

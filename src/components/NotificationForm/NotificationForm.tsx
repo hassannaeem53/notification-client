@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, FormEvent, useEffect } from 'react';
+import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import {
   Button,
   TextField,
@@ -6,17 +6,17 @@ import {
   CircularProgress,
   Snackbar,
   Alert,
-} from '@mui/material';
+} from "@mui/material";
 import {
   MentionsInput,
   Mention,
   SuggestionDataItem,
   DataFunc,
-} from 'react-mentions';
-import './NotificationForm.css';
-import useCreateNotification from '../../hooks/useCreateNotification';
-import useFetchTags from '../../hooks/useFetchTags';
-import notificationSchema from './notificationSchema';
+} from "react-mentions";
+import "./NotificationForm.css";
+import useCreateNotification from "../../hooks/useCreateNotification";
+import useFetchTags from "../../hooks/useFetchTags";
+import notificationSchema from "./notificationSchema";
 
 interface FormValues {
   name: string;
@@ -33,11 +33,11 @@ interface Props {
 
 const NotificationForm: React.FC<Props> = ({ onChange, eventId }) => {
   const [formData, setFormData] = useState<FormValues>({
-    name: '',
-    description: '',
-    templatebody: '',
+    name: "",
+    description: "",
+    templatebody: "",
     tags: [],
-    templatesubject: '',
+    templatesubject: "",
   });
   const [validationError, setValidationError] = useState<string | null>(null);
   const { createNotification, status } = useCreateNotification();
@@ -99,16 +99,16 @@ const NotificationForm: React.FC<Props> = ({ onChange, eventId }) => {
       if (!status.error && !apiError) {
         setFormData((prevData) => ({
           ...prevData,
-          name: '',
-          description: '',
-          templatebody: '',
-          templatesubject: '',
+          name: "",
+          description: "",
+          templatebody: "",
+          templatesubject: "",
         }));
 
         //console.log('tags', tagData);
         // Set form submission status to true
         setFormSubmitted(true);
-        //window.location.href = '/';
+        window.location.href = "/";
       } else {
         setApiError(status.error);
       }
@@ -123,12 +123,12 @@ const NotificationForm: React.FC<Props> = ({ onChange, eventId }) => {
   };
 
   const handleMentionsInputKeyDown = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       e.preventDefault();
-      const newTemplatebody = formData.templatebody + '\n';
+      const newTemplatebody = formData.templatebody + "\n";
 
       handleChange({
-        target: { name: 'templatebody', value: newTemplatebody },
+        target: { name: "templatebody", value: newTemplatebody },
       });
       // console.log('newTemplatebody', formData.templatebody);
     }
@@ -136,126 +136,126 @@ const NotificationForm: React.FC<Props> = ({ onChange, eventId }) => {
 
   return (
     <>
-      <Paper elevation={3} style={{ padding: '20px' }}>
-        <form onSubmit={handleSubmit} style={{ height: '470px' }}>
+      <Paper elevation={3} style={{ padding: "20px" }}>
+        <form onSubmit={handleSubmit} style={{ height: "470px" }}>
           <TextField
-            label='Notification Name'
-            variant='outlined'
+            label="Notification Name"
+            variant="outlined"
             fullWidth
-            name='name'
+            name="name"
             value={formData.name}
             onChange={handleChange}
-            margin='normal'
+            margin="normal"
             required
           />
           <TextField
-            label='Description'
-            variant='outlined'
+            label="Description"
+            variant="outlined"
             fullWidth
-            name='description'
+            name="description"
             value={formData.description}
             onChange={handleChange}
-            margin='normal'
+            margin="normal"
             required
           />
           <TextField
-            label='Template Subject'
-            variant='outlined'
+            label="Template Subject"
+            variant="outlined"
             fullWidth
-            name='templatesubject'
+            name="templatesubject"
             value={formData.templatesubject}
             onChange={handleChange}
-            margin='normal'
+            margin="normal"
             required
           />
 
           <div onKeyDown={(e) => handleMentionsInputKeyDown(e)}>
             <MentionsInput
-              className='custom-mentions-input'
+              className="custom-mentions-input"
               value={formData.templatebody}
               onChange={(e) =>
                 handleChange({
-                  target: { name: 'templatebody', value: e.target.value },
+                  target: { name: "templatebody", value: e.target.value },
                 })
               }
               readOnly={false}
-              placeholder='Template Body'
+              placeholder="Template Body"
               required
             >
               <Mention
-                trigger='{{'
+                trigger="{{"
                 data={formData.tags}
                 renderSuggestion={(suggestion, search, highlightedDisplay) => (
-                  <div className='custom-mention'>{highlightedDisplay}</div>
+                  <div className="custom-mention">{highlightedDisplay}</div>
                 )}
                 displayTransform={(id, display) => `{{${display}}}`}
-                markup='{{__display__}}'
+                markup="{{__display__}}"
               />
             </MentionsInput>
           </div>
           <div
             style={{
-              display: 'flex',
-              justifyContent: 'center',
-              marginTop: '20px',
+              display: "flex",
+              justifyContent: "center",
+              marginTop: "20px",
             }}
           >
             <Button
-              variant='contained'
-              color='primary'
-              type='submit'
-              style={{ marginRight: '20px' }}
+              variant="contained"
+              color="primary"
+              type="submit"
+              style={{ marginRight: "20px" }}
             >
               Save
             </Button>
-            <Button variant='contained' color='error' type='button'>
+            <Button variant="contained" color="error" type="button">
               Cancel
             </Button>
           </div>
         </form>
       </Paper>
       {status.loading && (
-        <div className='loading-overlay'>
+        <div className="loading-overlay">
           <CircularProgress size={60} />
         </div>
       )}
       <Snackbar
         open={validationError !== null}
         autoHideDuration={5000}
-        message={validationError || ''}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        message={validationError || ""}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
         onClose={() => {
           setValidationError(null);
         }}
       >
-        <Alert severity='error' sx={{ width: '100%' }} variant='filled'>
+        <Alert severity="error" sx={{ width: "100%" }} variant="filled">
           {validationError}
         </Alert>
       </Snackbar>
       <Snackbar
         open={apiError !== null} // Display Snackbar for API error
         autoHideDuration={5000}
-        message={apiError || ''}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        message={apiError || ""}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
         onClose={() => {
           setApiError(null); // Reset API error
         }}
       >
-        <Alert severity='error' sx={{ width: '100%' }} variant='filled'>
+        <Alert severity="error" sx={{ width: "100%" }} variant="filled">
           {apiError}
         </Alert>
       </Snackbar>
       <Snackbar
         open={successSnackbarOpen && status.success}
         autoHideDuration={null} // Set to null to prevent auto-hide
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
         onClose={() => {
           // Reset form submission status and hide the Snackbar
           setSuccessSnackbarOpen(false);
           status.success = false;
         }}
       >
-        <Alert severity='success' sx={{ width: '100%' }} variant='filled'>
+        <Alert severity="success" sx={{ width: "100%" }} variant="filled">
           Notification Created Successfully
         </Alert>
       </Snackbar>
