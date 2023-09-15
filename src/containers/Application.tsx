@@ -5,6 +5,8 @@ import {
   Paper,
   Skeleton,
   Snackbar,
+  Grow,
+  Slide,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import Tile from '../components/Tile';
@@ -17,9 +19,10 @@ import HeaderToolbar from '../common/Toolbar/HeaderToolbar';
 
 interface Props {
   onSet: (id: string) => void;
+  onSetName: (name: string) => void;
 }
 
-const Application = ({ onSet }: Props) => {
+const Application = ({ onSet, onSetName }: Props) => {
   const [page, setPage] = useState<number>(1);
   const [selectedAppId, setSelectedAppId] = useState<string>();
   const [open, setOpen] = useState(false);
@@ -126,30 +129,46 @@ const Application = ({ onSet }: Props) => {
       />
       {error && <p>{error.message}</p>}
 
-      <Grid container spacing={3}>
+      <Grid container spacing={3} sx={{ marginTop: '10px' }}>
+        {apps?.applications?.length === 0 && (
+          <Grid item xs={12}>
+            <Alert severity='info' sx={{ marginTop: '20px' }}>
+              No Items Found
+            </Alert>
+          </Grid>
+        )}
         {apps?.applications?.map((app) => (
-          <Grid
-            item
-            xs={12}
-            sm={6}
-            md={4}
-            lg={3}
-            display='grid'
-            gridAutoFlow='column'
+          <Slide
+            direction='left'
+            in={true}
+            mountOnEnter
+            unmountOnExit
             key={app._id}
           >
-            <Tile
-              app={app}
-              page={page}
-              selectedApp={selectedAppId}
-              setSelectedApp={setSelectedAppId}
-              openToast={onOpenToast}
-              open={open}
-              closeToast={onCloseToast}
-              toastError={toastError}
-              onEdit={onEdit}
-            />
-          </Grid>
+            <Grid
+              item
+              xs={12}
+              sm={6}
+              md={4}
+              lg={3}
+              display='grid'
+              gridAutoFlow='column'
+              key={app._id}
+            >
+              <Tile
+                app={app}
+                page={page}
+                selectedApp={selectedAppId}
+                setSelectedApp={setSelectedAppId}
+                openToast={onOpenToast}
+                open={open}
+                closeToast={onCloseToast}
+                toastError={toastError}
+                onEdit={onEdit}
+                onSetName={onSetName}
+              />
+            </Grid>
+          </Slide>
         ))}
         <PaginationButtons
           currentPage={page}

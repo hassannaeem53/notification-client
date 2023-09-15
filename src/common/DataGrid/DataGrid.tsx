@@ -37,9 +37,17 @@ export interface DataGridProps {
   title: string;
   parentId: string;
   onSet?: (id: string) => void;
+  parentName?: string;
+  setEventName?: (id: string) => void;
 }
 
-const DataGrid: React.FC<DataGridProps> = ({ title, parentId, onSet }) => {
+const DataGrid: React.FC<DataGridProps> = ({
+  title,
+  parentId,
+  parentName,
+  onSet,
+  setEventName,
+}) => {
   const [page, setPage] = useState(1);
   const [selectedId, setSelectedId] = useState<string>('');
 
@@ -80,8 +88,11 @@ const DataGrid: React.FC<DataGridProps> = ({ title, parentId, onSet }) => {
         onSet={setSearchInput}
         setSort={setSort}
         setSortby={setSortby}
+        parentName={parentName}
       />
-      <Container style={{ marginTop: '20px' }}>
+      <Container
+        style={{ marginTop: '20px', paddingLeft: '20px', paddingRight: '20px' }}
+      >
         <Grid container spacing={2}>
           {isLoading ? (
             // Loading skeleton
@@ -107,9 +118,24 @@ const DataGrid: React.FC<DataGridProps> = ({ title, parentId, onSet }) => {
                 <Grid item xs={6}>
                   <Paper
                     elevation={16}
-                    style={{ padding: '20px' }}
+                    style={{
+                      padding: '20px',
+                      //backgroundColor: '#EEEEEE',
+                      cursor: 'pointer',
+                      border:
+                        selectedId === item._id && title === 'events'
+                          ? '2px solid #2196F3'
+                          : '',
+                    }}
+                    sx={{
+                      '&:hover': {
+                        backgroundColor: '#CDDEEE',
+                        // border: '2px solid #2196F3',
+                      },
+                    }}
                     onClick={() => {
                       setSelectedId(item._id);
+                      setEventName && setEventName(item.name);
                       if (onSet) {
                         onSet(item._id);
                       }
@@ -117,7 +143,22 @@ const DataGrid: React.FC<DataGridProps> = ({ title, parentId, onSet }) => {
                   >
                     <Grid container spacing={6}>
                       <Grid item xs={12} md={8}>
-                        <Typography variant='h6'>{item.name}</Typography>
+                        <Typography
+                          variant='h5'
+                          component='div'
+                          style={{
+                            fontWeight:
+                              selectedId === item._id && title == 'events'
+                                ? 'bold'
+                                : 'normal', // Set the font weight based on the condition
+                            fontSize:
+                              selectedId === item._id && title == 'events'
+                                ? '1.7rem'
+                                : '1.5rem', // Set the font size based on the condition
+                          }}
+                        >
+                          {item.name}
+                        </Typography>
                         <Typography variant='body2'>
                           {item.description}
                         </Typography>

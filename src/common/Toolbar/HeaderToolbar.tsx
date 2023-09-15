@@ -24,6 +24,7 @@ interface HeaderToolbarProps {
   onSet?: (id: string) => void;
   setSort?: (sort: string) => void;
   setSortby?: (sortby: string) => void;
+  parentName?: string;
 }
 
 const HeaderToolbar: React.FC<HeaderToolbarProps> = ({
@@ -32,6 +33,7 @@ const HeaderToolbar: React.FC<HeaderToolbarProps> = ({
   onSet,
   setSort,
   setSortby,
+  parentName,
 }) => {
   // Sample filter options
   const filterOptions = [
@@ -113,9 +115,30 @@ const HeaderToolbar: React.FC<HeaderToolbarProps> = ({
       }}
     >
       <div>
-        <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
-          {title}
-        </Typography>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
+            {title}
+          </Typography>
+          {parentName && (
+            <div
+              style={{
+                height: '20px',
+                borderLeft: '1px solid white',
+                marginLeft: '10px',
+                marginRight: '10px',
+              }}
+            ></div>
+          )}
+          {parentName && (
+            <Typography
+              variant='h6'
+              component='div'
+              sx={{ flexGrow: 1, color: '#d3d3d3' }}
+            >
+              {parentName}
+            </Typography>
+          )}
+        </div>
       </div>
       {/* Search Box */}
       <div style={{ display: 'flex' }}>
@@ -132,7 +155,7 @@ const HeaderToolbar: React.FC<HeaderToolbarProps> = ({
           <SearchIcon />
           <InputBase
             placeholder='Search...'
-            inputProps={{ 'aria-label': 'search' }}
+            inputProps={{ 'aria-label': 'search', maxLength: 25 }}
             onChange={(e) => {
               if (onSet) {
                 onSet(e.target.value); // Check if onSet is defined before invoking it

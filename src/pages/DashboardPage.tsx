@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Alert, Grid } from '@mui/material';
 import Application from '../containers/Application';
 import DataGrid from '../common/DataGrid/DataGrid'; // Import the DataGrid component
@@ -7,7 +7,16 @@ import axios from 'axios';
 const Dashboard = () => {
   // Function to fetch events data
   const [applicationId, setApplicationId] = React.useState<string>(''); // Add the applicationId state variable
+  const [applicationName, setApplicationName] = React.useState<string>(''); // Add the applicationName state variable
   const [eventId, setEventId] = React.useState<string>(''); // Add the eventId state variable
+  const [eventName, setEventName] = React.useState<string>(''); // Add the eventName state variable
+
+  useEffect(() => {
+    if (applicationId) {
+      setEventId('');
+      setEventName('');
+    }
+  }, [applicationId]);
 
   const fetchEvents = async (page: number) => {
     const queryParams = {
@@ -37,9 +46,12 @@ const Dashboard = () => {
   };
 
   return (
-    <Grid container spacing={3} sx={{ padding: 4 }}>
+    <Grid container spacing={2} sx={{ padding: 1, minHeight: '100vh' }}>
       <Grid item sm={12}>
-        <Application onSet={(id) => setApplicationId(id)} />
+        <Application
+          onSet={(id) => setApplicationId(id)}
+          onSetName={setApplicationName}
+        />
       </Grid>
 
       {applicationId ? (
@@ -50,7 +62,9 @@ const Dashboard = () => {
               title='events'
               fetchData={fetchEvents}
               parentId={applicationId}
+              parentName={applicationName}
               onSet={(id) => setEventId(id)}
+              setEventName={setEventName}
             />
           </Grid>
           {eventId ? (
@@ -59,6 +73,7 @@ const Dashboard = () => {
                 title='notifications'
                 fetchData={fetchNotifications}
                 parentId={eventId}
+                parentName={eventName}
               />
             </Grid>
           ) : (

@@ -1,11 +1,13 @@
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
-import { Box, ButtonGroup, IconButton, Switch } from "@mui/material";
-import { useState } from "react";
-import { AxiosError } from "axios";
-import FormModal from "../FormModal";
-import useModifyApp from "../../hooks/useModifyApp";
-import { App } from "../../services/appService";
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import { Box, ButtonGroup, IconButton, Switch } from '@mui/material';
+import { useState } from 'react';
+import { AxiosError } from 'axios';
+import FormModal from '../FormModal';
+import useModifyApp from '../../hooks/useModifyApp';
+import { App } from '../../services/appService';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CancelIcon from '@mui/icons-material/Cancel';
 
 interface Props {
   selectedApp: App;
@@ -17,7 +19,7 @@ interface Props {
   page: number;
 }
 
-const styles = { backgroundColor: "#BABABA", borderRadius: 2 };
+const styles = {};
 
 const Buttons = ({ selectedApp, isActive, page }: Props) => {
   const [checked, setChecked] = useState(isActive);
@@ -39,22 +41,28 @@ const Buttons = ({ selectedApp, isActive, page }: Props) => {
   return (
     <>
       <Box>
-        <ButtonGroup size="medium" aria-label="medium button group" sx={styles}>
-          <Switch checked={checked} onClick={onToggle} color="primary" />
+        <ButtonGroup size='medium' aria-label='medium button group' sx={styles}>
+          <Switch
+            checked={checked}
+            onClick={onToggle}
+            //color='primary'
+            size='medium'
+            checkedIcon={<CheckCircleIcon color='primary' />}
+          />
 
-          <IconButton color="inherit" onClick={onEdit}>
-            <EditIcon color="action" />
+          <IconButton color='inherit' onClick={onEdit}>
+            <EditIcon color='action' />
           </IconButton>
 
-          <IconButton color="inherit" onClick={onDelete}>
-            <DeleteIcon color="error" />
+          <IconButton color='inherit' onClick={onDelete}>
+            <DeleteIcon color='error' />
           </IconButton>
         </ButtonGroup>
       </Box>
       <FormModal
         open={open}
         setOpen={setOpen}
-        title="Edit"
+        title='Edit'
         app={selectedApp}
         page={page}
       />

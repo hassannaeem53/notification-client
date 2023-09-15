@@ -43,6 +43,7 @@ const NotificationForm: React.FC<Props> = ({ onChange, eventId }) => {
   const { createNotification, status } = useCreateNotification();
   const [apiError, setApiError] = useState<string | null>(null); // Store API error message
   const { tags: tagData, loading, error } = useFetchTags();
+  const [successSnackbarOpen, setSuccessSnackbarOpen] = useState(false);
 
   useEffect(() => {
     setFormData((prevData) => ({
@@ -57,6 +58,18 @@ const NotificationForm: React.FC<Props> = ({ onChange, eventId }) => {
       setApiError(status.error);
     }
   }, [status.error]);
+
+  useEffect(() => {
+    // Handle status.success from useCreateNotification
+    if (status.success) {
+      setSuccessSnackbarOpen(true);
+
+      // Automatically close the success Snackbar after 5 seconds
+      setTimeout(() => {
+        setSuccessSnackbarOpen(false);
+      }, 5000);
+    }
+  }, [status.success]);
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -95,6 +108,7 @@ const NotificationForm: React.FC<Props> = ({ onChange, eventId }) => {
         //console.log('tags', tagData);
         // Set form submission status to true
         setFormSubmitted(true);
+        //window.location.href = '/';
       } else {
         setApiError(status.error);
       }
@@ -172,24 +186,9 @@ const NotificationForm: React.FC<Props> = ({ onChange, eventId }) => {
                 trigger='{{'
                 data={formData.tags}
                 renderSuggestion={(suggestion, search, highlightedDisplay) => (
-                  <div className='custom-mention'>
-                    {highlightedDisplay}
-                    <style>
-                      {`
-              .custom-mention {
-                padding: 8px 12px;
-                background-color: #f0f0f0;
-                border-radius: 4px;
-                cursor: pointer;
-              }
-
-              .custom-mention:hover {
-                background-color: #e0e0e0;
-              }
-            `}
-                    </style>
-                  </div>
+                  <div className='custom-mention'>{highlightedDisplay}</div>
                 )}
+                displayTransform={(id, display) => `{{${display}}}`}
                 markup='{{__display__}}'
               />
             </MentionsInput>
@@ -247,12 +246,12 @@ const NotificationForm: React.FC<Props> = ({ onChange, eventId }) => {
         </Alert>
       </Snackbar>
       <Snackbar
-        open={formSubmitted && status.success}
-        autoHideDuration={5000}
+        open={successSnackbarOpen && status.success}
+        autoHideDuration={null} // Set to null to prevent auto-hide
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         onClose={() => {
           // Reset form submission status and hide the Snackbar
-          setFormSubmitted(false);
+          setSuccessSnackbarOpen(false);
           status.success = false;
         }}
       >
