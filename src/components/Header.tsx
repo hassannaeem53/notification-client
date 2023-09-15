@@ -6,6 +6,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import CompanyLogo from '../assets/icon.svg';
 import { Divider } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { SportsRugbySharp } from '@mui/icons-material';
 
 const Header = () => {
   return (
@@ -25,10 +26,11 @@ const Header = () => {
             flexItem
             sx={{
               background: 'white',
-              height: '50px',
+              height: '40px',
               marginRight: '10px',
-              marginTop: '10px',
-              border: '1px solid white',
+              marginTop: '20px',
+              border: '1px solid',
+              opacity: '0.3',
             }} // Adjust styling here
           />
           <Link to='/'>

@@ -5,7 +5,6 @@ import {
   Paper,
   Skeleton,
   Snackbar,
-  Grow,
   Slide,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
@@ -30,6 +29,7 @@ const Application = ({ onSet, onSetName }: Props) => {
   const [searchInput, setSearchInput] = useState<string>('');
   const [sort, setSort] = useState<string>('asc');
   const [sortby, setSortby] = useState<string>('name');
+  const [previousPage, setPreviousPage] = useState<number | null>(null);
 
   //getting all apps
   const {
@@ -42,6 +42,20 @@ const Application = ({ onSet, onSetName }: Props) => {
     onSet(selectedAppId);
   }, [selectedAppId, onSet]);
 
+  const handlePageChange = (newPage: number) => {
+    setPreviousPage(page);
+    setPage(newPage);
+  };
+
+  const getSlideDirection = () => {
+    if (previousPage === null) {
+      return 'left'; // Initial render, slide from the left
+    } else if (page > previousPage) {
+      return 'left'; // Navigating to the next page, slide from the right
+    } else {
+      return 'right'; // Navigating to the previous page, slide from the left
+    }
+  };
   //functions to open and close the toast
   const onOpenToast = (err: AxiosError) => {
     setToastError(err?.response?.data);
@@ -139,7 +153,7 @@ const Application = ({ onSet, onSetName }: Props) => {
         )}
         {apps?.applications?.map((app) => (
           <Slide
-            direction='left'
+            direction={getSlideDirection()} // Dynamic slide direction
             in={true}
             mountOnEnter
             unmountOnExit
@@ -173,7 +187,7 @@ const Application = ({ onSet, onSetName }: Props) => {
         <PaginationButtons
           currentPage={page}
           totalPages={apps.pagination?.totalPages}
-          setPage={setPage}
+          setPage={handlePageChange}
         />
       </Grid>
       <Snackbar open={open} autoHideDuration={6000} onClose={onCloseToast}>

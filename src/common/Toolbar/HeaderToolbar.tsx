@@ -7,16 +7,19 @@ import {
   Tooltip,
   Select,
   MenuItem,
+  Menu,
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import SortIcon from '@mui/icons-material/Sort';
-import { Rotate } from '@mui/material/Rotate';
 
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import { SortByAlpha } from '@mui/icons-material';
+
+import './HeaderToolbar.css';
 
 interface HeaderToolbarProps {
   title: string;
@@ -56,12 +59,20 @@ const HeaderToolbar: React.FC<HeaderToolbarProps> = ({
   ];
   const [ascendingOrder, setAscendingOrder] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState<string>('name');
+  const [filterAnchor, setFilterAnchor] = useState<null | HTMLElement>(null); // Store anchor element for the filter menu
 
   const toggleSortingOrder = () => {
     setAscendingOrder((prevOrder) => !prevOrder);
     if (setSort) {
       setSort(ascendingOrder ? 'asc' : 'desc');
     }
+  };
+  const handleFilterClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setFilterAnchor(event.currentTarget); // Open the filter menu
+  };
+
+  const handleFilterClose = () => {
+    setFilterAnchor(null); // Close the filter menu
   };
   const renderButton = () => {
     if (title == 'NOTIFICATIONS') {
@@ -155,51 +166,115 @@ const HeaderToolbar: React.FC<HeaderToolbarProps> = ({
           <SearchIcon />
           <InputBase
             placeholder='Search...'
-            inputProps={{ 'aria-label': 'search', maxLength: 25 }}
+            inputProps={{ 'aria-label': 'search', maxLength: 20 }}
             onChange={(e) => {
               if (onSet) {
                 onSet(e.target.value); // Check if onSet is defined before invoking it
               }
             }}
+            style={{
+              flex: 1, // Take up remaining space in the flex container
+              marginLeft: '8px', // Add some space between the icon and input field
+            }}
           />
         </div>
         {/* Filter Dropdown */}
-        <div>
-          <Select
-            label='Filter'
-            value={selectedFilter}
-            sx={{
-              minWidth: '120px',
-              border: '1px ',
-              color: 'white', // Select text color
-            }}
-            onChange={(e) => {
-              if (setSortby) {
-                // console.log(e.target.value as string);
-                setSelectedFilter(e.target.value as string);
-                setSortby(e.target.value as string); // Check if setSort is defined before invoking it
-              }
-            }}
-          >
-            {filterOptions.map((option) => (
-              <MenuItem key={option.value} value={option.value}>
-                {option.label}
-              </MenuItem>
-            ))}
-          </Select>
-          {/* Filter Icon */}
+        <div className='small-medium-sort'>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <IconButton
+              onClick={handleFilterClick} // Open filter menu on button click
+              color='primary'
+              sx={{ marginLeft: '16px' }}
+            >
+              <SortByAlpha />
+            </IconButton>
+            {/* Filter Menu */}
+            <Menu
+              anchorEl={filterAnchor}
+              open={Boolean(filterAnchor)}
+              onClose={handleFilterClose} // Close filter menu on menu item click or outside click
+            >
+              {filterOptions.map((option) => (
+                <MenuItem
+                  key={option.value}
+                  value={option.value}
+                  onClick={() => {
+                    handleFilterClose(); // Close filter menu on menu item click
+                    if (setSortby) {
+                      setSelectedFilter(option.value);
+                      setSortby(option.value);
+                    }
+                  }}
+                >
+                  {option.label}
+                </MenuItem>
+              ))}
+            </Menu>
+            {/* Filter Icon */}
+            {ascendingOrder ? (
+              <SortIcon
+                sx={{
+                  marginLeft: '16px',
+                  cursor: 'pointer',
+                  transform: 'rotate(180deg)',
+                }}
+                onClick={toggleSortingOrder}
+              />
+            ) : (
+              <SortIcon
+                sx={{ marginLeft: '16px', cursor: 'pointer' }}
+                onClick={toggleSortingOrder}
+              />
+            )}
+          </div>
+        </div>
+        <div className='large-sort'>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <Select
+              label='Filter'
+              value={selectedFilter}
+              sx={{
+                minWidth: '120px',
+                border: '1px ',
+                color: 'white', // Select text color
+              }}
+              onChange={(e) => {
+                if (setSortby) {
+                  // console.log(e.target.value as string);
+                  setSelectedFilter(e.target.value as string);
+                  setSortby(e.target.value as string); // Check if setSort is defined before invoking it
+                }
+              }}
+            >
+              {filterOptions.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </Select>
+            {/* Filter Icon */}
 
-          {ascendingOrder ? (
-            <ArrowDownwardIcon
-              sx={{ marginLeft: '16px', cursor: 'pointer' }}
-              onClick={toggleSortingOrder}
-            />
-          ) : (
-            <ArrowUpwardIcon
-              sx={{ marginLeft: '16px', cursor: 'pointer' }}
-              onClick={toggleSortingOrder}
-            />
-          )}
+            {ascendingOrder ? (
+              <SortIcon
+                sx={{
+                  marginLeft: '16px',
+                  cursor: 'pointer',
+                  transform: 'rotate(180deg)',
+                }}
+                fontSize='large'
+                onClick={toggleSortingOrder}
+              />
+            ) : (
+              <SortIcon
+                sx={{
+                  marginLeft: '16px',
+                  cursor: 'pointer',
+                }}
+                onClick={toggleSortingOrder}
+                fontSize='large'
+              />
+            )}
+          </div>
         </div>
       </div>
 
