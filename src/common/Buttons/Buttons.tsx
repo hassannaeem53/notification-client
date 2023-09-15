@@ -1,3 +1,4 @@
+
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { Box, ButtonGroup, IconButton, Switch } from "@mui/material";
@@ -6,6 +7,8 @@ import { AxiosError } from "axios";
 import FormModal from "../FormModal";
 import { App } from "../../services/appService";
 import useModifyData from "../../hooks/useModifyData";
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CancelIcon from '@mui/icons-material/Cancel';
 
 export interface Entity {
   _id: string;
@@ -32,7 +35,7 @@ interface Props {
   setEventId?: React.Dispatch<React.SetStateAction<string | undeinfed>>;
 }
 
-const styles = { backgroundColor: "#BABABA", borderRadius: 2 };
+const styles = {};
 
 const Buttons = ({
   selectedEntity,
@@ -78,15 +81,21 @@ const Buttons = ({
   return (
     <>
       <Box>
-        <ButtonGroup size="medium" aria-label="medium button group" sx={styles}>
-          <Switch checked={checked} onClick={onToggle} color="primary" />
+        <ButtonGroup size='medium' aria-label='medium button group' sx={styles}>
+          <Switch
+            checked={checked}
+            onClick={onToggle}
+            //color='primary'
+            size='medium'
+            checkedIcon={<CheckCircleIcon color='primary' />}
+          />
 
-          <IconButton color="inherit" onClick={onEdit}>
-            <EditIcon color="action" />
+          <IconButton color='inherit' onClick={onEdit}>
+            <EditIcon color='action' />
           </IconButton>
 
-          <IconButton color="inherit" onClick={onDelete}>
-            <DeleteIcon color="error" />
+          <IconButton color='inherit' onClick={onDelete}>
+            <DeleteIcon color='error' />
           </IconButton>
         </ButtonGroup>
       </Box>

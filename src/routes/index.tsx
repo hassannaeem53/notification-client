@@ -9,7 +9,8 @@ import { Auth } from "../components/Auth";
 const AppRouter = () => (
   <Routes>
     <Route
-      path="/notification-preview"
+      path='/notification-preview/:eventId'
+
       element={
         <Wrapper>
           <PreviewPage />
