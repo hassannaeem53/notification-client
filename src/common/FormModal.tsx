@@ -60,10 +60,11 @@ const FormModal = ({
   });
 
   useEffect(() => {
-    setFormData({
-      name: selectedEntity?.name,
-      description: selectedEntity?.description,
-    });
+    if (title == "Edit")
+      setFormData({
+        name: selectedEntity?.name,
+        description: selectedEntity?.description,
+      });
   }, [selectedEntity]);
 
   const modifyEntity = useModifyData(page, entityName, parentId, () =>
@@ -73,6 +74,7 @@ const FormModal = ({
   const addEntity = useAddData(entityName, finalPage, parentId);
 
   const handleClose = () => {
+    if (title == "Add") setFormData({});
     // setFormData({
     //   name: selectedEntity?.name,
     //   description: selectedEntity?.description,
