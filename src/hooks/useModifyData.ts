@@ -33,7 +33,8 @@ const useModifyData = <T>(
       const invalidateQueryKey = [...key];
       if (
         context?.previousData[entityName]?.length == 1 &&
-        variables.entity.is_deleted
+        variables.entity.is_deleted &&
+        page - 1 != 0
       ) {
         invalidateQueryKey[1] = page - 1;
 

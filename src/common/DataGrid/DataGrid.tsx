@@ -13,9 +13,8 @@ import ErrorIcon from "@mui/icons-material/Error";
 import HeaderToolbar from "../Toolbar/HeaderToolbar";
 import Buttons from "../Buttons/Buttons";
 import useData from "../../hooks/useData";
-import PaginationButtons from "../NavButtons";
 import FormModal from "../FormModal";
-
+import PaginationButtons from "../PaginationButtons";
 
 interface DataItem {
   _id: string;
