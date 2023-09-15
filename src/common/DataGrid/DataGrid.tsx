@@ -7,13 +7,14 @@ import {
   Typography,
   Skeleton,
   Grow,
-} from '@mui/material';
-import { Container } from 'react-bootstrap';
-import ErrorIcon from '@mui/icons-material/Error';
-import HeaderToolbar from '../Toolbar/HeaderToolbar';
-import Buttons from '../Buttons/Buttons';
-import useData from '../../hooks/useData';
-import PaginationButtons from '../NavButtons';
+
+import { Container } from "react-bootstrap";
+import ErrorIcon from "@mui/icons-material/Error";
+import HeaderToolbar from "../Toolbar/HeaderToolbar";
+import Buttons from "../Buttons/Buttons";
+import useData from "../../hooks/useData";
+import FormModal from "../FormModal";
+import PaginationButtons from "../PaginationButtons";
 
 interface DataItem {
   _id: string;
@@ -39,14 +40,16 @@ export interface DataGridProps {
   onSet?: (id: string) => void;
   parentName?: string;
   setEventName?: (id: string) => void;
+  setEventId?: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const DataGrid: React.FC<DataGridProps> = ({
   title,
   parentId,
   parentName,
-  onSet,
   setEventName,
+  onSet,
+  setEventId,
 }) => {
   const [page, setPage] = useState(1);
   const [selectedId, setSelectedId] = useState<string>('');
@@ -54,6 +57,8 @@ const DataGrid: React.FC<DataGridProps> = ({
   const [searchInput, setSearchInput] = useState<string>('');
   const [sort, setSort] = useState<string>('asc');
   const [sortby, setSortby] = useState<string>('name');
+  const [selectedId, setSelectedId] = useState<string>("");
+  const [openAddModal, setOpenAddModal] = useState<boolean>(false);
 
   const { data, error, isLoading } = useData(
     page,
@@ -89,10 +94,11 @@ const DataGrid: React.FC<DataGridProps> = ({
         setSort={setSort}
         setSortby={setSortby}
         parentName={parentName}
+        setOpenAddModal={setOpenAddModal}
       />
-      <Container
-        style={{ marginTop: '20px', paddingLeft: '20px', paddingRight: '20px' }}
-      >
+      <Container 
+                style={{ marginTop: '20px', paddingLeft: '20px', paddingRight: '20px' }}
+        >
         <Grid container spacing={2}>
           {isLoading ? (
             // Loading skeleton
@@ -169,7 +175,16 @@ const DataGrid: React.FC<DataGridProps> = ({
                         md={4}
                         style={{ display: 'flex', alignItems: 'center' }}
                       >
-                        <Buttons />
+                        <Buttons
+                          selectedEntity={item}
+                          page={page}
+                          entity={title}
+                          setPage={setPage}
+                          isActive={item.is_active}
+                          parentId={parentId}
+                          finalPage={data.pagination?.totalPages || 1}
+                          setEventId={setEventId}
+                        />
                       </Grid>
                     </Grid>
                   </Paper>
@@ -183,6 +198,15 @@ const DataGrid: React.FC<DataGridProps> = ({
             setPage={setPage}
           />
         </Grid>
+        <FormModal
+          open={openAddModal}
+          setOpen={setOpenAddModal}
+          title="Add"
+          page={page}
+          entityName="events"
+          finalPage={data?.pagination?.totalPages || 1}
+          parentId={parentId}
+        />
       </Container>
     </>
   );

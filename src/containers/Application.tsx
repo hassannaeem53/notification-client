@@ -13,8 +13,10 @@ import { AxiosError } from 'axios';
 import ErrorIcon from '@mui/icons-material/Error'; // Import the Error icon from Material-UI
 import useData from '../hooks/useData';
 import { App } from '../services/appService';
-import PaginationButtons from '../common/NavButtons';
 import HeaderToolbar from '../common/Toolbar/HeaderToolbar';
+import FormModal from "../common/FormModal";
+import PaginationButtons from "../common/PaginationButtons";
+
 
 interface Props {
   onSet: (id: string) => void;
@@ -25,6 +27,7 @@ const Application = ({ onSet, onSetName }: Props) => {
   const [page, setPage] = useState<number>(1);
   const [selectedAppId, setSelectedAppId] = useState<string>();
   const [open, setOpen] = useState(false);
+  const [openAddModal, setOpenAddModal] = useState<boolean>(false);
   const [toastError, setToastError] = useState<string>();
   const [searchInput, setSearchInput] = useState<string>('');
   const [sort, setSort] = useState<string>('asc');
@@ -140,10 +143,11 @@ const Application = ({ onSet, onSetName }: Props) => {
         onSet={setSearchInput}
         setSort={setSort}
         setSortby={setSortby}
-      />
-      {error && <p>{error.message}</p>}
+        setOpenAddModal={setOpenAddModal}
 
-      <Grid container spacing={3} sx={{ marginTop: '10px' }}>
+      />
+
+      <Grid container spacing={3} sx={{ marginTop: 0.05 }}>
         {apps?.applications?.length === 0 && (
           <Grid item xs={12}>
             <Alert severity='info' sx={{ marginTop: '20px' }}>
@@ -151,6 +155,7 @@ const Application = ({ onSet, onSetName }: Props) => {
             </Alert>
           </Grid>
         )}
+
         {apps?.applications?.map((app) => (
           <Slide
             direction={getSlideDirection()} // Dynamic slide direction
@@ -180,9 +185,12 @@ const Application = ({ onSet, onSetName }: Props) => {
                 toastError={toastError}
                 onEdit={onEdit}
                 onSetName={onSetName}
+                setPage={setPage}
+                finalPage={apps.pagination?.totalPages || 1}
               />
             </Grid>
           </Slide>
+
         ))}
         <PaginationButtons
           currentPage={page}
@@ -195,6 +203,15 @@ const Application = ({ onSet, onSetName }: Props) => {
           {/* {error || "Something Went Wrong"} */}
         </Alert>
       </Snackbar>
+
+      <FormModal
+        open={openAddModal}
+        setOpen={setOpenAddModal}
+        title="Add"
+        page={page}
+        entityName="applications"
+        finalPage={apps.pagination?.totalPages || 1}
+      />
     </>
   );
 };

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+
+import React, { useState, Dispatch, SetStateAction } from "react";
 import {
   Toolbar,
   Typography,
@@ -28,6 +29,8 @@ interface HeaderToolbarProps {
   setSort?: (sort: string) => void;
   setSortby?: (sortby: string) => void;
   parentName?: string;
+  setOpenAddModal: Dispatch<SetStateAction<boolean>>;
+
 }
 
 const HeaderToolbar: React.FC<HeaderToolbarProps> = ({
@@ -37,6 +40,7 @@ const HeaderToolbar: React.FC<HeaderToolbarProps> = ({
   setSort,
   setSortby,
   parentName,
+  setOpenAddModal
 }) => {
   // Sample filter options
   const filterOptions = [
@@ -56,6 +60,7 @@ const HeaderToolbar: React.FC<HeaderToolbarProps> = ({
       value: 'updated_at',
       label: 'Updated At',
     },
+
   ];
   const [ascendingOrder, setAscendingOrder] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState<string>('name');
@@ -94,34 +99,40 @@ const HeaderToolbar: React.FC<HeaderToolbarProps> = ({
     }
   };
 
+  const addEntity = () => {
+    if (title === "EVENTS" || title === "APPLICATIONS") {
+      setOpenAddModal(true);
+    }
+  };
+
   return (
     <Toolbar
-      variant='dense'
+      variant="dense"
       sx={{
-        width: '100%',
-        marginTop: '20px',
-        backgroundColor: '#2196F3', // Blue background color
-        color: 'white', // Text color
-        borderRadius: '8px', // Border radius
-        boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)', // Box shadow
-        padding: '8px 16px', // Padding
-        alignItems: 'center', // Center items vertically
-        justifyContent: 'space-between', // Space evenly
-        '& .MuiInputBase-input': {
-          color: 'white', // Input text color
+        width: "100%",
+        marginTop: "20px",
+        backgroundColor: "#2196F3", // Blue background color
+        color: "white", // Text color
+        borderRadius: "8px", // Border radius
+        boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)", // Box shadow
+        padding: "8px 16px", // Padding
+        alignItems: "center", // Center items vertically
+        justifyContent: "space-between", // Space evenly
+        "& .MuiInputBase-input": {
+          color: "white", // Input text color
         },
-        '& .MuiSelect-root': {
-          color: 'white', // Select text color
+        "& .MuiSelect-root": {
+          color: "white", // Select text color
         },
-        '& .MuiSelect-icon': {
-          color: 'white', // Select icon color
+        "& .MuiSelect-icon": {
+          color: "white", // Select icon color
         },
-        '& .MuiIconButton-root': {
-          color: 'white', // Icon button color
+        "& .MuiIconButton-root": {
+          color: "white", // Icon button color
         },
-        '@media (prefers-color-scheme: dark)': {
+        "@media (prefers-color-scheme: dark)": {
           // Media query for dark theme
-          backgroundColor: '#1976D2', // Light bluish background color for dark theme
+          backgroundColor: "#1976D2", // Light bluish background color for dark theme
         },
       }}
     >
@@ -150,17 +161,18 @@ const HeaderToolbar: React.FC<HeaderToolbarProps> = ({
             </Typography>
           )}
         </div>
+
       </div>
       {/* Search Box */}
-      <div style={{ display: 'flex' }}>
+      <div style={{ display: "flex" }}>
         <div
           style={{
-            display: 'flex',
-            alignItems: 'center',
-            marginRight: '16px',
-            backgroundColor: 'rgba(255, 255, 255, 0.1)', // Search box background color
-            borderRadius: '4px', // Search box border radius
-            padding: '4px 8px', // Search box padding
+            display: "flex",
+            alignItems: "center",
+            marginRight: "16px",
+            backgroundColor: "rgba(255, 255, 255, 0.1)", // Search box background color
+            borderRadius: "4px", // Search box border radius
+            padding: "4px 8px", // Search box padding
           }}
         >
           <SearchIcon />
@@ -275,11 +287,17 @@ const HeaderToolbar: React.FC<HeaderToolbarProps> = ({
               />
             )}
           </div>
+
         </div>
       </div>
 
       {/* Create Icon */}
-      <Tooltip title='Create'>{renderButton()}</Tooltip>
+
+      <Tooltip title="Create">
+        <IconButton color="primary" onClick={addEntity}>
+          <AddCircleIcon fontSize="large" />
+        </IconButton>
+      </Tooltip>
     </Toolbar>
   );
 };

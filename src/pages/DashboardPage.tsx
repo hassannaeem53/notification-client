@@ -51,6 +51,7 @@ const Dashboard = () => {
         <Application
           onSet={(id) => setApplicationId(id)}
           onSetName={setApplicationName}
+
         />
       </Grid>
 
@@ -60,11 +61,12 @@ const Dashboard = () => {
             {/* Render the DataGrid for Events */}
             <DataGrid
               title='events'
-              fetchData={fetchEvents}
               parentId={applicationId}
               parentName={applicationName}
               onSet={(id) => setEventId(id)}
               setEventName={setEventName}
+              setEventId={setEventId}
+
             />
           </Grid>
           {eventId ? (
