@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import appService, { App, AppInterface } from "../services/appService";
-import { UpdateEntity } from "../services/httpService";
+import appService, { App } from "../services/appService";
+import { ResponseInterface, UpdateEntity } from "../services/httpService";
 
 interface UpdateObj {
   id: string;
@@ -14,14 +14,17 @@ const useModifyApp = (page: number, onUpdate?: () => void) => {
 
     onMutate: ({ id, entity }: UpdateObj) => {
       const previousAppsData =
-        queryClient.getQueryData<AppInterface>(["apps", page]) || [];
+        queryClient.getQueryData<ResponseInterface<App>>(["apps", page]) || [];
 
-      queryClient.setQueryData<AppInterface>(["apps", page], (data) => {
-        const newApps = data?.applications?.map((app: App) =>
-          app._id == id ? { ...app, ...entity } : app
-        );
-        return { ...data, applications: newApps };
-      });
+      queryClient.setQueryData<ResponseInterface<App>>(
+        ["apps", page],
+        (data) => {
+          const newApps = data?.applications?.map((app: App) =>
+            app._id == id ? { ...app, ...entity } : app
+          );
+          return { ...data, applications: newApps };
+        }
+      );
 
       return { previousAppsData };
     },
@@ -30,7 +33,7 @@ const useModifyApp = (page: number, onUpdate?: () => void) => {
       onUpdate && onUpdate();
     },
 
-    onError: (error, id, context) => {
+    onError: (_error, _id, context) => {
       if (!context) return;
       queryClient.setQueryData(["apps", page], context.previousAppsData);
     },

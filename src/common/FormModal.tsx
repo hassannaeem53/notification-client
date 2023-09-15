@@ -6,17 +6,29 @@ import {
   Typography,
   Stack,
 } from "@mui/material";
-import { ChangeEvent, FormEvent, useState } from "react";
-import useModifyApp from "../hooks/useModifyApp";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { UpdateEntity } from "../services/httpService";
 import { App } from "../services/appService";
+import { Entity } from "./Buttons/Buttons";
+import useModifyData from "../hooks/useModifyData";
+import useAddData from "../hooks/useAddData";
 
 interface Props {
   open: boolean;
   setOpen: (value: boolean) => void;
   title: string;
-  app: App;
+  selectedEntity?: Entity | App;
   page: number;
+  entityName: string;
+  parentId?: string;
+  finalPage: number;
+}
+
+interface AddEntity {
+  name: string;
+  description?: string;
+  applicationId?: string;
+  eventId?: string;
 }
 
 const style = {
@@ -32,12 +44,41 @@ const style = {
   textAlign: "center",
 };
 
-const FormModal = ({ open, setOpen, title, app, page }: Props) => {
-  const [formData, setFormData] = useState<UpdateEntity>({});
+const FormModal = ({
+  open,
+  setOpen,
+  title,
+  selectedEntity,
+  page,
+  entityName,
+  parentId,
+  finalPage,
+}: Props) => {
+  const [formData, setFormData] = useState<UpdateEntity | AddEntity>({
+    name: selectedEntity?.name,
+    description: selectedEntity?.description,
+  });
 
-  const modifyApp = useModifyApp(page, () => setFormData({}));
+  useEffect(() => {
+    setFormData({
+      name: selectedEntity?.name,
+      description: selectedEntity?.description,
+    });
+  }, [selectedEntity]);
 
-  const handleClose = () => setOpen(false);
+  const modifyEntity = useModifyData(page, entityName, parentId, () =>
+    setFormData({ name: "", description: "" })
+  );
+
+  const addEntity = useAddData(entityName, finalPage, parentId);
+
+  const handleClose = () => {
+    // setFormData({
+    //   name: selectedEntity?.name,
+    //   description: selectedEntity?.description,
+    // });
+    setOpen(false);
+  };
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -49,7 +90,17 @@ const FormModal = ({ open, setOpen, title, app, page }: Props) => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    modifyApp.mutate({ id: app._id, entity: formData });
+    if (title === "Edit")
+      modifyEntity.mutate({ id: selectedEntity?._id || "", entity: formData });
+    else {
+      //add case
+      let entityToAdd = { ...formData };
+      if (entityName == "events")
+        entityToAdd = { ...entityToAdd, applicationId: parentId };
+      else if (entityName == "notifications")
+        entityToAdd = { ...entityToAdd, eventId: parentId };
+      addEntity.mutate(entityToAdd);
+    }
     handleClose();
   };
 

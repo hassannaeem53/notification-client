@@ -13,7 +13,9 @@ import ErrorIcon from "@mui/icons-material/Error";
 import HeaderToolbar from "../Toolbar/HeaderToolbar";
 import Buttons from "../Buttons/Buttons";
 import useData from "../../hooks/useData";
-import PaginationButtons from "../PaginationButtons";
+import PaginationButtons from "../NavButtons";
+import FormModal from "../FormModal";
+
 
 interface DataItem {
   _id: string;
@@ -37,12 +39,19 @@ export interface DataGridProps {
   title: string;
   parentId: string;
   onSet?: (id: string) => void;
+  setEventId?: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const DataGrid: React.FC<DataGridProps> = ({ title, parentId, onSet }) => {
+const DataGrid: React.FC<DataGridProps> = ({
+  title,
+  parentId,
+  onSet,
+  setEventId,
+}) => {
   const [page, setPage] = useState(1);
 
   const [selectedId, setSelectedId] = useState<string>("");
+  const [openAddModal, setOpenAddModal] = useState<boolean>(false);
 
   const { data, error, isLoading } = useData(page, title, parentId);
 
@@ -64,7 +73,10 @@ const DataGrid: React.FC<DataGridProps> = ({ title, parentId, onSet }) => {
 
   return (
     <>
-      <HeaderToolbar title={title.toUpperCase()} />
+      <HeaderToolbar
+        title={title.toUpperCase()}
+        setOpenAddModal={setOpenAddModal}
+      />
       <Container style={{ marginTop: "20px" }}>
         <Grid container spacing={2}>
           {isLoading ? (
@@ -112,7 +124,16 @@ const DataGrid: React.FC<DataGridProps> = ({ title, parentId, onSet }) => {
                         md={4}
                         style={{ display: "flex", alignItems: "center" }}
                       >
-                        <Buttons />
+                        <Buttons
+                          selectedEntity={item}
+                          page={page}
+                          entity={title}
+                          setPage={setPage}
+                          isActive={item.is_active}
+                          parentId={parentId}
+                          finalPage={data.pagination?.totalPages || 1}
+                          setEventId={setEventId}
+                        />
                       </Grid>
                     </Grid>
                   </Paper>
@@ -126,6 +147,15 @@ const DataGrid: React.FC<DataGridProps> = ({ title, parentId, onSet }) => {
             setPage={setPage}
           />
         </Grid>
+        <FormModal
+          open={openAddModal}
+          setOpen={setOpenAddModal}
+          title="Add"
+          page={page}
+          entityName="events"
+          finalPage={data?.pagination?.totalPages || 1}
+          parentId={parentId}
+        />
       </Container>
     </>
   );

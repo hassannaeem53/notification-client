@@ -12,7 +12,9 @@ import { AxiosError } from "axios";
 import ErrorIcon from "@mui/icons-material/Error"; // Import the Error icon from Material-UI
 import useData from "../hooks/useData";
 import { App } from "../services/appService";
-import PaginationButtons from "../common/PaginationButtons";
+import PaginationButtons from "../common/NavButtons";
+import HeaderToolbar from "../common/Toolbar/HeaderToolbar";
+import FormModal from "../common/FormModal";
 
 
 interface Props {
@@ -23,6 +25,7 @@ const Application = ({ onSet }: Props) => {
   const [page, setPage] = useState<number>(1);
   const [selectedAppId, setSelectedAppId] = useState<string>();
   const [open, setOpen] = useState(false);
+  const [openAddModal, setOpenAddModal] = useState<boolean>(false);
   const [toastError, setToastError] = useState<string>();
 
   //getting all apps
@@ -111,11 +114,12 @@ const Application = ({ onSet }: Props) => {
 
   return (
     <>
+      <HeaderToolbar
+        title={"applications".toUpperCase()}
+        setOpenAddModal={setOpenAddModal}
+      />
 
-      <HeaderToolbar title={'applications'.toUpperCase()} />
-      {error && <p>{error.message}</p>}
-
-      <Grid container spacing={3}>
+      <Grid container spacing={3} sx={{ marginTop: 0.05 }}>
         {apps?.applications?.map((app) => (
           <Grid
             item
@@ -137,6 +141,8 @@ const Application = ({ onSet }: Props) => {
               closeToast={onCloseToast}
               toastError={toastError}
               onEdit={onEdit}
+              setPage={setPage}
+              finalPage={apps.pagination?.totalPages || 1}
             />
           </Grid>
         ))}
@@ -151,6 +157,15 @@ const Application = ({ onSet }: Props) => {
           {/* {error || "Something Went Wrong"} */}
         </Alert>
       </Snackbar>
+
+      <FormModal
+        open={openAddModal}
+        setOpen={setOpenAddModal}
+        title="Add"
+        page={page}
+        entityName="applications"
+        finalPage={apps.pagination?.totalPages || 1}
+      />
     </>
   );
 };
