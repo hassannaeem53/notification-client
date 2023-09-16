@@ -123,8 +123,12 @@ const DataGrid: React.FC<DataGridProps> = ({
                 <Grid item xs={6}>
                   <Paper
                     elevation={16}
-                    style={{
-                      padding: "20px",
+                    sx={{
+                      "&:hover": {
+                        backgroundColor: "#CDDEEE",
+                        // border: '2px solid #2196F3',
+                      },
+                      padding: 2,
                       //backgroundColor: '#EEEEEE',
                       cursor: "pointer",
                       border:
@@ -132,16 +136,11 @@ const DataGrid: React.FC<DataGridProps> = ({
                           ? "2px solid #2196F3"
                           : "",
                       display: "flex",
-                      minHeight: "10vw",
-                      alignItems: "center",
+                      // flex: 1,
+                      // minHeight: "10vw",
+                      // alignItems: "center",
                       flexDirection: "column",
                       justifyContent: "center",
-                    }}
-                    sx={{
-                      "&:hover": {
-                        backgroundColor: "#CDDEEE",
-                        // border: '2px solid #2196F3',
-                      },
                     }}
                     onClick={() => {
                       setSelectedId(item._id);
@@ -152,7 +151,12 @@ const DataGrid: React.FC<DataGridProps> = ({
                     }}
                   >
                     <Grid container spacing={6}>
-                      <Grid item xs={12} md={8}>
+                      <Grid
+                        item
+                        xs={12}
+                        md={8}
+                        // sx={{ backgroundColor: "orange" }}
+                      >
                         <Typography
                           variant="h5"
                           component="div"
@@ -177,7 +181,11 @@ const DataGrid: React.FC<DataGridProps> = ({
                         item
                         xs={12}
                         md={4}
-                        style={{ display: "flex", alignItems: "center" }}
+                        sx={{
+                          // backgroundColor: "yellow",
+                          display: "flex",
+                          justifyContent: "right",
+                        }}
                       >
                         <Buttons
                           selectedEntity={item}
