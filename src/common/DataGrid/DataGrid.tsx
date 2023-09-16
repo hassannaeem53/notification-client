@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   AlertTitle,
   Alert,
@@ -67,6 +67,10 @@ const DataGrid: React.FC<DataGridProps> = ({
     sort,
     sortby
   );
+
+  useEffect(() => {
+    if (searchInput.length) setPage(1); //resetting page to 1 to show search results
+  }, [searchInput]);
 
   if (error)
     return (

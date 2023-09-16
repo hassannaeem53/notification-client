@@ -60,6 +60,10 @@ const Application = ({ onSet, onSetName }: Props) => {
 
   const onEdit = () => setOpen(true);
 
+  useEffect(() => {
+    if (searchInput.length) setPage(1); //resetting page to 1 to show search results
+  }, [searchInput]);
+
   if (isLoading) {
     // Display skeleton placeholders when data is loading
     const skeletonItems = Array.from({ length: 4 }).map((_, index) => (
