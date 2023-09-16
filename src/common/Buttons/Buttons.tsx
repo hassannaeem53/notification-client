@@ -1,7 +1,14 @@
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import { Box, ButtonGroup, IconButton, Switch } from "@mui/material";
-import { useState } from "react";
+import {
+  Alert,
+  Box,
+  ButtonGroup,
+  IconButton,
+  Snackbar,
+  Switch,
+} from "@mui/material";
+import { useEffect, useState } from "react";
 import FormModal from "../FormModal";
 import { App } from "../../services/appService";
 import useModifyData from "../../hooks/useModifyData";
@@ -49,10 +56,11 @@ const Buttons = ({
   sort,
   sortBy,
 }: Props) => {
-  // console.log("🚀 ~ file: Buttons.tsx:51 ~ selectedEntity:", selectedEntity);
   const [checked, setChecked] = useState(isActive);
 
   const [open, setOpen] = useState<boolean>(false);
+
+  const [reqError, setReqError] = useState<string | undefined>(undefined);
 
   const deleteApp = useModifyData(
     page,
@@ -82,12 +90,30 @@ const Buttons = ({
   );
 
   const onToggle = () => {
-    // setChecked(!checked);
     const updatedEntity = { is_active: !checked };
     toggleApp.mutate({ id: selectedEntity._id, entity: updatedEntity });
+
+    if (toggleApp.isError) {
+      setReqError(toggleApp.error.message);
+    }
   };
 
   const onEdit = () => setOpen(true);
+
+  useEffect(() => {
+    if (toggleApp.error)
+      setReqError(
+        toggleApp.error?.response?.data?.error || toggleApp.error.message
+      );
+    if (deleteApp.error)
+      setReqError(
+        deleteApp.error?.response?.data?.error || deleteApp.error.message
+      );
+  }, [toggleApp.error, deleteApp.error]);
+
+  function handleCloseAlert() {
+    setReqError(undefined);
+  }
 
   return (
     <>
@@ -123,6 +149,22 @@ const Buttons = ({
         sort={sort}
         sortBy={sortBy}
       />
+      <Snackbar
+        open={reqError !== undefined}
+        autoHideDuration={5000}
+        onClose={handleCloseAlert}
+        message={reqError || ""}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleCloseAlert}
+          severity="error"
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          {reqError}
+        </Alert>
+      </Snackbar>
     </>
   );
 };

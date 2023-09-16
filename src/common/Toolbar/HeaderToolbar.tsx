@@ -248,7 +248,6 @@ const HeaderToolbar: React.FC<HeaderToolbarProps> = ({
               }}
               onChange={(e) => {
                 if (setSortby) {
-                  // console.log(e.target.value as string);
                   setSelectedFilter(e.target.value as string);
                   setSortby(e.target.value as string); // Check if setSort is defined before invoking it
                 }

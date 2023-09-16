@@ -3,6 +3,7 @@ import HttpService, {
   ResponseInterface,
   UpdateEntity,
 } from "../services/httpService";
+import { AxiosError } from "axios";
 
 interface UpdateObj {
   id: string;
@@ -24,12 +25,11 @@ const useModifyData = <T>(
   const key = parentId
     ? [entityName, page, parentId, searchInput, sort, sortBy]
     : [entityName, page, searchInput, sort, sortBy];
-  console.log("🚀 ~ file: useModifyData.ts:22 ~ key:", key);
 
   return useMutation({
     mutationFn: ({ id, entity }: UpdateObj) => service.update(id, entity),
 
-    onMutate: ({ id }: UpdateObj) => {
+    onMutate: () => {
       const previousData = queryClient.getQueryData<ResponseInterface<T>>(key);
 
       return { previousData };
@@ -37,7 +37,6 @@ const useModifyData = <T>(
 
     onSuccess: (_data, variables, context) => {
       const invalidateQueryKey = [...key];
-      console.log("context:", context);
 
       if (
         context?.previousData[entityName]?.length == 1 &&
@@ -53,8 +52,9 @@ const useModifyData = <T>(
       queryClient.invalidateQueries({ queryKey: invalidateQueryKey });
     },
 
-    onError: () => {
+    onError: (error: AxiosError) => {
       queryClient.invalidateQueries({ queryKey: key });
+      return { error };
     },
   });
 };
