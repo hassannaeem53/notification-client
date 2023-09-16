@@ -12,13 +12,18 @@ interface UpdateObj {
 const useModifyData = <T>(
   page: number,
   entityName: string,
+  searchInput: string,
+  sort: string,
+  sortBy: string,
   parentId?: string,
   onUpdate?: (page?: number) => void
 ) => {
   const queryClient = useQueryClient();
   const service = new HttpService<T>(entityName);
 
-  const key = parentId ? [entityName, page, parentId] : [entityName, page];
+  const key = parentId
+    ? [entityName, page, parentId, searchInput, sort, sortBy]
+    : [entityName, page, searchInput, sort, sortBy];
   console.log("🚀 ~ file: useModifyData.ts:22 ~ key:", key);
 
   return useMutation({

@@ -22,6 +22,9 @@ interface Props {
   entityName: string;
   parentId?: string;
   finalPage: number;
+  searchInput: string;
+  sort: string;
+  sortBy: string;
 }
 
 interface AddEntity {
@@ -53,6 +56,9 @@ const FormModal = ({
   entityName,
   parentId,
   finalPage,
+  searchInput,
+  sort,
+  sortBy,
 }: Props) => {
   const [formData, setFormData] = useState<UpdateEntity | AddEntity>({
     name: selectedEntity?.name,
@@ -67,18 +73,20 @@ const FormModal = ({
       });
   }, [selectedEntity]);
 
-  const modifyEntity = useModifyData(page, entityName, parentId, () =>
-    setFormData({ name: "", description: "" })
+  const modifyEntity = useModifyData(
+    page,
+    entityName,
+    searchInput,
+    sort,
+    sortBy,
+    parentId,
+    () => setFormData({ name: "", description: "" })
   );
 
   const addEntity = useAddData(entityName, finalPage, parentId);
 
   const handleClose = () => {
     if (title == "Add") setFormData({});
-    // setFormData({
-    //   name: selectedEntity?.name,
-    //   description: selectedEntity?.description,
-    // });
     setOpen(false);
   };
 

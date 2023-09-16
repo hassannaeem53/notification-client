@@ -40,7 +40,7 @@ export interface DataGridProps {
   onSet?: (id: string) => void;
   parentName?: string;
   setEventName?: (id: string) => void;
-  setEventId?: React.Dispatch<React.SetStateAction<string>>;
+  setEventId?: React.Dispatch<React.SetStateAction<string>> | undefined;
 }
 
 const DataGrid: React.FC<DataGridProps> = ({
@@ -196,6 +196,9 @@ const DataGrid: React.FC<DataGridProps> = ({
                           parentId={parentId}
                           finalPage={data.pagination?.totalPages || 1}
                           setEventId={setEventId}
+                          searchInput={searchInput}
+                          sort={sort}
+                          sortBy={sortby}
                         />
                       </Grid>
                     </Grid>
@@ -218,6 +221,9 @@ const DataGrid: React.FC<DataGridProps> = ({
           entityName="events"
           finalPage={data?.pagination?.totalPages || 1}
           parentId={parentId}
+          searchInput={searchInput}
+          sort={sort}
+          sortBy={sortby}
         />
       </Container>
     </>
