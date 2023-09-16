@@ -125,11 +125,15 @@ const FormModal = ({
   useEffect(() => {
     if (addEntity.error)
       setReqError(
-        addEntity.error?.response?.data?.error || addEntity.error.message
+        addEntity.error?.response?.data?.message ||
+          addEntity.error?.response?.data?.error ||
+          addEntity.error.message
       );
     if (modifyEntity.error)
       setReqError(
-        modifyEntity.error?.response?.data?.error || modifyEntity.error.message
+        modifyEntity.error?.response?.data?.message ||
+          modifyEntity.error?.response?.data?.error ||
+          modifyEntity.error.message
       );
   }, [addEntity.error, modifyEntity.error]);
 

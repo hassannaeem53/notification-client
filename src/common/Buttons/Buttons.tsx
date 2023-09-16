@@ -103,11 +103,15 @@ const Buttons = ({
   useEffect(() => {
     if (toggleApp.error)
       setReqError(
-        toggleApp.error?.response?.data?.error || toggleApp.error.message
+        toggleApp.error?.response?.data?.message ||
+          toggleApp.error?.response?.data?.error ||
+          toggleApp.error.message
       );
     if (deleteApp.error)
       setReqError(
-        deleteApp.error?.response?.data?.error || deleteApp.error.message
+        deleteApp.error?.response?.data?.message ||
+          deleteApp.error?.response?.data?.error ||
+          deleteApp.error.message
       );
   }, [toggleApp.error, deleteApp.error]);
 
