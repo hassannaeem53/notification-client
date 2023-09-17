@@ -13,9 +13,9 @@ import HeaderToolbar from "../Toolbar/HeaderToolbar";
 import Buttons from "../Buttons/Buttons";
 import useData from "../../hooks/useData";
 import FormModal from "../FormModal";
-import PaginationButtons from "../PaginationButtons";
 import { Container } from "react-bootstrap";
 import InfoButton from "../Buttons/InfoButton";
+import PaginationButtons from "../PaginationButtons";
 
 interface DataItem {
   _id: string;

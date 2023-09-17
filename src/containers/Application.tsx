@@ -6,17 +6,16 @@ import {
   Skeleton,
   Snackbar,
   Slide,
-} from '@mui/material';
-import { useEffect, useState } from 'react';
-import Tile from '../components/Tile';
-import { AxiosError } from 'axios';
-import ErrorIcon from '@mui/icons-material/Error'; // Import the Error icon from Material-UI
-import useData from '../hooks/useData';
-import { App } from '../services/appService';
-import HeaderToolbar from '../common/Toolbar/HeaderToolbar';
-import FormModal from '../common/FormModal';
-import PaginationButtons from '../common/PaginationButtons';
-
+} from "@mui/material";
+import { useEffect, useState } from "react";
+import Tile from "../components/Tile";
+import { AxiosError } from "axios";
+import ErrorIcon from "@mui/icons-material/Error"; // Import the Error icon from Material-UI
+import useData from "../hooks/useData";
+import { App } from "../services/appService";
+import HeaderToolbar from "../common/Toolbar/HeaderToolbar";
+import FormModal from "../common/FormModal";
+import PaginationButtons from "../common/PaginationButtons";
 
 interface Props {
   onSet: (id: string) => void;
@@ -137,7 +136,7 @@ const Application = ({ onSet, onSetName }: Props) => {
         spacing={3}
         sx={{
           marginTop: 0.05,
-          paddingLeft: '40px',
+          paddingLeft: "40px",
         }}
       >
         {apps?.applications?.length === 0 && (
@@ -193,9 +192,9 @@ const Application = ({ onSet, onSetName }: Props) => {
       <FormModal
         open={openAddModal}
         setOpen={setOpenAddModal}
-        title='Add'
+        title="Add"
         page={page}
-        entityName='applications'
+        entityName="applications"
         finalPage={apps.pagination?.totalPages || 1}
       />
     </>
