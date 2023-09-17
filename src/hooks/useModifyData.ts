@@ -1,8 +1,8 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import HttpService, {
   ResponseInterface,
   UpdateEntity,
-} from "../services/httpService";
+} from '../services/httpService';
 
 interface UpdateObj {
   id: string;
@@ -19,7 +19,7 @@ const useModifyData = <T>(
   const service = new HttpService<T>(entityName);
 
   const key = parentId ? [entityName, page, parentId] : [entityName, page];
-  console.log("🚀 ~ file: useModifyData.ts:22 ~ key:", key);
+  //console.log("🚀 ~ file: useModifyData.ts:22 ~ key:", key);
 
   return useMutation({
     mutationFn: ({ id, entity }: UpdateObj) => service.update(id, entity),
@@ -32,7 +32,7 @@ const useModifyData = <T>(
 
     onSuccess: (_data, variables, context) => {
       const invalidateQueryKey = [...key];
-      console.log("context:", context);
+      console.log('context:', context);
 
       if (
         context?.previousData[entityName]?.length == 1 &&

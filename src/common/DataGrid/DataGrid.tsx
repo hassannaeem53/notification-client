@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   AlertTitle,
   Alert,
@@ -7,14 +7,15 @@ import {
   Typography,
   Skeleton,
   Grow,
-} from "@mui/material";
-import ErrorIcon from "@mui/icons-material/Error";
-import HeaderToolbar from "../Toolbar/HeaderToolbar";
-import Buttons from "../Buttons/Buttons";
-import useData from "../../hooks/useData";
-import FormModal from "../FormModal";
-import PaginationButtons from "../PaginationButtons";
-import { Container } from "react-bootstrap";
+} from '@mui/material';
+import ErrorIcon from '@mui/icons-material/Error';
+import HeaderToolbar from '../Toolbar/HeaderToolbar';
+import Buttons from '../Buttons/Buttons';
+import useData from '../../hooks/useData';
+import FormModal from '../FormModal';
+import PaginationButtons from '../PaginationButtons';
+import { Container } from 'react-bootstrap';
+import InfoButton from '../Buttons/InfoButton';
 
 interface DataItem {
   _id: string;
@@ -40,7 +41,7 @@ export interface DataGridProps {
   onSet?: (id: string) => void;
   parentName?: string;
   setEventName?: (id: string) => void;
-  setEventId?: React.Dispatch<React.SetStateAction<string>>;
+  setEventId?: React.Dispatch<React.SetStateAction<string | undefined>>;
 }
 
 const DataGrid: React.FC<DataGridProps> = ({
@@ -53,10 +54,10 @@ const DataGrid: React.FC<DataGridProps> = ({
 }) => {
   const [page, setPage] = useState(1);
 
-  const [searchInput, setSearchInput] = useState<string>("");
-  const [sort, setSort] = useState<string>("asc");
-  const [sortby, setSortby] = useState<string>("name");
-  const [selectedId, setSelectedId] = useState<string>("");
+  const [searchInput, setSearchInput] = useState<string>('');
+  const [sort, setSort] = useState<string>('asc');
+  const [sortby, setSortby] = useState<string>('name');
+  const [selectedId, setSelectedId] = useState<string>('');
   const [openAddModal, setOpenAddModal] = useState<boolean>(false);
 
   const { data, error, isLoading } = useData(
@@ -72,11 +73,11 @@ const DataGrid: React.FC<DataGridProps> = ({
     return (
       <Alert
         iconMapping={{
-          error: <ErrorIcon fontSize="large" />,
+          error: <ErrorIcon fontSize='large' />,
         }}
-        severity="error"
-        variant="outlined"
-        sx={{ marginTop: "20px" }}
+        severity='error'
+        variant='outlined'
+        sx={{ marginTop: '20px' }}
       >
         <AlertTitle>Error</AlertTitle>
         Unable to Fetch {title}
@@ -96,23 +97,23 @@ const DataGrid: React.FC<DataGridProps> = ({
         setOpenAddModal={setOpenAddModal}
       />
       <Container
-        style={{ marginTop: "20px", paddingLeft: "20px", paddingRight: "20px" }}
+        style={{ marginTop: '20px', paddingLeft: '20px', paddingRight: '20px' }}
       >
         <Grid container spacing={2}>
           {isLoading ? (
             // Loading skeleton
             Array.from({ length: 4 }).map((_, index) => (
               <Grid item xs={6} key={index}>
-                <Paper elevation={3} style={{ padding: "20px" }}>
-                  <Skeleton animation="wave" variant="text" width="60%" />
-                  <Skeleton animation="wave" variant="text" width="80%" />
+                <Paper elevation={3} style={{ padding: '20px' }}>
+                  <Skeleton animation='wave' variant='text' width='60%' />
+                  <Skeleton animation='wave' variant='text' width='80%' />
                 </Paper>
               </Grid>
             ))
           ) : data?.[title]?.length === 0 ? (
             // No items found error
             <Grid item xs={12}>
-              <Alert severity="info" sx={{ marginTop: "20px" }}>
+              <Alert severity='info' sx={{ marginTop: '20px' }}>
                 No Items Found
               </Alert>
             </Grid>
@@ -124,22 +125,18 @@ const DataGrid: React.FC<DataGridProps> = ({
                   <Paper
                     elevation={16}
                     style={{
-                      padding: "20px",
-                      //backgroundColor: '#EEEEEE',
-                      cursor: "pointer",
+                      padding: '20px',
+                      backgroundColor: '#EEEEEE',
+                      cursor: 'pointer',
                       border:
-                        selectedId === item._id && title === "events"
-                          ? "2px solid #2196F3"
-                          : "",
-                      display: "flex",
-                      minHeight: "10vw",
-                      alignItems: "center",
-                      flexDirection: "column",
-                      justifyContent: "center",
+                        selectedId === item._id && title === 'events'
+                          ? '2px solid #2196F3'
+                          : '',
+                      position: 'relative',
                     }}
                     sx={{
-                      "&:hover": {
-                        backgroundColor: "#CDDEEE",
+                      '&:hover': {
+                        backgroundColor: '#CDDEEE',
                         // border: '2px solid #2196F3',
                       },
                     }}
@@ -151,33 +148,48 @@ const DataGrid: React.FC<DataGridProps> = ({
                       }
                     }}
                   >
+                    <div
+                      style={{
+                        position: 'absolute',
+                        top: '10px', // Adjust the top position as needed
+                        right: '10px', // Adjust the right position as needed
+                      }}
+                    >
+                      <InfoButton
+                        description={item.description}
+                        createdDate={item.created_at.slice(0, 10)}
+                        updatedDate={item.updated_at}
+                      />
+                    </div>
                     <Grid container spacing={6}>
                       <Grid item xs={12} md={8}>
                         <Typography
-                          variant="h5"
-                          component="div"
+                          variant='h5'
+                          component='div'
                           style={{
                             fontWeight:
-                              selectedId === item._id && title == "events"
-                                ? "bold"
-                                : "normal", // Set the font weight based on the condition
+                              selectedId === item._id && title == 'events'
+                                ? 'bold'
+                                : 'normal', // Set the font weight based on the condition
                             fontSize:
-                              selectedId === item._id && title == "events"
-                                ? "1.7rem"
-                                : "1.5rem", // Set the font size based on the condition
+                              selectedId === item._id && title == 'events'
+                                ? '1.7rem'
+                                : '1.5rem', // Set the font size based on the condition
                           }}
                         >
                           {item.name}
                         </Typography>
-                        <Typography variant="body2">
-                          {item.description}
+                        <Typography variant='body2'>
+                          {item.description && item.description?.length > 100
+                            ? item.description?.substring(0, 70) + '...'
+                            : item.description}
                         </Typography>
                       </Grid>
                       <Grid
                         item
                         xs={12}
                         md={4}
-                        style={{ display: "flex", alignItems: "center" }}
+                        style={{ display: 'flex', alignItems: 'center' }}
                       >
                         <Buttons
                           selectedEntity={item}
@@ -205,9 +217,9 @@ const DataGrid: React.FC<DataGridProps> = ({
         <FormModal
           open={openAddModal}
           setOpen={setOpenAddModal}
-          title="Add"
+          title='Add'
           page={page}
-          entityName="events"
+          entityName='events'
           finalPage={data?.pagination?.totalPages || 1}
           parentId={parentId}
         />

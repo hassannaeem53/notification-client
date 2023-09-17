@@ -51,7 +51,6 @@ const Dashboard = () => {
         <Application
           onSet={(id) => setApplicationId(id)}
           onSetName={setApplicationName}
-
         />
       </Grid>
 
@@ -66,7 +65,6 @@ const Dashboard = () => {
               onSet={(id) => setEventId(id)}
               setEventName={setEventName}
               setEventId={setEventId}
-
             />
           </Grid>
           {eventId ? (

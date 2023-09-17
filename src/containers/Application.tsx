@@ -14,9 +14,8 @@ import ErrorIcon from '@mui/icons-material/Error'; // Import the Error icon from
 import useData from '../hooks/useData';
 import { App } from '../services/appService';
 import HeaderToolbar from '../common/Toolbar/HeaderToolbar';
-import FormModal from "../common/FormModal";
-import PaginationButtons from "../common/PaginationButtons";
-
+import FormModal from '../common/FormModal';
+import PaginationButtons from '../common/PaginationButtons';
 
 interface Props {
   onSet: (id: string) => void;
@@ -144,10 +143,16 @@ const Application = ({ onSet, onSetName }: Props) => {
         setSort={setSort}
         setSortby={setSortby}
         setOpenAddModal={setOpenAddModal}
-
       />
 
-      <Grid container spacing={3} sx={{ marginTop: 0.05 }}>
+      <Grid
+        container
+        spacing={3}
+        sx={{
+          marginTop: 0.05,
+          paddingLeft: '40px',
+        }}
+      >
         {apps?.applications?.length === 0 && (
           <Grid item xs={12}>
             <Alert severity='info' sx={{ marginTop: '20px' }}>
@@ -190,7 +195,6 @@ const Application = ({ onSet, onSetName }: Props) => {
               />
             </Grid>
           </Slide>
-
         ))}
         <PaginationButtons
           currentPage={page}
@@ -207,9 +211,9 @@ const Application = ({ onSet, onSetName }: Props) => {
       <FormModal
         open={openAddModal}
         setOpen={setOpenAddModal}
-        title="Add"
+        title='Add'
         page={page}
-        entityName="applications"
+        entityName='applications'
         finalPage={apps.pagination?.totalPages || 1}
       />
     </>

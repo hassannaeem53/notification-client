@@ -1,15 +1,22 @@
-
-import { Card, CardActions, CardContent, Typography } from "@mui/material";
-import Buttons from "../common/Buttons/Buttons";
-import { AxiosError } from "axios";
-import { App } from "../services/appService";
-import useModifyData from "../hooks/useModifyData";
+import React, { useState } from 'react';
+import {
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  Typography,
+} from '@mui/material';
+import Buttons from '../common/Buttons/Buttons';
+import { AxiosError } from 'axios';
+import { App } from '../services/appService';
+import useModifyData from '../hooks/useModifyData';
+// import './Tile.css';
+import ReactCardFlip from 'react-card-flip';
 
 interface Props {
   app: App;
   selectedApp: string | undefined;
   setSelectedApp: (app: string | undefined) => void;
-  // onDelete: (id: number) => void;
   openToast: (err: AxiosError) => void;
   closeToast: () => void;
   open: boolean;
@@ -28,106 +35,213 @@ const Tile = ({
   open,
   openToast,
   closeToast,
-  // onDelete,
   page,
   toastError,
   onSetName,
   setPage,
   finalPage,
 }: Props) => {
+  const [isFlipped, setIsFlipped] = useState(false);
+  const toggleFlip = () => {
+    setIsFlipped(!isFlipped);
+    // Automatically flip the card back after 1 second
+    setTimeout(() => {
+      setIsFlipped(false);
+    }, 5000); // Adjust the duration (in milliseconds) as needed
+  };
+
   return (
-    <Card
-      elevation={12}
-      sx={{
-        padding: 1,
-        backgroundColor: '#EEEEEE',
-        borderRadius: 4,
-        display: 'flex',
-        minHeight: '15vw',
-        alignItems: 'center',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        width: '90%',
-        border: selectedApp === app._id ? '3px solid #2196F3' : 'none', // Set the border style based on the condition
-        '&:hover': {
-          border: '3px solid #2196F3', // Define the hover effect here
-        },
-        cursor: 'pointer',
-        position: 'relative', // Added position relative for absolute positioning
-      }}
-      onClick={() => {
-        setSelectedApp(app._id);
-        onSetName(app.name);
-      }}
-    >
-      <CardContent
-        sx={{
-          flex: 1,
-          display: 'flex',
-          textAlign: 'center',
-          flexDirection: 'column',
-          justifyContent: 'center',
-        }}
-      >
-        <Typography
-          variant='h5'
-          component='div' // You can set this to 'h1' or 'h2' as needed
+    <>
+      <ReactCardFlip isFlipped={isFlipped} flipDirection='horizontal'>
+        <Card
+          className='front-card'
+          elevation={12}
           sx={{
-            color: '#303030',
+            padding: 1,
+            backgroundColor: '#EEEEEE',
+            borderRadius: 4,
+            display: 'flex',
+            minHeight: '15vw',
+            alignItems: 'center',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            width: '90%',
+            border: selectedApp === app._id ? '3px solid #2196F3' : 'none',
+            '&:hover': {
+              border: '3px solid #2196F3',
+            },
+            cursor: 'pointer',
+            position: 'relative',
           }}
-          style={{
-            fontWeight: selectedApp === app._id ? 'bold' : 'normal', // Set the font weight based on the condition
-            fontSize: selectedApp === app._id ? '1.7rem' : '1.5rem', // Set the font size based on the condition
+          onClick={() => {
+            setSelectedApp(app._id);
+            onSetName(app.name);
           }}
         >
-          {app.name.toUpperCase()}
-        </Typography>
-        <hr
-          style={{
-            width: '100%',
-            height: '1px',
-            backgroundColor: '#303030',
-          }}
-        />
-
-        <Typography variant='body1'>{app.description}</Typography>
-        <div>
-          <div
-            style={{
+          {/* Front side */}
+          <CardContent
+            sx={{
+              flex: 1,
               display: 'flex',
-              justifyContent: 'space-between',
-              marginTop: '40px',
+              textAlign: 'center',
+              flexDirection: 'column',
+              justifyContent: 'center',
             }}
           >
-            <Typography
-              variant='caption'
-              sx={{ color: '#777', paddingRight: '50px' }}
+            <Button
+              variant='contained'
+              color='primary'
+              sx={{
+                position: 'absolute',
+                top: '10px',
+                right: '10px',
+                zIndex: 1,
+              }}
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleFlip();
+              }}
             >
-              Created: 2021-10-01
+              Info
+            </Button>
+            <Typography
+              variant='h5'
+              component='div'
+              sx={{
+                color: '#303030',
+              }}
+              style={{
+                fontWeight: selectedApp === app._id ? 'bold' : 'normal',
+                fontSize: selectedApp === app._id ? '1.7rem' : '1.5rem',
+              }}
+            >
+              {app.name.toUpperCase()}
             </Typography>
+            <hr
+              style={{
+                width: '100%',
+                height: '1px',
+                backgroundColor: '#303030',
+              }}
+            />
 
-            <Typography variant='caption' sx={{ color: '#777' }}>
-              Updated: 2021-10-01
+            <Typography variant='body1'>
+              {app.description && app.description?.length > 100
+                ? app.description?.substring(0, 100) + '...'
+                : app.description}
             </Typography>
-          </div>
-        </div>
-      </CardContent>
-      <CardActions>
-        <Buttons
-          selectedEntity={app}
-          isActive={app.is_active}
-          openToast={openToast}
-          closeToast={closeToast}
-          open={open}
-          page={page}
-          error={toastError}
-          entity="applications"
-          setPage={setPage}
-          finalPage={finalPage}
-          setSelectedApp={setSelectedApp} //to ensure that events & ntoifications of deleted app dont appear
-        />
-      </CardActions>
-    </Card>
+          </CardContent>
+          <CardActions>
+            <Buttons
+              selectedEntity={app}
+              isActive={app.is_active}
+              openToast={openToast}
+              closeToast={closeToast}
+              open={open}
+              page={page}
+              error={toastError}
+              entity='applications'
+              setPage={setPage}
+              finalPage={finalPage}
+              setSelectedApp={setSelectedApp}
+            />
+          </CardActions>
+        </Card>
+        {/* Back side */}
+        <Card
+          className='back-card'
+          elevation={12}
+          sx={{
+            padding: 1,
+            backgroundColor: '#EEEEEE',
+            borderRadius: 4,
+            display: 'flex',
+            minHeight: '15vw',
+            alignItems: 'center',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            width: '90%',
+            border: selectedApp === app._id ? '3px solid #2196F3' : 'none',
+            '&:hover': {
+              border: '3px solid #2196F3',
+            },
+            cursor: 'pointer',
+            position: 'relative',
+          }}
+          onClick={() => {
+            setSelectedApp(app._id);
+            onSetName(app.name);
+          }}
+        >
+          <CardContent
+            sx={{
+              flex: 1,
+              display: 'flex',
+              textAlign: 'center',
+              flexDirection: 'column',
+              justifyContent: 'center',
+            }}
+          >
+            <Button
+              variant='contained'
+              color='primary'
+              sx={{
+                position: 'absolute',
+                top: '10px',
+                right: '10px',
+                zIndex: 1,
+              }}
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleFlip();
+              }}
+            >
+              Back
+            </Button>
+            <Typography
+              variant='h5'
+              component='div'
+              sx={{
+                color: '#303030',
+              }}
+            >
+              DESCRIPTION
+            </Typography>
+            <hr
+              style={{
+                width: '100%',
+                height: '1px',
+                backgroundColor: '#303030',
+              }}
+            />
+
+            <Typography variant='body1'>{app.description}</Typography>
+            <div>
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  marginTop: '40px',
+                }}
+              >
+                <Typography
+                  variant='caption'
+                  sx={{ color: '#777', paddingRight: '50px' }}
+                >
+                  <em>Created At: </em>
+                  {app.created_at ? app.created_at.slice(0, 10) : '-'}
+                </Typography>
+
+                <Typography variant='caption' sx={{ color: '#777' }}>
+                  <em>Updated At: </em>
+                  {app.updated_at ? app.updated_at.slice(0, 10) : '-'}
+                </Typography>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </ReactCardFlip>
+    </>
   );
 };
 
