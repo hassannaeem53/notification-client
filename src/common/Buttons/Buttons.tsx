@@ -1,11 +1,19 @@
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
-import { Box, ButtonGroup, IconButton, Switch } from "@mui/material";
-import { useState } from "react";
-import { AxiosError } from "axios";
+import {
+  Alert,
+  Box,
+  ButtonGroup,
+  IconButton,
+  Snackbar,
+  Switch,
+} from "@mui/material";
+import { useEffect, useState } from "react";
 import FormModal from "../FormModal";
 import { App } from "../../services/appService";
 import useModifyData from "../../hooks/useModifyData";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import { useNavigate } from "react-router-dom";
 
 export interface Entity {
   _id: string;
@@ -19,8 +27,6 @@ export interface Entity {
 interface Props {
   selectedEntity: App | Entity;
   isActive?: boolean;
-  openToast?: (err: AxiosError) => void;
-  closeToast?: () => void;
   open?: boolean;
   error?: string | undefined;
   page: number;
@@ -29,10 +35,13 @@ interface Props {
   parentId?: string;
   finalPage: number;
   setSelectedApp?: (appId: string | undefined) => void;
-  setEventId?: React.Dispatch<React.SetStateAction<string | undeinfed>>;
+  setEventId?: React.Dispatch<React.SetStateAction<string>> | undefined;
+  searchInput: string;
+  sort: string;
+  sortBy: string;
 }
 
-const styles = { backgroundColor: "#BABABA", borderRadius: 2 };
+const styles = {};
 
 const Buttons = ({
   selectedEntity,
@@ -44,14 +53,24 @@ const Buttons = ({
   finalPage,
   setSelectedApp,
   setEventId,
+  searchInput,
+  sort,
+  sortBy,
 }: Props) => {
   const [checked, setChecked] = useState(isActive);
 
   const [open, setOpen] = useState<boolean>(false);
 
+  const [reqError, setReqError] = useState<string | undefined>(undefined);
+
+  const navigate = useNavigate();
+
   const deleteApp = useModifyData(
     page,
     entity,
+    searchInput,
+    sort,
+    sortBy,
     parentId,
     (page: number | undefined) => {
       setPage(page || 1);
@@ -59,27 +78,78 @@ const Buttons = ({
       entity === "events" && setEventId && setEventId(undefined);
     }
   );
-  const onDelete = () => {
+  const onDelete = (e) => {
+    e.stopPropagation();
+
     deleteApp.mutate({ id: selectedEntity._id, entity: { is_deleted: true } });
   };
 
-  const toggleApp = useModifyData(page, entity, parentId, () =>
-    setChecked(!checked)
+  const toggleApp = useModifyData(
+    page,
+    entity,
+    searchInput,
+    sort,
+    sortBy,
+    parentId,
+    () => setChecked(!checked)
   );
 
-  const onToggle = () => {
-    // setChecked(!checked);
+  const onToggle = (e) => {
+    e.stopPropagation();
+
     const updatedEntity = { is_active: !checked };
     toggleApp.mutate({ id: selectedEntity._id, entity: updatedEntity });
+
+    if (toggleApp.isError) {
+      setReqError(toggleApp.error.message);
+    }
   };
 
-  const onEdit = () => setOpen(true);
+  const onEdit = (e) => {
+    e.stopPropagation();
+    if (entity === "events" || entity === "applications") setOpen(true);
+    else
+      navigate(`/notification-preview/${selectedEntity._id}`, {
+        state: { entity: selectedEntity },
+      });
+  };
+
+  useEffect(() => {
+    if (toggleApp.error)
+      setReqError(
+        toggleApp.error?.response?.data?.message ||
+          toggleApp.error?.response?.data?.error ||
+          toggleApp.error.message
+      );
+    if (deleteApp.error)
+      setReqError(
+        deleteApp.error?.response?.data?.message ||
+          deleteApp.error?.response?.data?.error ||
+          deleteApp.error.message
+      );
+  }, [toggleApp.error, deleteApp.error]);
+
+  function handleCloseAlert() {
+    setReqError(undefined);
+  }
 
   return (
     <>
-      <Box>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+        }}
+      >
         <ButtonGroup size="medium" aria-label="medium button group" sx={styles}>
-          <Switch checked={checked} onClick={onToggle} color="primary" />
+          <Switch
+            checked={checked}
+            onClick={onToggle}
+            //color='primary'
+            size="medium"
+            checkedIcon={<CheckCircleIcon color="primary" />}
+          />
 
           <IconButton color="inherit" onClick={onEdit}>
             <EditIcon color="action" />
@@ -99,7 +169,26 @@ const Buttons = ({
         entityName={entity}
         parentId={parentId}
         finalPage={finalPage}
+        searchInput={searchInput}
+        sort={sort}
+        sortBy={sortBy}
       />
+      <Snackbar
+        open={reqError !== undefined}
+        autoHideDuration={5000}
+        onClose={handleCloseAlert}
+        message={reqError || ""}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleCloseAlert}
+          severity="error"
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          {reqError}
+        </Alert>
+      </Snackbar>
     </>
   );
 };

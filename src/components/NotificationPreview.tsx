@@ -1,5 +1,5 @@
-import React from 'react';
-import Paper from '@mui/material/Paper';
+import React from "react";
+import Paper from "@mui/material/Paper";
 
 interface FormValues {
   name: string;
@@ -15,7 +15,7 @@ const NotificationPreview: React.FC<Props> = ({ formData }) => {
   const { templatesubject, templatebody } = formData;
 
   // Replace newline characters with <br> tags
-  const formattedTemplatebody = templatebody.replace(/\n/g, '<br>');
+  const formattedTemplatebody = templatebody.replace(/\n/g, "<br>");
   // Use regular expression to find text enclosed in {{}} and apply a different color and bold style
   const coloredTemplatebody = formattedTemplatebody.replace(
     /{{(.*?)}}/g,
@@ -26,16 +26,16 @@ const NotificationPreview: React.FC<Props> = ({ formData }) => {
     <Paper
       elevation={3}
       style={{
-        padding: '20px',
-        backgroundColor: '#f0f0f0',
-        boxShadow: '0px 0px 8px 0px rgba(0,0,0,0.2)',
-        borderRadius: '8px',
+        padding: "20px",
+        backgroundColor: "#f0f0f0",
+        boxShadow: "0px 0px 8px 0px rgba(0,0,0,0.2)",
+        borderRadius: "8px",
       }}
     >
       <div
         style={{
-          height: '470px',
-          overflowY: 'auto',
+          height: "470px",
+          overflowY: "auto",
         }}
       >
         <h2>Subject: {templatesubject}</h2>

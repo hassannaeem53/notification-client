@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   AlertTitle,
   Alert,
@@ -8,12 +8,13 @@ import {
   Skeleton,
   Grow,
 } from "@mui/material";
-import { Container } from "react-bootstrap";
 import ErrorIcon from "@mui/icons-material/Error";
 import HeaderToolbar from "../Toolbar/HeaderToolbar";
 import Buttons from "../Buttons/Buttons";
 import useData from "../../hooks/useData";
 import FormModal from "../FormModal";
+import { Container } from "react-bootstrap";
+import InfoButton from "../Buttons/InfoButton";
 import PaginationButtons from "../PaginationButtons";
 
 interface DataItem {
@@ -38,21 +39,40 @@ export interface DataGridProps {
   title: string;
   parentId: string;
   onSet?: (id: string) => void;
-  setEventId?: React.Dispatch<React.SetStateAction<string>>;
+  parentName?: string;
+  setEventName?: (id: string) => void;
+
+  setEventId?: React.Dispatch<React.SetStateAction<string>> | undefined;
 }
 
 const DataGrid: React.FC<DataGridProps> = ({
   title,
   parentId,
+  parentName,
+  setEventName,
   onSet,
   setEventId,
 }) => {
   const [page, setPage] = useState(1);
 
+  const [searchInput, setSearchInput] = useState<string>("");
+  const [sort, setSort] = useState<string>("asc");
+  const [sortby, setSortby] = useState<string>("name");
   const [selectedId, setSelectedId] = useState<string>("");
   const [openAddModal, setOpenAddModal] = useState<boolean>(false);
 
-  const { data, error, isLoading } = useData(page, title, parentId);
+  const { data, error, isLoading } = useData(
+    page,
+    title,
+    parentId,
+    searchInput,
+    sort,
+    sortby
+  );
+
+  useEffect(() => {
+    if (searchInput.length) setPage(1); //resetting page to 1 to show search results
+  }, [searchInput]);
 
   if (error)
     return (
@@ -74,9 +94,16 @@ const DataGrid: React.FC<DataGridProps> = ({
     <>
       <HeaderToolbar
         title={title.toUpperCase()}
+        id={parentId}
+        onSet={setSearchInput}
+        setSort={setSort}
+        setSortby={setSortby}
+        parentName={parentName}
         setOpenAddModal={setOpenAddModal}
       />
-      <Container style={{ marginTop: "20px" }}>
+      <Container
+        style={{ marginTop: "20px", paddingLeft: "20px", paddingRight: "20px" }}
+      >
         <Grid container spacing={2}>
           {isLoading ? (
             // Loading skeleton
@@ -99,29 +126,88 @@ const DataGrid: React.FC<DataGridProps> = ({
             // Render data items
             data?.[title]?.map((item) => (
               <Grow in={true} timeout={1000} key={item._id}>
-                <Grid item xs={6}>
+                <Grid item xs={12} md={6}>
                   <Paper
                     elevation={16}
-                    style={{ padding: "20px" }}
+                    sx={{
+                      "&:hover": {
+                        backgroundColor: "#CDDEEE",
+                        // border: '2px solid #2196F3',
+                      },
+                      padding: 2,
+                      backgroundColor: "#EEEEEE",
+                      cursor: "pointer",
+                      border:
+                        selectedId === item._id && title === "events"
+                          ? "2px solid #2196F3"
+                          : "",
+                      position: "relative",
+
+                      display: "flex",
+                      // flex: 1,
+                      // minHeight: "10vw",
+                      // alignItems: "center",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                    }}
                     onClick={() => {
                       setSelectedId(item._id);
+                      setEventName && setEventName(item.name);
                       if (onSet) {
                         onSet(item._id);
                       }
                     }}
                   >
+                    {/* <div
+                      style={{
+                        position: "absolute",
+                        top: "10px", // Adjust the top position as needed
+                        right: "10px", // Adjust the right position as needed
+                      }}
+                    >
+                      <InfoButton
+                        description={item.description}
+                        createdDate={item.created_at.slice(0, 10)}
+                        updatedDate={item.updated_at}
+                      />
+                    </div> */}
                     <Grid container spacing={6}>
-                      <Grid item xs={12} md={8}>
-                        <Typography variant="h6">{item.name}</Typography>
+                      <Grid
+                        item
+                        xs={12}
+                        md={8}
+                        // sx={{ backgroundColor: "orange" }}
+                      >
+                        <Typography
+                          variant="h5"
+                          component="div"
+                          style={{
+                            fontWeight:
+                              selectedId === item._id && title == "events"
+                                ? "bold"
+                                : "normal", // Set the font weight based on the condition
+                            fontSize:
+                              selectedId === item._id && title == "events"
+                                ? "1.7rem"
+                                : "1.5rem", // Set the font size based on the condition
+                          }}
+                        >
+                          {item.name}
+                        </Typography>
                         <Typography variant="body2">
-                          {item.description}
+                          {item.description && item.description?.length > 100
+                            ? item.description?.substring(0, 70) + "..."
+                            : item.description}
                         </Typography>
                       </Grid>
                       <Grid
                         item
                         xs={12}
                         md={4}
-                        style={{ display: "flex", alignItems: "center" }}
+                        sx={{
+                          display: "flex",
+                          justifyContent: "right",
+                        }}
                       >
                         <Buttons
                           selectedEntity={item}
@@ -132,6 +218,14 @@ const DataGrid: React.FC<DataGridProps> = ({
                           parentId={parentId}
                           finalPage={data.pagination?.totalPages || 1}
                           setEventId={setEventId}
+                          searchInput={searchInput}
+                          sort={sort}
+                          sortBy={sortby}
+                        />
+                        <InfoButton
+                          description={item.description}
+                          createdDate={item.created_at.slice(0, 10)}
+                          updatedDate={item.updated_at}
                         />
                       </Grid>
                     </Grid>
@@ -154,6 +248,9 @@ const DataGrid: React.FC<DataGridProps> = ({
           entityName="events"
           finalPage={data?.pagination?.totalPages || 1}
           parentId={parentId}
+          searchInput={searchInput}
+          sort={sort}
+          sortBy={sortby}
         />
       </Container>
     </>

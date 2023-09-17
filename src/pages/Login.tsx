@@ -7,6 +7,8 @@ import {
   Typography,
   Grid,
   Divider,
+  Alert,
+  Snackbar,
 } from "@mui/material";
 import CompanyLogo from "../assets/Company-logo.png";
 import NotificationsIcon from "@mui/icons-material/Notifications";
@@ -14,6 +16,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { z } from "zod";
 import HttpService from "../services/httpService";
 import { useNavigate } from "react-router-dom";
+import { AxiosError } from "axios";
 
 interface LoginInterface {
   email: string;
@@ -27,6 +30,8 @@ const Login = () => {
   });
 
   const [emailValidation, setEmailValidation] = useState("");
+
+  const [reqError, setReqError] = useState<string>();
 
   const emailSchema = z.string().email();
 
@@ -44,12 +49,20 @@ const Login = () => {
       //validate
       // send a request to authentication endpoint
       const service = new HttpService<LoginInterface>("/auth/login");
-      const res = await service.create(formData);
-      localStorage.setItem("token", res as string);
+      try {
+        const res = await service.create(formData);
+        localStorage.setItem("token", res as string);
 
-      navigate("/");
+        navigate("/");
+      } catch (err) {
+        setReqError(err?.response?.data.message || error?.message);
+      }
     }
   };
+
+  function handleCloseAlert() {
+    setReqError(undefined);
+  }
 
   useEffect(() => {
     validateEmail();
@@ -175,6 +188,22 @@ const Login = () => {
           </Grid>
         </Grid>
       </Paper>
+      <Snackbar
+        open={reqError !== undefined}
+        autoHideDuration={5000}
+        onClose={handleCloseAlert}
+        message={reqError || ""}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleCloseAlert}
+          severity="error"
+          variant="filled"
+          sx={{ width: "100%" }}
+        >
+          {reqError}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };

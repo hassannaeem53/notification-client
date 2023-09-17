@@ -4,6 +4,15 @@
   padding: 10px;
   border-radius: 4px;
   height: 170px;
+}
 
-  /* Add more styles as needed */
+.custom-mention {
+  padding: 8px 12px;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.custom-mention:hover {
+  background-color: #e0e0e0;
 }
