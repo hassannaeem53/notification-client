@@ -67,7 +67,7 @@ class HttpService<T> {
 
   update = (id: string, entity: UpdateEntity) => {
     return apiClient
-      .patch<UpdateResponseInterface>(this.endpoint + "/" + id, entity)
+      .patch<UpdateResponseInterface>(this.endpoint + "x/" + id, entity)
       .then((res) => res.data);
   };
 }

@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import HttpService, { ResponseInterface } from "../services/httpService";
+import { AxiosError } from "axios";
 
 const useAddData = <T>(
   entityName: string,
@@ -24,6 +25,11 @@ const useAddData = <T>(
 
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: key });
+    },
+
+    onError: (error: AxiosError) => {
+      queryClient.invalidateQueries({ queryKey: key });
+      return { error };
     },
   });
 };

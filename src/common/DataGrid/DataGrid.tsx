@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+
+import React, { useEffect, useState } from "react";
 import {
   AlertTitle,
   Alert,
@@ -41,7 +42,8 @@ export interface DataGridProps {
   onSet?: (id: string) => void;
   parentName?: string;
   setEventName?: (id: string) => void;
-  setEventId?: React.Dispatch<React.SetStateAction<string | undefined>>;
+
+  setEventId?: React.Dispatch<React.SetStateAction<string>> | undefined;
 }
 
 const DataGrid: React.FC<DataGridProps> = ({
@@ -68,6 +70,10 @@ const DataGrid: React.FC<DataGridProps> = ({
     sort,
     sortby
   );
+
+  useEffect(() => {
+    if (searchInput.length) setPage(1); //resetting page to 1 to show search results
+  }, [searchInput]);
 
   if (error)
     return (
@@ -124,21 +130,27 @@ const DataGrid: React.FC<DataGridProps> = ({
                 <Grid item xs={6}>
                   <Paper
                     elevation={16}
-                    style={{
-                      padding: '20px',
-                      backgroundColor: '#EEEEEE',
-                      cursor: 'pointer',
-                      border:
-                        selectedId === item._id && title === 'events'
-                          ? '2px solid #2196F3'
-                          : '',
-                      position: 'relative',
-                    }}
+
                     sx={{
-                      '&:hover': {
-                        backgroundColor: '#CDDEEE',
+                      "&:hover": {
+                        backgroundColor: "#CDDEEE",
                         // border: '2px solid #2196F3',
                       },
+                      padding: 2,
+                      backgroundColor: '#EEEEEE',
+                      cursor: "pointer",
+                      border:
+                        selectedId === item._id && title === "events"
+                          ? "2px solid #2196F3"
+                          : "",
+                      position: 'relative',
+
+                      display: "flex",
+                      // flex: 1,
+                      // minHeight: "10vw",
+                      // alignItems: "center",
+                      flexDirection: "column",
+                      justifyContent: "center",
                     }}
                     onClick={() => {
                       setSelectedId(item._id);
@@ -162,7 +174,12 @@ const DataGrid: React.FC<DataGridProps> = ({
                       />
                     </div>
                     <Grid container spacing={6}>
-                      <Grid item xs={12} md={8}>
+                      <Grid
+                        item
+                        xs={12}
+                        md={8}
+                        // sx={{ backgroundColor: "orange" }}
+                      >
                         <Typography
                           variant='h5'
                           component='div'
@@ -189,7 +206,11 @@ const DataGrid: React.FC<DataGridProps> = ({
                         item
                         xs={12}
                         md={4}
-                        style={{ display: 'flex', alignItems: 'center' }}
+
+                        sx={{
+                          display: "flex",
+                          justifyContent: "right",
+                        }}
                       >
                         <Buttons
                           selectedEntity={item}
@@ -200,6 +221,9 @@ const DataGrid: React.FC<DataGridProps> = ({
                           parentId={parentId}
                           finalPage={data.pagination?.totalPages || 1}
                           setEventId={setEventId}
+                          searchInput={searchInput}
+                          sort={sort}
+                          sortBy={sortby}
                         />
                       </Grid>
                     </Grid>
@@ -222,6 +246,9 @@ const DataGrid: React.FC<DataGridProps> = ({
           entityName='events'
           finalPage={data?.pagination?.totalPages || 1}
           parentId={parentId}
+          searchInput={searchInput}
+          sort={sort}
+          sortBy={sortby}
         />
       </Container>
     </>

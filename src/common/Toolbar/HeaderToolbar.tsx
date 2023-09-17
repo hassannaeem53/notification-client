@@ -8,15 +8,16 @@ import {
   Select,
   MenuItem,
   Menu,
-} from '@mui/material';
-import { Link } from 'react-router-dom';
-import SearchIcon from '@mui/icons-material/Search';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
-// import FilterListIcon from "@mui/icons-material/FilterList";
-import SortIcon from '@mui/icons-material/Sort';
-import { SortByAlpha } from '@mui/icons-material';
 
-import './HeaderToolbar.css';
+} from "@mui/material";
+import { Link } from "react-router-dom";
+import SearchIcon from "@mui/icons-material/Search";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import SortIcon from "@mui/icons-material/Sort";
+
+import { SortByAlpha } from "@mui/icons-material";
+
+import "./HeaderToolbar.css";
 
 interface HeaderToolbarProps {
   title: string;
@@ -245,7 +246,6 @@ const HeaderToolbar: React.FC<HeaderToolbarProps> = ({
               }}
               onChange={(e) => {
                 if (setSortby) {
-                  // console.log(e.target.value as string);
                   setSelectedFilter(e.target.value as string);
                   setSortby(e.target.value as string); // Check if setSort is defined before invoking it
                 }

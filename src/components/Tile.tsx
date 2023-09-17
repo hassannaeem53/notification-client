@@ -13,19 +13,20 @@ import useModifyData from '../hooks/useModifyData';
 // import './Tile.css';
 import ReactCardFlip from 'react-card-flip';
 
+
 interface Props {
   app: App;
   selectedApp: string | undefined;
   setSelectedApp: (app: string | undefined) => void;
-  openToast: (err: AxiosError) => void;
-  closeToast: () => void;
   open: boolean;
-  toastError: string | undefined;
   page: number;
   onEdit: () => void;
   onSetName: (name: string) => void;
   setPage: (page: number) => void;
   finalPage: number;
+  searchInput: string;
+  sort: string;
+  sortBy: string;
 }
 
 const Tile = ({
@@ -33,13 +34,13 @@ const Tile = ({
   selectedApp,
   setSelectedApp,
   open,
-  openToast,
-  closeToast,
   page,
-  toastError,
   onSetName,
   setPage,
   finalPage,
+  searchInput,
+  sort,
+  sortBy,
 }: Props) => {
   const [isFlipped, setIsFlipped] = useState(false);
   const toggleFlip = () => {
@@ -86,6 +87,7 @@ const Tile = ({
               textAlign: 'center',
               flexDirection: 'column',
               justifyContent: 'center',
+
             }}
           >
             <Button
@@ -114,6 +116,7 @@ const Tile = ({
                 fontWeight: selectedApp === app._id ? 'bold' : 'normal',
                 fontSize: selectedApp === app._id ? '1.7rem' : '1.5rem',
               }}
+
             >
               {app.name.toUpperCase()}
             </Typography>
@@ -133,18 +136,18 @@ const Tile = ({
           </CardContent>
           <CardActions>
             <Buttons
-              selectedEntity={app}
-              isActive={app.is_active}
-              openToast={openToast}
-              closeToast={closeToast}
-              open={open}
-              page={page}
-              error={toastError}
-              entity='applications'
-              setPage={setPage}
-              finalPage={finalPage}
-              setSelectedApp={setSelectedApp}
-            />
+          selectedEntity={app}
+          isActive={app.is_active}
+          open={open}
+          page={page}
+          entity="applications"
+          setPage={setPage}
+          finalPage={finalPage}
+          setSelectedApp={setSelectedApp} //to ensure that events & ntoifications of deleted app dont appear
+          searchInput={searchInput}
+          sort={sort}
+          sortBy={sortBy}
+        />
           </CardActions>
         </Card>
         {/* Back side */}
@@ -242,6 +245,7 @@ const Tile = ({
         </Card>
       </ReactCardFlip>
     </>
+
   );
 };
 
