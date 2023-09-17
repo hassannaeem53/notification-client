@@ -13,6 +13,7 @@ import FormModal from "../FormModal";
 import { App } from "../../services/appService";
 import useModifyData from "../../hooks/useModifyData";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import { useNavigate } from "react-router-dom";
 
 export interface Entity {
   _id: string;
@@ -62,6 +63,8 @@ const Buttons = ({
 
   const [reqError, setReqError] = useState<string | undefined>(undefined);
 
+  const navigate = useNavigate();
+
   const deleteApp = useModifyData(
     page,
     entity,
@@ -75,7 +78,9 @@ const Buttons = ({
       entity === "events" && setEventId && setEventId(undefined);
     }
   );
-  const onDelete = () => {
+  const onDelete = (e) => {
+    e.stopPropagation();
+
     deleteApp.mutate({ id: selectedEntity._id, entity: { is_deleted: true } });
   };
 
@@ -89,7 +94,9 @@ const Buttons = ({
     () => setChecked(!checked)
   );
 
-  const onToggle = () => {
+  const onToggle = (e) => {
+    e.stopPropagation();
+
     const updatedEntity = { is_active: !checked };
     toggleApp.mutate({ id: selectedEntity._id, entity: updatedEntity });
 
@@ -98,7 +105,14 @@ const Buttons = ({
     }
   };
 
-  const onEdit = () => setOpen(true);
+  const onEdit = (e) => {
+    e.stopPropagation();
+    if (entity === "events" || entity === "applications") setOpen(true);
+    else
+      navigate(`/notification-preview/${selectedEntity._id}`, {
+        state: { entity: selectedEntity },
+      });
+  };
 
   useEffect(() => {
     if (toggleApp.error)
@@ -121,7 +135,13 @@ const Buttons = ({
 
   return (
     <>
-      <Box>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+        }}
+      >
         <ButtonGroup size="medium" aria-label="medium button group" sx={styles}>
           <Switch
             checked={checked}

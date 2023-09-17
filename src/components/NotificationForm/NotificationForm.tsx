@@ -17,6 +17,8 @@ import "./NotificationForm.css";
 import useCreateNotification from "../../hooks/useCreateNotification";
 import useFetchTags from "../../hooks/useFetchTags";
 import notificationSchema from "./notificationSchema";
+import { Entity } from "../../common/Buttons/Buttons";
+import { useLocation, useNavigate } from "react-router-dom";
 
 interface FormValues {
   name: string;
@@ -32,18 +34,26 @@ interface Props {
 }
 
 const NotificationForm: React.FC<Props> = ({ onChange, eventId }) => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const entityData = location.state?.entity;
+
   const [formData, setFormData] = useState<FormValues>({
-    name: "",
-    description: "",
-    templatebody: "",
-    tags: [],
-    templatesubject: "",
+    name: entityData?.name || "",
+    description: entityData?.description || "",
+    templatebody: entityData?.templatebody || "",
+    tags: entityData?.tags || [],
+    templatesubject: entityData?.templatesubject || "",
   });
   const [validationError, setValidationError] = useState<string | null>(null);
   const { createNotification, status } = useCreateNotification();
   const [apiError, setApiError] = useState<string | null>(null); // Store API error message
   const { tags: tagData, loading, error } = useFetchTags();
   const [successSnackbarOpen, setSuccessSnackbarOpen] = useState(false);
+
+  useEffect(() => {
+    entityData && onChange(entityData);
+  }, [entityData]);
 
   useEffect(() => {
     setFormData((prevData) => ({
@@ -92,9 +102,10 @@ const NotificationForm: React.FC<Props> = ({ onChange, eventId }) => {
         description: formData.description,
         templatebody: formData.templatebody,
         templatesubject: formData.templatesubject,
-        eventId: eventId,
+        eventId: eventId || entityData.eventId,
       };
-      await createNotification(inputData);
+      if (entityData) await createNotification(inputData, true);
+      else await createNotification(inputData, false);
       // Reset the form data on successful submission
       if (!status.error && !apiError) {
         setFormData((prevData) => ({
@@ -208,7 +219,12 @@ const NotificationForm: React.FC<Props> = ({ onChange, eventId }) => {
             >
               Save
             </Button>
-            <Button variant="contained" color="error" type="button">
+            <Button
+              variant="contained"
+              color="error"
+              type="button"
+              onClick={() => navigate("/")}
+            >
               Cancel
             </Button>
           </div>
