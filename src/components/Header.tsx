@@ -6,7 +6,6 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import CompanyLogo from '../assets/icon.svg';
 import { Divider } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { SportsRugbySharp } from '@mui/icons-material';
 
 const Header = () => {
   return (
