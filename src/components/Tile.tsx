@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Button,
   Card,
@@ -7,9 +7,7 @@ import {
   Typography,
 } from "@mui/material";
 import Buttons from "../common/Buttons/Buttons";
-import { AxiosError } from "axios";
 import { App } from "../services/appService";
-import useModifyData from "../hooks/useModifyData";
 // import './Tile.css';
 import ReactCardFlip from "react-card-flip";
 
