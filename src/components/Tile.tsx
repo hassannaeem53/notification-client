@@ -26,6 +26,7 @@ interface Props {
   searchInput: string;
   sort: string;
   sortBy: string;
+  active: boolean;
 }
 
 const Tile = ({
@@ -40,6 +41,7 @@ const Tile = ({
   searchInput,
   sort,
   sortBy,
+  active,
 }: Props) => {
   const [isFlipped, setIsFlipped] = useState(false);
   const toggleFlip = () => {
@@ -144,6 +146,7 @@ const Tile = ({
               searchInput={searchInput}
               sort={sort}
               sortBy={sortBy}
+              active={active}
             />
           </CardActions>
         </Card>

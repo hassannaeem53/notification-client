@@ -60,15 +60,21 @@ const DataGrid: React.FC<DataGridProps> = ({
   const [sortby, setSortby] = useState<string>("name");
   const [selectedId, setSelectedId] = useState<string>("");
   const [openAddModal, setOpenAddModal] = useState<boolean>(false);
+  const [active, setActive] = useState<boolean>(true);
 
   const { data, error, isLoading } = useData(
     page,
     title,
+    active,
     parentId,
     searchInput,
     sort,
     sortby
   );
+
+  const onSetActive = (val: boolean) => {
+    setActive(val);
+  };
 
   useEffect(() => {
     if (searchInput.length) setPage(1); //resetting page to 1 to show search results
@@ -100,6 +106,8 @@ const DataGrid: React.FC<DataGridProps> = ({
         setSortby={setSortby}
         parentName={parentName}
         setOpenAddModal={setOpenAddModal}
+        active={active}
+        onSetActive={() => setActive(!active)}
       />
       <Container
         style={{ marginTop: "20px", paddingLeft: "20px", paddingRight: "20px" }}
@@ -158,19 +166,6 @@ const DataGrid: React.FC<DataGridProps> = ({
                       }
                     }}
                   >
-                    {/* <div
-                      style={{
-                        position: "absolute",
-                        top: "10px", // Adjust the top position as needed
-                        right: "10px", // Adjust the right position as needed
-                      }}
-                    >
-                      <InfoButton
-                        description={item.description}
-                        createdDate={item.created_at.slice(0, 10)}
-                        updatedDate={item.updated_at}
-                      />
-                    </div> */}
                     <Grid container spacing={6}>
                       <Grid
                         item
@@ -221,6 +216,7 @@ const DataGrid: React.FC<DataGridProps> = ({
                           searchInput={searchInput}
                           sort={sort}
                           sortBy={sortby}
+                          active={active}
                         />
                         <InfoButton
                           description={item.description}
@@ -251,6 +247,7 @@ const DataGrid: React.FC<DataGridProps> = ({
           searchInput={searchInput}
           sort={sort}
           sortBy={sortby}
+          setPage={setPage}
         />
       </Container>
     </>

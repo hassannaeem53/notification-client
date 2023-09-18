@@ -1,10 +1,11 @@
-import { useQuery } from '@tanstack/react-query';
-import ms from 'ms';
-import HttpService, { ResponseInterface } from '../services/httpService';
+import { useQuery } from "@tanstack/react-query";
+import ms from "ms";
+import HttpService, { ResponseInterface } from "../services/httpService";
 
 interface QueryInterface {
   page: number;
   limit: number;
+  is_active: boolean;
   applicationId?: string;
   eventId?: string;
   name?: string;
@@ -15,6 +16,7 @@ interface QueryInterface {
 const useData = <T>(
   page: number,
   entityName: string,
+  is_active: boolean,
   parentId?: string,
   searchInput?: string,
   sort?: string,
@@ -27,35 +29,38 @@ const useData = <T>(
     limit: 4,
     sort: sort,
     sortby: sortby,
+    is_active: is_active,
   };
-  if (entityName == 'applications') {
+  if (entityName == "applications") {
     if (searchInput) {
       queryParams = { ...queryParams, name: searchInput };
     } else queryParams = { ...queryParams };
-  } else if (entityName == 'events') {
+  } else if (entityName == "events") {
     if (searchInput)
       queryParams = {
         ...queryParams,
         applicationId: parentId,
         name: searchInput,
+        is_active: is_active,
       };
     queryParams = { ...queryParams, applicationId: parentId };
-  } else if (entityName == 'notifications') {
+  } else if (entityName == "notifications") {
     if (searchInput)
       queryParams = { ...queryParams, eventId: parentId, name: searchInput };
     else queryParams = { ...queryParams, eventId: parentId };
   }
+
   return useQuery<ResponseInterface<T>, Error, ResponseInterface<T>>({
     queryKey: parentId
-      ? [entityName, page, parentId, searchInput, sort, sortby]
-      : [entityName, page, searchInput, sort, sortby],
+      ? [entityName, page, is_active, parentId, searchInput, sort, sortby]
+      : [entityName, page, is_active, searchInput, sort, sortby],
     queryFn: () =>
       service.getAll({
         params: queryParams,
       }),
-    staleTime: ms('10m'),
+    staleTime: ms("10m"),
     keepPreviousData: true,
-    refetchOnWindowFocus: 'always',
+    refetchOnWindowFocus: "always",
   });
 };
 

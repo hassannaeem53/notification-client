@@ -1,8 +1,7 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import HttpService, {
   ResponseInterface,
   UpdateEntity,
-
 } from "../services/httpService";
 import { AxiosError } from "axios";
 
@@ -14,6 +13,7 @@ interface UpdateObj {
 const useModifyData = <T>(
   page: number,
   entityName: string,
+  active: boolean,
   searchInput: string,
   sort: string,
   sortBy: string,
@@ -23,10 +23,9 @@ const useModifyData = <T>(
   const queryClient = useQueryClient();
   const service = new HttpService<T>(entityName);
 
-
   const key = parentId
-    ? [entityName, page, parentId, searchInput, sort, sortBy]
-    : [entityName, page, searchInput, sort, sortBy];
+    ? [entityName, page, active, parentId, searchInput, sort, sortBy]
+    : [entityName, page, active, searchInput, sort, sortBy];
 
   return useMutation({
     mutationFn: ({ id, entity }: UpdateObj) => service.update(id, entity),
@@ -39,7 +38,6 @@ const useModifyData = <T>(
 
     onSuccess: (_data, variables, context) => {
       const invalidateQueryKey = [...key];
-
 
       if (
         context?.previousData[entityName]?.length == 1 &&

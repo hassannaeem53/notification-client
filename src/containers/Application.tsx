@@ -31,13 +31,22 @@ const Application = ({ onSet, onSetName }: Props) => {
   const [sort, setSort] = useState<string>("asc");
   const [sortby, setSortby] = useState<string>("name");
   const [previousPage, setPreviousPage] = useState<number | null>(null);
+  const [active, setActive] = useState<boolean>(true);
 
   //getting all apps
   const {
     data: apps,
     error,
     isLoading,
-  } = useData(page, "applications", undefined, searchInput, sort, sortby);
+  } = useData(
+    page,
+    "applications",
+    active,
+    undefined,
+    searchInput,
+    sort,
+    sortby
+  );
 
   useEffect(() => {
     onSet(selectedAppId);
@@ -129,6 +138,8 @@ const Application = ({ onSet, onSetName }: Props) => {
         setSort={setSort}
         setSortby={setSortby}
         setOpenAddModal={setOpenAddModal}
+        active={active}
+        onSetActive={() => setActive(!active)}
       />
 
       <Grid
@@ -178,6 +189,7 @@ const Application = ({ onSet, onSetName }: Props) => {
                 searchInput={searchInput}
                 sort={sort}
                 sortBy={sortby}
+                active={active}
               />
             </Grid>
           </Slide>
@@ -196,6 +208,7 @@ const Application = ({ onSet, onSetName }: Props) => {
         page={page}
         entityName="applications"
         finalPage={apps.pagination?.totalPages || 1}
+        setPage={setPage}
       />
     </>
   );

@@ -5,7 +5,8 @@ import { AxiosError } from "axios";
 const useAddData = <T>(
   entityName: string,
   finalPage: number,
-  parentId?: string
+  parentId?: string,
+  onAdd?: () => void
 ) => {
   const queryClient = useQueryClient();
   const service = new HttpService<T>(entityName);
@@ -21,6 +22,10 @@ const useAddData = <T>(
       const previousData = queryClient.getQueryData<ResponseInterface<T>>(key);
 
       return { previousData };
+    },
+
+    onSuccess: () => {
+      onAdd && onAdd();
     },
 
     onSettled: () => {

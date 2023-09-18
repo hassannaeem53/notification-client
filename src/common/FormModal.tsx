@@ -27,6 +27,8 @@ interface Props {
   searchInput: string;
   sort: string;
   sortBy: string;
+  active: boolean;
+  setPage: (page: number) => void;
 }
 
 interface AddEntity {
@@ -61,6 +63,8 @@ const FormModal = ({
   searchInput,
   sort,
   sortBy,
+  active,
+  setPage,
 }: Props) => {
   const [formData, setFormData] = useState<UpdateEntity | AddEntity>({
     name: selectedEntity?.name,
@@ -80,6 +84,7 @@ const FormModal = ({
   const modifyEntity = useModifyData(
     page,
     entityName,
+    active,
     searchInput,
     sort,
     sortBy,
@@ -87,7 +92,9 @@ const FormModal = ({
     () => setFormData({ name: "", description: "" })
   );
 
-  const addEntity = useAddData(entityName, finalPage, parentId);
+  const addEntity = useAddData(entityName, finalPage, parentId, () =>
+    setPage(page)
+  );
 
   const handleClose = () => {
     if (title == "Add") setFormData({});

@@ -39,6 +39,7 @@ interface Props {
   searchInput: string;
   sort: string;
   sortBy: string;
+  active: boolean;
 }
 
 const styles = {};
@@ -56,6 +57,7 @@ const Buttons = ({
   searchInput,
   sort,
   sortBy,
+  active,
 }: Props) => {
   const [checked, setChecked] = useState(isActive);
 
@@ -68,6 +70,7 @@ const Buttons = ({
   const deleteApp = useModifyData(
     page,
     entity,
+    active,
     searchInput,
     sort,
     sortBy,
@@ -87,11 +90,17 @@ const Buttons = ({
   const toggleApp = useModifyData(
     page,
     entity,
+    active,
     searchInput,
     sort,
     sortBy,
     parentId,
-    () => setChecked(!checked)
+    () => {
+      setChecked(!checked);
+      setPage(page || 1);
+      setSelectedApp && setSelectedApp(undefined);
+      entity === "events" && setEventId && setEventId(undefined);
+    }
   );
 
   const onToggle = (e) => {
@@ -172,6 +181,8 @@ const Buttons = ({
         searchInput={searchInput}
         sort={sort}
         sortBy={sortBy}
+        active={active}
+        setPage={setPage}
       />
       <Snackbar
         open={reqError !== undefined}
