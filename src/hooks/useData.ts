@@ -1,6 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
-import ms from "ms";
-import HttpService, { ResponseInterface } from "../services/httpService";
+import { useQuery } from '@tanstack/react-query';
+import ms from 'ms';
+import HttpService, { ResponseInterface } from '../services/httpService';
 
 interface QueryInterface {
   page: number;
@@ -31,11 +31,11 @@ const useData = <T>(
     sortby: sortby,
     is_active: is_active,
   };
-  if (entityName == "applications") {
+  if (entityName == 'applications') {
     if (searchInput) {
       queryParams = { ...queryParams, name: searchInput };
     } else queryParams = { ...queryParams };
-  } else if (entityName == "events") {
+  } else if (entityName == 'events') {
     if (searchInput)
       queryParams = {
         ...queryParams,
@@ -44,7 +44,7 @@ const useData = <T>(
         is_active: is_active,
       };
     queryParams = { ...queryParams, applicationId: parentId };
-  } else if (entityName == "notifications") {
+  } else if (entityName == 'notifications') {
     if (searchInput)
       queryParams = { ...queryParams, eventId: parentId, name: searchInput };
     else queryParams = { ...queryParams, eventId: parentId };
@@ -58,9 +58,9 @@ const useData = <T>(
       service.getAll({
         params: queryParams,
       }),
-    staleTime: ms("10m"),
+    // staleTime: ms("10m"),
     keepPreviousData: true,
-    refetchOnWindowFocus: "always",
+    refetchOnWindowFocus: 'always',
   });
 };
 
