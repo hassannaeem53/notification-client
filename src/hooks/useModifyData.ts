@@ -45,9 +45,11 @@ const useModifyData = <T>(
         page - 1 != 0
       ) {
         invalidateQueryKey[1] = page - 1;
-
         onUpdate && onUpdate(page - 1);
+      } else if (variables.entity.is_deleted) {
+        onUpdate && onUpdate(page);
       }
+
       if (!variables.entity.is_deleted) onUpdate && onUpdate();
 
       queryClient.invalidateQueries({ queryKey: invalidateQueryKey });
