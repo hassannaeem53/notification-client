@@ -98,6 +98,11 @@ const FormModal = ({
 
   const handleClose = () => {
     if (title == "Add") setFormData({});
+    else
+      setFormData({
+        name: selectedEntity?.name,
+        description: selectedEntity?.description,
+      });
     setOpen(false);
   };
 
