@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-import ms from 'ms';
 import HttpService, { ResponseInterface } from '../services/httpService';
 
 interface QueryInterface {

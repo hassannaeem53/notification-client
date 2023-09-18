@@ -7,13 +7,13 @@ import {
   Stack,
   Alert,
   Snackbar,
-} from "@mui/material";
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
-import { UpdateEntity } from "../services/httpService";
-import { App } from "../services/appService";
-import { Entity } from "./Buttons/Buttons";
-import useModifyData from "../hooks/useModifyData";
-import useAddData from "../hooks/useAddData";
+} from '@mui/material';
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import { UpdateEntity } from '../services/httpService';
+import { App } from '../services/appService';
+import { Entity } from './Buttons/Buttons';
+import useModifyData from '../hooks/useModifyData';
+import useAddData from '../hooks/useAddData';
 
 interface Props {
   open: boolean;
@@ -39,16 +39,16 @@ interface AddEntity {
 }
 
 const style = {
-  position: "absolute" as const,
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
+  position: 'absolute' as const,
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
   width: 400,
-  bgcolor: "background.paper",
+  bgcolor: 'background.paper',
   borderRadius: 4,
   boxShadow: 24,
   p: 4,
-  textAlign: "center",
+  textAlign: 'center',
 };
 
 const FormModal = ({
@@ -74,7 +74,7 @@ const FormModal = ({
   const [reqError, setReqError] = useState<string | undefined>(undefined);
 
   useEffect(() => {
-    if (title == "Edit")
+    if (title == 'Edit')
       setFormData({
         name: selectedEntity?.name,
         description: selectedEntity?.description,
@@ -89,7 +89,7 @@ const FormModal = ({
     sort,
     sortBy,
     parentId,
-    () => setFormData({ name: "", description: "" })
+    () => setFormData({ name: '', description: '' })
   );
 
   const addEntity = useAddData(entityName, finalPage, parentId, () =>
@@ -97,7 +97,7 @@ const FormModal = ({
   );
 
   const handleClose = () => {
-    if (title == "Add") setFormData({});
+    if (title == 'Add') setFormData({});
     setOpen(false);
   };
 
@@ -111,14 +111,14 @@ const FormModal = ({
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (title === "Edit")
-      modifyEntity.mutate({ id: selectedEntity?._id || "", entity: formData });
+    if (title === 'Edit')
+      modifyEntity.mutate({ id: selectedEntity?._id || '', entity: formData });
     else {
       //add case
       let entityToAdd = { ...formData };
-      if (entityName == "events")
+      if (entityName == 'events')
         entityToAdd = { ...entityToAdd, applicationId: parentId };
-      else if (entityName == "notifications")
+      else if (entityName == 'notifications')
         entityToAdd = { ...entityToAdd, eventId: parentId };
       addEntity.mutate(entityToAdd);
     }
@@ -146,40 +146,42 @@ const FormModal = ({
 
   return (
     <>
-      <Modal open={open} onClose={handleClose} sx={{ alignItems: "center" }}>
+      <Modal open={open} onClose={handleClose} sx={{ alignItems: 'center' }}>
         <Box sx={style}>
-          <Typography variant="h4">{title}</Typography>
+          <Typography variant='h4'>{title}</Typography>
           <form noValidate onSubmit={handleSubmit}>
             <TextField
-              label="Name"
-              name="name"
-              margin="normal"
+              label='Name'
+              name='name'
+              margin='normal'
               fullWidth
               value={formData?.name}
               onChange={handleChange}
+              required={true}
             />
             <TextField
-              label="Description"
-              name="description"
+              label='Description'
+              name='description'
               multiline
               rows={3}
               fullWidth
               value={formData?.description}
               onChange={handleChange}
+              required={true}
             />
             <Stack
               spacing={2}
-              direction="row"
+              direction='row'
               sx={{
                 marginTop: 3,
-                display: "flex",
-                justifyContent: "center",
+                display: 'flex',
+                justifyContent: 'center',
               }}
             >
-              <Button variant="contained" color="error" onClick={handleClose}>
+              <Button variant='contained' color='error' onClick={handleClose}>
                 Close
               </Button>
-              <Button variant="contained" type="submit">
+              <Button variant='contained' type='submit'>
                 {title}
               </Button>
             </Stack>
@@ -190,14 +192,14 @@ const FormModal = ({
         open={reqError !== undefined}
         autoHideDuration={5000}
         onClose={handleCloseAlert}
-        message={reqError || ""}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        message={reqError || ''}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
         <Alert
           onClose={handleCloseAlert}
-          severity="error"
-          variant="filled"
-          sx={{ width: "100%" }}
+          severity='error'
+          variant='filled'
+          sx={{ width: '100%' }}
         >
           {reqError}
         </Alert>

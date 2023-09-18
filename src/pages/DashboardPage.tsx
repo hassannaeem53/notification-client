@@ -89,7 +89,7 @@ const Dashboard = () => {
         </>
       ) : (
         // Render a message or component when applicationId is not set
-        <Grid item xs={12}>
+        <Grid item xs={12} sx={{ minHeight: '100%' }}>
           <Alert severity='info' sx={{ marginTop: '20px', fontSize: '1.2rem' }}>
             Please select an Application to view Events.
           </Alert>
