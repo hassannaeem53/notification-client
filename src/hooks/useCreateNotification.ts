@@ -1,7 +1,7 @@
-import { useState } from "react";
-import axios from "axios";
+import { useState } from 'react';
+import axios from 'axios';
 
-const API_BASE_URL = "http://localhost:3000/"; // Replace with your actual API base URL
+const API_BASE_URL = 'http://localhost:3000/'; // Replace with your actual API base URL
 
 interface NotificationData {
   name: string;
@@ -37,10 +37,10 @@ const useCreateNotification = (): {
       let response;
       if (edit) {
         const { eventId, ...editData } = notificationData;
-        console.log(
-          "🚀 ~ file: useCreateNotification.ts:40 ~ editData:",
-          editData
-        );
+        // console.log(
+        //   '🚀 ~ file: useCreateNotification.ts:40 ~ editData:',
+        //   editData
+        // );
         response = await axios.patch(
           `${API_BASE_URL}api/notifications/${notificationData.eventId}`,
           editData
@@ -51,7 +51,7 @@ const useCreateNotification = (): {
           notificationData
         );
 
-      if (response.status === 201) {
+      if (response.status === 201 || response.status === 200) {
         // Notification created successfully
         setStatus({ error: null, loading: false, success: true });
       } else {
@@ -63,7 +63,7 @@ const useCreateNotification = (): {
       }
     } catch (error) {
       setStatus({
-        error: `Error creating notification: ${error.message}`,
+        error: `Error creating notification: ${error.response.data.message}`,
         loading: false,
         success: false,
       });

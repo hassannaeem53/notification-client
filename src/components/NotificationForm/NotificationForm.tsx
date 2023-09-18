@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
+import React, { useState, ChangeEvent, FormEvent, useEffect } from 'react';
 import {
   Button,
   TextField,
@@ -6,19 +6,20 @@ import {
   CircularProgress,
   Snackbar,
   Alert,
-} from "@mui/material";
+} from '@mui/material';
+import * as z from 'zod';
 import {
   MentionsInput,
   Mention,
   SuggestionDataItem,
   DataFunc,
-} from "react-mentions";
-import "./NotificationForm.css";
-import useCreateNotification from "../../hooks/useCreateNotification";
-import useFetchTags from "../../hooks/useFetchTags";
-import notificationSchema from "./notificationSchema";
-import { Entity } from "../../common/Buttons/Buttons";
-import { useLocation, useNavigate } from "react-router-dom";
+} from 'react-mentions';
+import './NotificationForm.css';
+import useCreateNotification from '../../hooks/useCreateNotification';
+import useFetchTags from '../../hooks/useFetchTags';
+import notificationSchema from './notificationSchema';
+import { Entity } from '../../common/Buttons/Buttons';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 interface FormValues {
   name: string;
@@ -39,11 +40,11 @@ const NotificationForm: React.FC<Props> = ({ onChange, eventId }) => {
   const entityData = location.state?.entity;
 
   const [formData, setFormData] = useState<FormValues>({
-    name: entityData?.name || "",
-    description: entityData?.description || "",
-    templatebody: entityData?.templatebody || "",
+    name: entityData?.name || '',
+    description: entityData?.description || '',
+    templatebody: entityData?.templatebody || '',
     tags: entityData?.tags || [],
-    templatesubject: entityData?.templatesubject || "",
+    templatesubject: entityData?.templatesubject || '',
   });
   const [validationError, setValidationError] = useState<string | null>(null);
   const { createNotification, status } = useCreateNotification();
@@ -53,7 +54,7 @@ const NotificationForm: React.FC<Props> = ({ onChange, eventId }) => {
 
   useEffect(() => {
     entityData && onChange(entityData);
-  }, [entityData]);
+  }, [entityData, onChange]);
 
   useEffect(() => {
     setFormData((prevData) => ({
@@ -64,6 +65,7 @@ const NotificationForm: React.FC<Props> = ({ onChange, eventId }) => {
 
   useEffect(() => {
     // Handle status.error from useCreateNotification
+
     if (status.error) {
       setApiError(status.error);
     }
@@ -96,7 +98,9 @@ const NotificationForm: React.FC<Props> = ({ onChange, eventId }) => {
     e.preventDefault();
 
     try {
+      // Validate the formData with notificationSchema
       notificationSchema.parse(formData);
+
       const inputData = {
         name: formData.name,
         description: formData.description,
@@ -104,42 +108,52 @@ const NotificationForm: React.FC<Props> = ({ onChange, eventId }) => {
         templatesubject: formData.templatesubject,
         eventId: eventId || entityData.eventId,
       };
-      if (entityData) await createNotification(inputData, true);
-      else await createNotification(inputData, false);
-      // Reset the form data on successful submission
-      if (!status.error && !apiError) {
-        setFormData((prevData) => ({
-          ...prevData,
-          name: "",
-          description: "",
-          templatebody: "",
-          templatesubject: "",
-        }));
 
-        //console.log('tags', tagData);
-        // Set form submission status to true
-        setFormSubmitted(true);
-        window.location.href = "/";
+      // Create or update notification based on entityData
+      if (entityData) {
+        await createNotification(inputData, true);
       } else {
-        setApiError(status.error);
+        await createNotification(inputData, false);
       }
+
+      // Reset the form data on successful submission
+      // setFormData((prevData) => ({
+      //   ...prevData,
+      //   name: '',
+      //   description: '',
+      //   templatebody: '',
+      //   templatesubject: '',
+      // }));
+
+      // Set form submission status to true
+      setFormSubmitted(true);
+
+      // Redirect or navigate to a different page if needed
+      // window.location.href = '/';
     } catch (error) {
-      if (error.message) {
+      if (error instanceof z.ZodError) {
+        // Handle ZodError by including the path in the error message
+        const path = error.issues[0].path.join('.');
+        const errorMessage = `${path}: ${error.issues[0].message}`;
+        setValidationError(errorMessage);
+      } else {
+        // Handle other errors (e.g., API error or general error)
         setValidationError(error.message);
-        setFormSubmitted(false);
+        setApiError(error.message);
       }
-      // Handle other errors (e.g., API error)
-      // You can set status.error or display a different error message to the user
+
+      // Set form submission status to false
+      setFormSubmitted(false);
     }
   };
 
   const handleMentionsInputKeyDown = (e) => {
-    if (e.key === "Enter") {
+    if (e.key === 'Enter') {
       e.preventDefault();
-      const newTemplatebody = formData.templatebody + "\n";
+      const newTemplatebody = formData.templatebody + '\n';
 
       handleChange({
-        target: { name: "templatebody", value: newTemplatebody },
+        target: { name: 'templatebody', value: newTemplatebody },
       });
       // console.log('newTemplatebody', formData.templatebody);
     }
@@ -147,83 +161,83 @@ const NotificationForm: React.FC<Props> = ({ onChange, eventId }) => {
 
   return (
     <>
-      <Paper elevation={3} style={{ padding: "20px" }}>
-        <form onSubmit={handleSubmit} style={{ height: "470px" }}>
+      <Paper elevation={3} style={{ padding: '20px' }}>
+        <form onSubmit={handleSubmit} style={{ height: '470px' }}>
           <TextField
-            label="Notification Name"
-            variant="outlined"
+            label='Notification Name'
+            variant='outlined'
             fullWidth
-            name="name"
+            name='name'
             value={formData.name}
             onChange={handleChange}
-            margin="normal"
+            margin='normal'
             required
           />
           <TextField
-            label="Description"
-            variant="outlined"
+            label='Description'
+            variant='outlined'
             fullWidth
-            name="description"
+            name='description'
             value={formData.description}
             onChange={handleChange}
-            margin="normal"
+            margin='normal'
             required
           />
           <TextField
-            label="Template Subject"
-            variant="outlined"
+            label='Template Subject'
+            variant='outlined'
             fullWidth
-            name="templatesubject"
+            name='templatesubject'
             value={formData.templatesubject}
             onChange={handleChange}
-            margin="normal"
+            margin='normal'
             required
           />
 
           <div onKeyDown={(e) => handleMentionsInputKeyDown(e)}>
             <MentionsInput
-              className="custom-mentions-input"
+              className='custom-mentions-input'
               value={formData.templatebody}
               onChange={(e) =>
                 handleChange({
-                  target: { name: "templatebody", value: e.target.value },
+                  target: { name: 'templatebody', value: e.target.value },
                 })
               }
               readOnly={false}
-              placeholder="Template Body"
+              placeholder='Template Body'
               required
             >
               <Mention
-                trigger="{{"
+                trigger='{{'
                 data={formData.tags}
                 renderSuggestion={(suggestion, search, highlightedDisplay) => (
-                  <div className="custom-mention">{highlightedDisplay}</div>
+                  <div className='custom-mention'>{highlightedDisplay}</div>
                 )}
                 displayTransform={(id, display) => `{{${display}}}`}
-                markup="{{__display__}}"
+                markup='{{__display__}}'
               />
             </MentionsInput>
           </div>
           <div
             style={{
-              display: "flex",
-              justifyContent: "center",
-              marginTop: "20px",
+              display: 'flex',
+              justifyContent: 'center',
+              marginTop: '20px',
             }}
           >
             <Button
-              variant="contained"
-              color="primary"
-              type="submit"
-              style={{ marginRight: "20px" }}
+              variant='contained'
+              color='primary'
+              type='submit'
+              style={{ marginRight: '20px' }}
             >
               Save
             </Button>
             <Button
-              variant="contained"
-              color="error"
-              type="button"
-              onClick={() => navigate("/")}
+              variant='contained'
+              color='error'
+              type='button'
+              onClick={() => navigate('/')}
             >
               Cancel
             </Button>
@@ -231,47 +245,50 @@ const NotificationForm: React.FC<Props> = ({ onChange, eventId }) => {
         </form>
       </Paper>
       {status.loading && (
-        <div className="loading-overlay">
+        <div className='loading-overlay'>
           <CircularProgress size={60} />
         </div>
       )}
       <Snackbar
         open={validationError !== null}
         autoHideDuration={5000}
-        message={validationError || ""}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        message={validationError || ''}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         onClose={() => {
           setValidationError(null);
+          setApiError(null);
         }}
       >
-        <Alert severity="error" sx={{ width: "100%" }} variant="filled">
+        <Alert severity='error' sx={{ width: '100%' }} variant='filled'>
           {validationError}
         </Alert>
       </Snackbar>
       <Snackbar
         open={apiError !== null} // Display Snackbar for API error
         autoHideDuration={5000}
-        message={apiError || ""}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        message={apiError || ''}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         onClose={() => {
           setApiError(null); // Reset API error
+          status.error = null; // Reset status.error
+          setValidationError(null); // Reset validation error
         }}
       >
-        <Alert severity="error" sx={{ width: "100%" }} variant="filled">
+        <Alert severity='error' sx={{ width: '100%' }} variant='filled'>
           {apiError}
         </Alert>
       </Snackbar>
       <Snackbar
         open={successSnackbarOpen && status.success}
         autoHideDuration={null} // Set to null to prevent auto-hide
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         onClose={() => {
           // Reset form submission status and hide the Snackbar
           setSuccessSnackbarOpen(false);
           status.success = false;
         }}
       >
-        <Alert severity="success" sx={{ width: "100%" }} variant="filled">
+        <Alert severity='success' sx={{ width: '100%' }} variant='filled'>
           Notification Created Successfully
         </Alert>
       </Snackbar>
