@@ -8,7 +8,6 @@ import {
   Select,
   MenuItem,
   Menu,
-  Box,
   Switch,
 } from '@mui/material';
 import { Link } from 'react-router-dom';
@@ -190,13 +189,15 @@ const HeaderToolbar: React.FC<HeaderToolbarProps> = ({
         {/* Filter Dropdown */}
         <div className='small-medium-sort'>
           <div style={{ display: 'flex', alignItems: 'center' }}>
-            <IconButton
-              onClick={handleFilterClick} // Open filter menu on button click
-              color='primary'
-              sx={{ marginLeft: '16px' }}
-            >
-              <SortByAlpha />
-            </IconButton>
+            <Tooltip title='Sort By'>
+              <IconButton
+                onClick={handleFilterClick} // Open filter menu on button click
+                color='primary'
+                sx={{ marginLeft: '16px' }}
+              >
+                <SortByAlpha />
+              </IconButton>
+            </Tooltip>
             {/* Filter Menu */}
             <Menu
               anchorEl={filterAnchor}
@@ -221,20 +222,50 @@ const HeaderToolbar: React.FC<HeaderToolbarProps> = ({
             </Menu>
             {/* Filter Icon */}
             {ascendingOrder ? (
-              <SortIcon
-                sx={{
-                  marginLeft: '16px',
-                  cursor: 'pointer',
-                  transform: 'rotate(180deg)',
-                }}
-                onClick={toggleSortingOrder}
-              />
+              <Tooltip title='Descending'>
+                <div>
+                  <SortIcon
+                    sx={{
+                      marginLeft: '16px',
+                      cursor: 'pointer',
+                      transform: 'rotate(180deg)',
+                    }}
+                    onClick={toggleSortingOrder}
+                  />
+                  <ArrowUpward
+                    sx={{
+                      cursor: 'pointer',
+                      transform: 'rotate(180deg)',
+                    }}
+                    onClick={toggleSortingOrder}
+                    fontSize='small'
+                  />
+                </div>
+              </Tooltip>
             ) : (
-              <SortIcon
-                sx={{ marginLeft: '16px', cursor: 'pointer' }}
-                onClick={toggleSortingOrder}
-              />
+              <Tooltip title='Ascending'>
+                <div>
+                  <SortIcon
+                    sx={{ marginLeft: '16px', cursor: 'pointer' }}
+                    onClick={toggleSortingOrder}
+                  />
+                  <ArrowUpward
+                    sx={{ cursor: 'pointer' }}
+                    onClick={toggleSortingOrder}
+                    fontSize='small'
+                  />
+                </div>
+              </Tooltip>
             )}
+            <Tooltip title={active ? 'Active' : 'InActive'}>
+              <Switch
+                checked={active}
+                onClick={onSetActive}
+                color='default'
+                size='medium'
+                checkedIcon={<CheckCircleIcon color='default' />}
+              />
+            </Tooltip>
           </div>
         </div>
         <div className='large-sort'>

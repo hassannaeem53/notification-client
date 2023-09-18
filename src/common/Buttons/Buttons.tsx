@@ -1,5 +1,5 @@
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import {
   Alert,
   Box,
@@ -7,13 +7,14 @@ import {
   IconButton,
   Snackbar,
   Switch,
-} from "@mui/material";
-import { useEffect, useState } from "react";
-import FormModal from "../FormModal";
-import { App } from "../../services/appService";
-import useModifyData from "../../hooks/useModifyData";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import { useNavigate } from "react-router-dom";
+  Tooltip,
+} from '@mui/material';
+import { useEffect, useState } from 'react';
+import FormModal from '../FormModal';
+import { App } from '../../services/appService';
+import useModifyData from '../../hooks/useModifyData';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import { useNavigate } from 'react-router-dom';
 
 export interface Entity {
   _id: string;
@@ -78,7 +79,7 @@ const Buttons = ({
     (page: number | undefined) => {
       setPage(page || 1);
       setSelectedApp && setSelectedApp(undefined);
-      entity === "events" && setEventId && setEventId(undefined);
+      entity === 'events' && setEventId && setEventId(undefined);
     }
   );
   const onDelete = (e) => {
@@ -99,7 +100,7 @@ const Buttons = ({
       setChecked(!checked);
       setPage(page || 1);
       setSelectedApp && setSelectedApp(undefined);
-      entity === "events" && setEventId && setEventId(undefined);
+      entity === 'events' && setEventId && setEventId(undefined);
     }
   );
 
@@ -116,7 +117,7 @@ const Buttons = ({
 
   const onEdit = (e) => {
     e.stopPropagation();
-    if (entity === "events" || entity === "applications") setOpen(true);
+    if (entity === 'events' || entity === 'applications') setOpen(true);
     else
       navigate(`/notification-preview/${selectedEntity._id}`, {
         state: { entity: selectedEntity },
@@ -146,33 +147,37 @@ const Buttons = ({
     <>
       <Box
         sx={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
         }}
       >
-        <ButtonGroup size="medium" aria-label="medium button group" sx={styles}>
-          <Switch
-            checked={checked}
-            onClick={onToggle}
-            //color='primary'
-            size="medium"
-            checkedIcon={<CheckCircleIcon color="primary" />}
-          />
-
-          <IconButton color="inherit" onClick={onEdit}>
-            <EditIcon color="action" />
-          </IconButton>
-
-          <IconButton color="inherit" onClick={onDelete}>
-            <DeleteIcon color="error" />
-          </IconButton>
+        <ButtonGroup size='medium' aria-label='medium button group' sx={styles}>
+          <Tooltip title='Active Status'>
+            <Switch
+              checked={checked}
+              onClick={onToggle}
+              //color='primary'
+              size='medium'
+              checkedIcon={<CheckCircleIcon color='primary' />}
+            />
+          </Tooltip>
+          <Tooltip title='Edit'>
+            <IconButton color='inherit' onClick={onEdit}>
+              <EditIcon color='action' />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title='Delete'>
+            <IconButton color='inherit' onClick={onDelete}>
+              <DeleteIcon color='error' />
+            </IconButton>
+          </Tooltip>
         </ButtonGroup>
       </Box>
       <FormModal
         open={open}
         setOpen={setOpen}
-        title="Edit"
+        title='Edit'
         selectedEntity={selectedEntity}
         page={page}
         entityName={entity}
@@ -188,14 +193,14 @@ const Buttons = ({
         open={reqError !== undefined}
         autoHideDuration={5000}
         onClose={handleCloseAlert}
-        message={reqError || ""}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        message={reqError || ''}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
         <Alert
           onClose={handleCloseAlert}
-          severity="error"
-          variant="filled"
-          sx={{ width: "100%" }}
+          severity='error'
+          variant='filled'
+          sx={{ width: '100%' }}
         >
           {reqError}
         </Alert>

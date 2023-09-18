@@ -129,7 +129,7 @@ const NotificationForm: React.FC<Props> = ({ onChange, eventId }) => {
       setFormSubmitted(true);
 
       // Redirect or navigate to a different page if needed
-      // window.location.href = '/';
+      window.location.href = '/';
     } catch (error) {
       if (error instanceof z.ZodError) {
         // Handle ZodError by including the path in the error message

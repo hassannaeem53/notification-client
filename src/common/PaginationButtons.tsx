@@ -1,4 +1,4 @@
-import { Grid, Pagination, Stack } from "@mui/material";
+import { Grid, Pagination, Stack } from '@mui/material';
 
 interface Props {
   currentPage: number;
@@ -20,21 +20,21 @@ const PaginationButtons = ({
       item
       xs={12}
       sx={{
-        textAlign: "center",
+        textAlign: 'center',
       }}
     >
       <Stack
         sx={{
-          display: "flex",
-          alignItems: "center",
-          flexDirection: "column",
+          display: 'flex',
+          alignItems: 'center',
+          flexDirection: 'column',
         }}
       >
         <Pagination
           count={totalPages}
           page={currentPage}
           onChange={handleChange}
-          color="primary"
+          color='primary'
         />
       </Stack>
     </Grid>

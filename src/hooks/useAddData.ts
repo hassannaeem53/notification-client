@@ -1,6 +1,6 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import HttpService, { ResponseInterface } from "../services/httpService";
-import { AxiosError } from "axios";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import HttpService, { ResponseInterface } from '../services/httpService';
+import { AxiosError } from 'axios';
 
 const useAddData = <T>(
   entityName: string,
@@ -14,7 +14,7 @@ const useAddData = <T>(
   const key = parentId
     ? [entityName, finalPage, parentId]
     : [entityName, finalPage];
-
+  console.log('key', key);
   return useMutation({
     mutationFn: (entity: T) => service.create(entity),
 
@@ -26,10 +26,11 @@ const useAddData = <T>(
 
     onSuccess: () => {
       onAdd && onAdd();
+      queryClient.invalidateQueries({ queryKey: key });
     },
 
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: key });
+      queryClient.invalidateQueries({ queryKey: [entityName] });
     },
 
     onError: (error: AxiosError) => {
