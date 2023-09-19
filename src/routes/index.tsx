@@ -5,12 +5,12 @@ import DashboardPage from "../pages/DashboardPage";
 import Login from "../pages/Login";
 import NotFoundPage from "../pages/NotFound";
 import { Auth } from "../components/Auth";
+import { Redirection } from "../components/Redirection";
 
 const AppRouter = () => (
   <Routes>
     <Route
-      path='/notification-preview/:eventId'
-
+      path="/notification-preview/:eventId"
       element={
         <Wrapper>
           <PreviewPage />
@@ -27,7 +27,9 @@ const AppRouter = () => (
         }
       />
     </Route>
-    <Route path="/login" element={<Login />} />
+    <Route element={<Redirection />}>
+      <Route path="/login" element={<Login />} />
+    </Route>
     <Route path="*" element={<NotFoundPage />} />
     {/* Define more routes as needed */}
   </Routes>
