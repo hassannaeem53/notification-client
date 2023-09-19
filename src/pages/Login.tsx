@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 import {
   Container,
   Paper,
@@ -9,14 +9,17 @@ import {
   Divider,
   Alert,
   Snackbar,
-} from "@mui/material";
-import CompanyLogo from "../assets/Company-logo.png";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import { z } from "zod";
-import HttpService from "../services/httpService";
-import { useNavigate } from "react-router-dom";
-import { AxiosError } from "axios";
+  IconButton,
+  InputAdornment,
+} from '@mui/material';
+import CompanyLogo from '../assets/Company-logo.png';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import { z } from 'zod';
+import HttpService from '../services/httpService';
+import { useNavigate } from 'react-router-dom';
+import { AxiosError } from 'axios';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 interface LoginInterface {
   email: string;
@@ -25,11 +28,12 @@ interface LoginInterface {
 
 const Login = () => {
   const [formData, setFormData] = useState({
-    email: "",
-    password: "",
+    email: '',
+    password: '',
   });
+  const [showPassword, setShowPassword] = useState(false);
 
-  const [emailValidation, setEmailValidation] = useState("");
+  const [emailValidation, setEmailValidation] = useState('');
 
   const [reqError, setReqError] = useState<string>();
 
@@ -41,6 +45,9 @@ const Login = () => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   const handleSubmit = async (e) => {
     if (emailValidation.length == 0) {
@@ -48,12 +55,12 @@ const Login = () => {
 
       //validate
       // send a request to authentication endpoint
-      const service = new HttpService<LoginInterface>("/auth/login");
+      const service = new HttpService<LoginInterface>('/auth/login');
       try {
         const res = await service.create(formData);
-        localStorage.setItem("token", res as string);
+        localStorage.setItem('token', res as string);
 
-        navigate("/");
+        navigate('/');
       } catch (err) {
         setReqError(err?.response?.data.message || error?.message);
       }
@@ -71,114 +78,137 @@ const Login = () => {
   const validateEmail = () => {
     try {
       emailSchema.parse(formData.email);
-      setEmailValidation("");
+      setEmailValidation('');
     } catch (err) {
-      setEmailValidation("Email is not valid");
+      setEmailValidation('Email is not valid');
     }
   };
 
   return (
     <Container
-      maxWidth="sm"
+      maxWidth='sm'
       style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        minHeight: "100vh",
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: '100vh',
       }}
     >
-      <Paper elevation={6} style={{ padding: "20px", width: "100%" }}>
-        <Grid container spacing={2} justifyContent="center" alignItems="center">
-          <Grid item xs={12} align="center">
-            <div style={{ display: "flex", alignItems: "center" }}>
+      <Paper
+        elevation={24}
+        style={{
+          padding: '20px',
+          width: '100%',
+          borderRadius: '3%',
+        }}
+      >
+        <Grid container spacing={2} justifyContent='center' alignItems='center'>
+          <Grid item xs={12} align='center'>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
               <Typography
-                variant="h4"
-                component="div"
+                variant='h4'
+                component='div'
                 sx={{
-                  fontWeight: "400",
-                  marginRight: "40px",
-                  marginLeft: "60px",
-                  font: "Poppins",
-                  fontSize: "40px",
+                  fontWeight: '400',
+                  marginRight: '40px',
+                  marginLeft: '60px',
+                  font: 'Poppins',
+                  fontSize: '40px',
 
-                  color: "#032a9c",
+                  color: '#032a9c',
                 }}
                 //color='primary'
               >
                 Notify
                 <NotificationsIcon
-                  style={{ color: "orange", height: "auto", width: "40px" }}
+                  style={{
+                    color: 'orange',
+                    height: 'auto',
+                    width: '40px',
+                  }}
                 />
               </Typography>
               <Divider
-                orientation="vertical"
-                variant="middle"
+                orientation='vertical'
+                variant='middle'
                 flexItem
-                sx={{ height: "100px" }} // Adjust the height as needed
+                sx={{ height: '100px' }} // Adjust the height as needed
               />
               <img
                 src={CompanyLogo}
-                alt=""
-                width={"120px"}
-                style={{ marginLeft: "40px" }}
+                alt=''
+                width={'120px'}
+                style={{ marginLeft: '40px' }}
               />
             </div>
           </Grid>
 
-          <Grid item xs={12} align="center">
-            <Typography variant="h4" gutterBottom>
+          <Grid item xs={12} align='center'>
+            <Typography variant='h4' gutterBottom>
               Login
             </Typography>
           </Grid>
           <Grid item xs={12}>
             <form onSubmit={handleSubmit}>
               <TextField
-                label="Email"
+                label='Email'
                 fullWidth
-                margin="normal"
-                name="email"
+                margin='normal'
+                name='email'
                 value={formData.email}
                 onChange={handleChange}
-                autoComplete="on"
+                autoComplete='on'
                 required
               />
-              {emailValidation.length > 0 && (
-                <Typography variant="subtitle1" color="error">
+              {emailValidation.length > 0 && formData.email.length > 0 && (
+                <Typography variant='subtitle1' color='error'>
                   {emailValidation}
                 </Typography>
               )}
               <TextField
-                label="Password"
+                label='Password'
                 fullWidth
-                margin="normal"
-                name="password"
-                type="password"
+                margin='normal'
+                name='password'
+                type={showPassword ? 'text' : 'password'} // Toggle password visibility
                 value={formData.password}
                 onChange={handleChange}
-                autoComplete="on"
+                autoComplete='on'
                 required
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position='end'>
+                      <IconButton
+                        aria-label='toggle password visibility'
+                        onClick={togglePasswordVisibility}
+                      >
+                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
               />
-              {formData.password.length < 8 && (
-                <Typography variant="subtitle1" color="error">
+              {formData.password.length < 8 && formData.password.length > 0 && (
+                <Typography variant='subtitle1' color='error'>
                   Password must be at least 8 characters long
                 </Typography>
               )}
               <Button
-                type="submit"
-                variant="contained"
+                type='submit'
+                variant='contained'
                 style={{
-                  marginTop: "20px",
-                  marginBottom: "20px",
-                  backgroundColor: "#032a9c",
-                  transition: "background-color 0.3s", // Add transition for smooth hover effect
+                  marginTop: '30px',
+                  marginBottom: '30px',
+                  backgroundColor: '#032a9c',
+                  transition: 'background-color 0.3s', // Add transition for smooth hover effect
                 }}
                 endIcon={<LockOutlinedIcon />}
                 fullWidth
                 // Define hover styles
                 sx={{
-                  "&:hover": {
-                    backgroundColor: "#2351d1", // Change background color on hover
+                  '&:hover': {
+                    backgroundColor: '#2351d1', // Change background color on hover
                   },
                 }}
               >
@@ -192,14 +222,14 @@ const Login = () => {
         open={reqError !== undefined}
         autoHideDuration={5000}
         onClose={handleCloseAlert}
-        message={reqError || ""}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        message={reqError || ''}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
         <Alert
           onClose={handleCloseAlert}
-          severity="error"
-          variant="filled"
-          sx={{ width: "100%" }}
+          severity='error'
+          variant='filled'
+          sx={{ width: '100%' }}
         >
           {reqError}
         </Alert>
