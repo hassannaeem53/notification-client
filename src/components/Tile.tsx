@@ -1,15 +1,15 @@
-import { useState } from "react";
+import { useState } from 'react';
 import {
   Button,
   Card,
   CardActions,
   CardContent,
   Typography,
-} from "@mui/material";
-import Buttons from "../common/Buttons/Buttons";
-import { App } from "../services/appService";
+} from '@mui/material';
+import Buttons from '../common/Buttons/Buttons';
+import { App } from '../services/appService';
 // import './Tile.css';
-import ReactCardFlip from "react-card-flip";
+import ReactCardFlip from 'react-card-flip';
 
 interface Props {
   app: App;
@@ -52,26 +52,26 @@ const Tile = ({
 
   return (
     <>
-      <ReactCardFlip isFlipped={isFlipped} flipDirection="horizontal">
+      <ReactCardFlip isFlipped={isFlipped} flipDirection='horizontal'>
         <Card
-          className="front-card"
+          className='front-card'
           elevation={12}
           sx={{
             padding: 1,
-            backgroundColor: "#EEEEEE",
+            backgroundColor: '#EEEEEE',
             borderRadius: 4,
-            display: "flex",
-            minHeight: "15vw",
-            alignItems: "center",
-            flexDirection: "column",
-            justifyContent: "center",
-            width: "90%",
-            border: selectedApp === app._id ? "3px solid #2196F3" : "none",
-            "&:hover": {
-              border: "3px solid #2196F3",
+            display: 'flex',
+            minHeight: '15vw',
+            alignItems: 'center',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            width: '90%',
+            border: selectedApp === app._id ? '3px solid #2196F3' : 'none',
+            '&:hover': {
+              border: '3px solid #2196F3',
             },
-            cursor: "pointer",
-            position: "relative",
+            cursor: 'pointer',
+            position: 'relative',
           }}
           onClick={() => {
             setSelectedApp(app._id);
@@ -82,19 +82,19 @@ const Tile = ({
           <CardContent
             sx={{
               flex: 1,
-              display: "flex",
-              textAlign: "center",
-              flexDirection: "column",
-              justifyContent: "center",
+              display: 'flex',
+              textAlign: 'center',
+              flexDirection: 'column',
+              justifyContent: 'center',
             }}
           >
             <Button
-              variant="contained"
-              color="primary"
+              variant='contained'
+              color='primary'
               sx={{
-                position: "absolute",
-                top: "10px",
-                right: "10px",
+                position: 'absolute',
+                top: '10px',
+                right: '10px',
                 zIndex: 1,
               }}
               onClick={(e) => {
@@ -105,29 +105,29 @@ const Tile = ({
               Info
             </Button>
             <Typography
-              variant="h5"
-              component="div"
+              variant='h5'
+              component='div'
               sx={{
-                color: "#303030",
+                color: '#303030',
               }}
               style={{
-                fontWeight: selectedApp === app._id ? "bold" : "normal",
-                fontSize: selectedApp === app._id ? "1.7rem" : "1.5rem",
+                fontWeight: selectedApp === app._id ? 'bold' : 'normal',
+                fontSize: selectedApp === app._id ? '1.7rem' : '1.5rem',
               }}
             >
               {app.name.toUpperCase()}
             </Typography>
             <hr
               style={{
-                width: "100%",
-                height: "1px",
-                backgroundColor: "#303030",
+                width: '100%',
+                height: '1px',
+                backgroundColor: '#303030',
               }}
             />
 
-            <Typography variant="body1">
+            <Typography variant='body1'>
               {app.description && app.description?.length > 50
-                ? app.description?.substring(0, 50) + "..."
+                ? app.description?.substring(0, 50) + '...'
                 : app.description}
             </Typography>
           </CardContent>
@@ -137,7 +137,7 @@ const Tile = ({
               isActive={app.is_active}
               open={open}
               page={page}
-              entity="applications"
+              entity='applications'
               setPage={setPage}
               finalPage={finalPage}
               setSelectedApp={setSelectedApp} //to ensure that events & ntoifications of deleted app dont appear
@@ -150,24 +150,24 @@ const Tile = ({
         </Card>
         {/* Back side */}
         <Card
-          className="back-card"
+          className='back-card'
           elevation={12}
           sx={{
             padding: 1,
-            backgroundColor: "#EEEEEE",
+            backgroundColor: '#EEEEEE',
             borderRadius: 4,
-            display: "flex",
-            minHeight: "15vw",
-            alignItems: "center",
-            flexDirection: "column",
-            justifyContent: "center",
-            width: "90%",
-            border: selectedApp === app._id ? "3px solid #2196F3" : "none",
-            "&:hover": {
-              border: "3px solid #2196F3",
+            display: 'flex',
+            minHeight: '15vw',
+            alignItems: 'center',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            width: '90%',
+            border: selectedApp === app._id ? '3px solid #2196F3' : 'none',
+            '&:hover': {
+              border: '3px solid #2196F3',
             },
-            cursor: "pointer",
-            position: "relative",
+            cursor: 'pointer',
+            position: 'relative',
           }}
           onClick={() => {
             setSelectedApp(app._id);
@@ -177,19 +177,19 @@ const Tile = ({
           <CardContent
             sx={{
               flex: 1,
-              display: "flex",
-              textAlign: "center",
-              flexDirection: "column",
-              justifyContent: "center",
+              display: 'flex',
+              textAlign: 'center',
+              flexDirection: 'column',
+              justifyContent: 'center',
             }}
           >
             <Button
-              variant="contained"
-              color="primary"
+              variant='contained'
+              color='primary'
               sx={{
-                position: "absolute",
-                top: "10px",
-                right: "10px",
+                position: 'absolute',
+                top: '10px',
+                right: '10px',
                 zIndex: 1,
               }}
               onClick={(e) => {
@@ -200,42 +200,62 @@ const Tile = ({
               Back
             </Button>
             <Typography
-              variant="h5"
-              component="div"
+              variant='h5'
+              component='div'
               sx={{
-                color: "#303030",
+                color: '#303030',
               }}
             >
               DESCRIPTION
             </Typography>
             <hr
               style={{
-                width: "100%",
-                height: "1px",
-                backgroundColor: "#303030",
+                width: '100%',
+                height: '1px',
+                backgroundColor: '#303030',
               }}
             />
 
-            <Typography variant="body1">{app.description}</Typography>
+            <Typography variant='body1'>{app.description}</Typography>
             <div>
               <div
                 style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  marginTop: "40px",
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  marginTop: '40px',
                 }}
               >
                 <Typography
-                  variant="caption"
-                  sx={{ color: "#777", paddingRight: "50px" }}
+                  variant='caption'
+                  sx={{ color: '#777', paddingRight: '50px' }}
                 >
                   <em>Created At: </em>
-                  {app.created_at ? app.created_at.slice(0, 10) : "-"}
+                  {app.created_at
+                    ? new Date(app.created_at).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'numeric',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit',
+                        timeZoneName: 'short',
+                      })
+                    : '-'}
                 </Typography>
 
-                <Typography variant="caption" sx={{ color: "#777" }}>
+                <Typography variant='caption' sx={{ color: '#777' }}>
                   <em>Updated At: </em>
-                  {app.updated_at ? app.updated_at.slice(0, 10) : "-"}
+                  {app.updated_at
+                    ? new Date(app.updated_at).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'numeric',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit',
+                        timeZoneName: 'short',
+                      })
+                    : '-'}
                 </Typography>
               </div>
             </div>

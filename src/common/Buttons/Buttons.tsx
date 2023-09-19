@@ -8,7 +8,14 @@ import {
   Snackbar,
   Switch,
   Tooltip,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Button,
 } from '@mui/material';
+
 import { useEffect, useState } from 'react';
 import FormModal from '../FormModal';
 import { App } from '../../services/appService';
@@ -66,6 +73,8 @@ const Buttons = ({
 
   const [reqError, setReqError] = useState<string | undefined>(undefined);
 
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
+
   const navigate = useNavigate();
 
   const deleteApp = useModifyData(
@@ -84,8 +93,17 @@ const Buttons = ({
   );
   const onDelete = (e) => {
     e.stopPropagation();
+    setOpenDialog(true);
+    //deleteApp.mutate({ id: selectedEntity._id, entity: { is_deleted: true } });
+  };
 
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+
+  const handleDelete = () => {
     deleteApp.mutate({ id: selectedEntity._id, entity: { is_deleted: true } });
+    setOpenDialog(false);
   };
 
   const toggleApp = useModifyData(
@@ -189,6 +207,32 @@ const Buttons = ({
         active={active}
         setPage={setPage}
       />
+      <Dialog
+        open={openDialog}
+        onClose={handleCloseDialog}
+        aria-labelledby='alert-dialog-title'
+        aria-describedby='alert-dialog-description'
+      >
+        <DialogTitle id='alert-dialog-title'>{'Delete'}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id='alert-dialog-description'>
+            Are you sure you want to delete this{' '}
+            {entity.substring(0, entity.length - 1)}?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <ButtonGroup>
+            <Button onClick={handleCloseDialog}>Cancel</Button>
+            <Button
+              onClick={handleDelete}
+              // sx={{ marginLeft: '10px' }}
+              autoFocus
+            >
+              Delete
+            </Button>
+          </ButtonGroup>
+        </DialogActions>
+      </Dialog>
       <Snackbar
         open={reqError !== undefined}
         autoHideDuration={5000}

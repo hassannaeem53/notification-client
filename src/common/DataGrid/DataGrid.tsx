@@ -229,8 +229,38 @@ const DataGrid: React.FC<DataGridProps> = ({
                         />
                         <InfoButton
                           description={item.description}
-                          createdDate={item.created_at.slice(0, 10)}
-                          updatedDate={item.updated_at}
+                          createdDate={
+                            item.created_at
+                              ? new Date(item.created_at).toLocaleDateString(
+                                  'en-US',
+                                  {
+                                    year: 'numeric',
+                                    month: 'numeric',
+                                    day: 'numeric',
+                                    hour: '2-digit',
+                                    minute: '2-digit',
+                                    second: '2-digit',
+                                    timeZoneName: 'short',
+                                  }
+                                )
+                              : ''
+                          }
+                          updatedDate={
+                            item.updated_at
+                              ? new Date(item.updated_at).toLocaleDateString(
+                                  'en-US',
+                                  {
+                                    year: 'numeric',
+                                    month: 'numeric',
+                                    day: 'numeric',
+                                    hour: '2-digit',
+                                    minute: '2-digit',
+                                    second: '2-digit',
+                                    timeZoneName: 'short',
+                                  }
+                                )
+                              : ''
+                          }
                         />
                       </Grid>
                     </Grid>
