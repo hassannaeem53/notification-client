@@ -153,7 +153,6 @@ const Tile = ({
           className='back-card'
           elevation={12}
           sx={{
-            padding: 1,
             backgroundColor: '#EEEEEE',
             borderRadius: 4,
             display: 'flex',
@@ -181,6 +180,7 @@ const Tile = ({
               textAlign: 'center',
               flexDirection: 'column',
               justifyContent: 'center',
+              paddingTop: '-3',
             }}
           >
             <Button
