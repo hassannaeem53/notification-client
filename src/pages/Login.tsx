@@ -18,7 +18,6 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { z } from "zod";
 import HttpService from "../services/httpService";
 import { useNavigate } from "react-router-dom";
-import { AxiosError } from "axios";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 interface LoginInterface {
