@@ -19,6 +19,7 @@ const containerStyle = {
   //   minHeight: '100vh', // Set container height to 100% of viewport height
   display: 'flex',
   flexDirection: 'column', // Arrange children in a column
+  marginTop: '16px', // Push footer to the bottom of the page
 };
 
 const contentStyle = {

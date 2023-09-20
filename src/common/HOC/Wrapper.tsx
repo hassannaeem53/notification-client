@@ -6,7 +6,7 @@ const Wrapper = ({ children }: { children: ReactNode }) => {
   return (
     <div>
       <Header />
-      <div>{children}</div>
+      <div style={{ minHeight: '90vh' }}>{children}</div>
       <Footer />
     </div>
   );
