@@ -49,30 +49,35 @@ const Login = () => {
   };
 
   const handleSubmit = async (e) => {
-    if (emailValidation.length == 0) {
-      e.preventDefault();
+    validateEmail();
+    // if (emailValidation.length == 0) {
+    e.preventDefault();
 
-      //validate
-      // send a request to authentication endpoint
-      const service = new HttpService<LoginInterface>("/auth/login");
-      try {
-        const res = await service.create(formData);
-        localStorage.setItem("token", res as string);
+    //validate
+    // send a request to authentication endpoint
+    const service = new HttpService<LoginInterface>("/auth/login");
+    try {
+      const res = await service.create(formData);
+      localStorage.setItem("token", res as string);
 
-        navigate("/");
-      } catch (err) {
-        setReqError(err?.response?.data.message || err?.message);
-      }
+      navigate("/");
+    } catch (err) {
+      console.log("🚀 ~ file: Login.tsx:65 ~ handleSubmit ~ err:", err);
+      setReqError(err?.response?.data.error || err?.message);
     }
+    // }
+    // else {
+    //   setReqError("Email is not valid");
+    // }
   };
 
   function handleCloseAlert() {
     setReqError(undefined);
   }
 
-  useEffect(() => {
-    validateEmail();
-  }, [formData.email]);
+  // useEffect(() => {
+  //   validateEmail();
+  // }, [formData.email]);
 
   const validateEmail = () => {
     try {
@@ -160,11 +165,11 @@ const Login = () => {
                 autoComplete="on"
                 required
               />
-              {emailValidation.length > 0 && formData.email.length > 0 && (
+              {/* {emailValidation.length > 0 && formData.email.length > 0 && (
                 <Typography variant="subtitle1" color="error">
                   {emailValidation}
                 </Typography>
-              )}
+              )} */}
               <TextField
                 label="Password"
                 fullWidth
