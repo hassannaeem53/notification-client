@@ -278,6 +278,24 @@ const DataGrid: React.FC<DataGridProps> = ({
             setPage={setPage}
           />
         </Grid>
+        {data?.pagination?.totalCount > 0 && (
+          <Typography
+            variant="subtitle1"
+            component="div"
+            sx={{
+              marginRight: "40px",
+              display: "flex",
+              justifyContent: "flex-end", // Align to the right
+              alignItems: "center", // Vertically center the text
+              color: "#2196F3",
+              textAlign: "center",
+            }}
+          >
+            <strong>
+              TOTAL {title.toUpperCase()}: {data?.pagination?.totalCount}
+            </strong>
+          </Typography>
+        )}
         <FormModal
           open={openAddModal}
           setOpen={setOpenAddModal}

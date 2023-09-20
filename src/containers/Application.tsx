@@ -1,4 +1,12 @@
-import { Alert, AlertTitle, Grid, Paper, Skeleton, Slide } from "@mui/material";
+import {
+  Alert,
+  AlertTitle,
+  Grid,
+  Paper,
+  Skeleton,
+  Slide,
+  Typography,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import Tile from "../components/Tile";
 import ErrorIcon from "@mui/icons-material/Error"; // Import the Error icon from Material-UI
@@ -188,12 +196,30 @@ const Application = ({ onSet, onSetName, applicationId }: Props) => {
             </Grid>
           </Slide>
         ))}
+
         <PaginationButtons
           currentPage={page}
           totalPages={apps.pagination?.totalPages}
           setPage={handlePageChange}
         />
       </Grid>
+      {apps?.pagination?.totalCount > 0 && (
+        <Typography
+          variant="subtitle1"
+          component="div"
+          sx={{
+            marginRight: "40px",
+            marginTop: "6px",
+            display: "flex",
+            justifyContent: "flex-end", // Align to the right
+            alignItems: "center", // Vertically center the text
+            color: "#2196F3",
+            textAlign: "center",
+          }}
+        >
+          <strong>TOTAL APPLICATIONS: {apps?.pagination?.totalCount}</strong>
+        </Typography>
+      )}
 
       <FormModal
         open={openAddModal}
