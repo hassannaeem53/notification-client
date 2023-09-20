@@ -44,6 +44,7 @@ export interface DataGridProps {
   applicationId: string;
   setEventId?: React.Dispatch<React.SetStateAction<string>> | undefined;
   eventId: string;
+  setEventDataAvailable?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const DataGrid: React.FC<DataGridProps> = ({
@@ -55,6 +56,7 @@ const DataGrid: React.FC<DataGridProps> = ({
   setEventId,
   applicationId,
   eventId,
+  setEventDataAvailable,
 }) => {
   const [page, setPage] = useState(1);
 
@@ -84,6 +86,13 @@ const DataGrid: React.FC<DataGridProps> = ({
       setSelectedId("");
     }
   }, [parentId]);
+
+  //updating state to decide whether select event info message should be displayed
+  useEffect(() => {
+    if (data?.[title]?.length !== 0)
+      setEventDataAvailable && setEventDataAvailable(true);
+    else setEventDataAvailable && setEventDataAvailable(false);
+  }, [data]);
 
   if (error)
     return (

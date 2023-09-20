@@ -27,10 +27,10 @@ interface Props {
   entityName: string;
   parentId?: string;
   finalPage: number;
-  searchInput: string;
-  sort: string;
-  sortBy: string;
-  active: boolean;
+  searchInput?: string;
+  sort?: string;
+  sortBy?: string;
+  active?: boolean;
   setPage: (page: number) => void;
 }
 

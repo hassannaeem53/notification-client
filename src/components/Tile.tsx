@@ -14,7 +14,7 @@ import ReactCardFlip from "react-card-flip";
 interface Props {
   app: App;
   selectedApp: string | undefined;
-  setSelectedApp: (app: string | undefined) => void;
+  setSelectedApp: React.Dispatch<React.SetStateAction<string>>;
   open: boolean;
   page: number;
   onEdit: () => void;

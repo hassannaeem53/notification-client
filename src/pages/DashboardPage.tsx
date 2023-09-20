@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Alert, Grid } from "@mui/material";
 import Application from "../containers/Application";
 import DataGrid from "../common/DataGrid/DataGrid"; // Import the DataGrid component
@@ -19,10 +19,10 @@ const Dashboard = () => {
     ""
   ); // Add the applicationId state variable
 
-  const [applicationName, setApplicationName] = React.useState<string>(""); // Add the applicationName state variable
+  const [applicationName, setApplicationName] = useState<string>(""); // Add the applicationName state variable
   const [eventId, setEventId] = useSessionStorage("redirectEventId", ""); // Add the eventId state variable
-
-  const [eventName, setEventName] = React.useState<string>(""); // Add the eventName state variable
+  const [eventName, setEventName] = useState<string>(""); // Add the eventName state variable
+  const [eventDataAvailable, setEventDataAvailable] = useState<boolean>(false);
 
   useEffect(() => {
     if (applicationId && !state?.redirectEventId) {
@@ -54,6 +54,7 @@ const Dashboard = () => {
               setEventId={setEventId}
               applicationId={applicationId}
               eventId={eventId}
+              setEventDataAvailable={setEventDataAvailable}
             />
           </Grid>
           {eventId ? (
@@ -69,14 +70,16 @@ const Dashboard = () => {
               </Grid>
             </>
           ) : (
-            <Grid item xs={12}>
-              <Alert
-                severity="info"
-                sx={{ marginTop: "20px", fontSize: "1.2rem" }}
-              >
-                Please select an Event to view Notifications.
-              </Alert>
-            </Grid>
+            eventDataAvailable && (
+              <Grid item xs={12}>
+                <Alert
+                  severity="info"
+                  sx={{ marginTop: "20px", fontSize: "1.2rem" }}
+                >
+                  Please select an Event to view Notifications.
+                </Alert>
+              </Grid>
+            )
           )}
         </>
       ) : (
