@@ -1,18 +1,8 @@
-import {
-  Alert,
-  AlertTitle,
-  Grid,
-  Paper,
-  Skeleton,
-  Snackbar,
-  Slide,
-} from "@mui/material";
+import { Alert, AlertTitle, Grid, Paper, Skeleton, Slide } from "@mui/material";
 import { useEffect, useState } from "react";
 import Tile from "../components/Tile";
-import { AxiosError } from "axios";
 import ErrorIcon from "@mui/icons-material/Error"; // Import the Error icon from Material-UI
 import useData from "../hooks/useData";
-import { App } from "../services/appService";
 import HeaderToolbar from "../common/Toolbar/HeaderToolbar";
 import FormModal from "../common/FormModal";
 import PaginationButtons from "../common/PaginationButtons";
@@ -20,11 +10,12 @@ import PaginationButtons from "../common/PaginationButtons";
 interface Props {
   onSet: (id: string) => void;
   onSetName: (name: string) => void;
+  applicationId: string;
 }
 
-const Application = ({ onSet, onSetName }: Props) => {
+const Application = ({ onSet, onSetName, applicationId }: Props) => {
   const [page, setPage] = useState<number>(1);
-  const [selectedAppId, setSelectedAppId] = useState<string>();
+  const [selectedAppId, setSelectedAppId] = useState<string>(applicationId);
   const [open, setOpen] = useState(false);
   const [openAddModal, setOpenAddModal] = useState<boolean>(false);
   const [searchInput, setSearchInput] = useState<string>("");

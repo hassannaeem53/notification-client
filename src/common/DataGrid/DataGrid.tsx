@@ -41,8 +41,9 @@ export interface DataGridProps {
   onSet?: (id: string) => void;
   parentName?: string;
   setEventName?: (id: string) => void;
-
+  applicationId: string;
   setEventId?: React.Dispatch<React.SetStateAction<string>> | undefined;
+  eventId: string;
 }
 
 const DataGrid: React.FC<DataGridProps> = ({
@@ -52,13 +53,15 @@ const DataGrid: React.FC<DataGridProps> = ({
   setEventName,
   onSet,
   setEventId,
+  applicationId,
+  eventId,
 }) => {
   const [page, setPage] = useState(1);
 
   const [searchInput, setSearchInput] = useState<string>("");
   const [sort, setSort] = useState<string>("asc");
   const [sortby, setSortby] = useState<string>("name");
-  const [selectedId, setSelectedId] = useState<string>("");
+  const [selectedId, setSelectedId] = useState<string>(eventId);
   const [openAddModal, setOpenAddModal] = useState<boolean>(false);
   const [active, setActive] = useState<boolean>(true);
 
@@ -72,16 +75,12 @@ const DataGrid: React.FC<DataGridProps> = ({
     sortby
   );
 
-  const onSetActive = (val: boolean) => {
-    setActive(val);
-  };
-
   useEffect(() => {
     if (searchInput.length) setPage(1); //resetting page to 1 to show search results
   }, [searchInput]);
 
   useEffect(() => {
-    if (parentId) {
+    if (parentId && eventId == "") {
       setSelectedId("");
     }
   }, [parentId]);
@@ -229,6 +228,7 @@ const DataGrid: React.FC<DataGridProps> = ({
                           sort={sort}
                           sortBy={sortby}
                           active={active}
+                          applicationId={applicationId}
                         />
                         <InfoButton
                           description={item.description}

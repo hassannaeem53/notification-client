@@ -62,7 +62,6 @@ const Login = () => {
 
       navigate("/");
     } catch (err) {
-      console.log("🚀 ~ file: Login.tsx:65 ~ handleSubmit ~ err:", err);
       setReqError(err?.response?.data.error || err?.message);
     }
     // }

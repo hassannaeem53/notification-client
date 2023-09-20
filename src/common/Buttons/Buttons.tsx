@@ -29,7 +29,7 @@ export interface Entity {
   description: string;
   is_active: string;
   applicationId?: string;
-  event_id?: string;
+  eventId?: string;
 }
 
 interface Props {
@@ -48,6 +48,7 @@ interface Props {
   sort: string;
   sortBy: string;
   active: boolean;
+  applicationId?: string;
 }
 
 const styles = {};
@@ -66,6 +67,7 @@ const Buttons = ({
   sort,
   sortBy,
   active,
+  applicationId,
 }: Props) => {
   const [checked, setChecked] = useState(isActive);
 
@@ -76,6 +78,8 @@ const Buttons = ({
   const [openDialog, setOpenDialog] = useState<boolean>(false);
 
   const navigate = useNavigate();
+
+  const eventId = entity == "notifications" && selectedEntity.eventId;
 
   const deleteApp = useModifyData(
     page,
@@ -139,7 +143,7 @@ const Buttons = ({
     if (entity === "events" || entity === "applications") setOpen(true);
     else
       navigate(`/notification-preview/${selectedEntity._id}`, {
-        state: { entity: selectedEntity },
+        state: { entity: selectedEntity, applicationId, eventId },
       });
   };
 
