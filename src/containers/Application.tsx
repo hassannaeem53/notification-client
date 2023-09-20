@@ -139,7 +139,10 @@ const Application = ({ onSet, onSetName }: Props) => {
         setSortby={setSortby}
         setOpenAddModal={setOpenAddModal}
         active={active}
-        onSetActive={() => setActive(!active)}
+        onSetActive={() => {
+          setActive(!active);
+          setPage(1);
+        }}
       />
 
       <Grid

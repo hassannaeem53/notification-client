@@ -188,11 +188,11 @@ const Login = () => {
                   ),
                 }}
               />
-              {formData.password.length < 8 && formData.password.length > 0 && (
+              {/* {formData.password.length < 8 && formData.password.length > 0 && (
                 <Typography variant="subtitle1" color="error">
                   Password must be at least 8 characters long
                 </Typography>
-              )}
+              )} */}
               <Button
                 type="submit"
                 variant="contained"
