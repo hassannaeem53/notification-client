@@ -46,7 +46,7 @@ const Dashboard = () => {
   };
 
   return (
-    <Grid container spacing={2} sx={{ padding: 1, minHeight: '100vh' }}>
+    <Grid container spacing={2} sx={{ padding: 1 }}>
       <Grid item sm={12}>
         <Application
           onSet={(id) => setApplicationId(id)}

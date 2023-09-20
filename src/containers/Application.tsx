@@ -6,16 +6,17 @@ import {
   Skeleton,
   Snackbar,
   Slide,
-} from "@mui/material";
-import { useEffect, useState } from "react";
-import Tile from "../components/Tile";
-import { AxiosError } from "axios";
-import ErrorIcon from "@mui/icons-material/Error"; // Import the Error icon from Material-UI
-import useData from "../hooks/useData";
-import { App } from "../services/appService";
-import HeaderToolbar from "../common/Toolbar/HeaderToolbar";
-import FormModal from "../common/FormModal";
-import PaginationButtons from "../common/PaginationButtons";
+  Typography,
+} from '@mui/material';
+import { useEffect, useState } from 'react';
+import Tile from '../components/Tile';
+import { AxiosError } from 'axios';
+import ErrorIcon from '@mui/icons-material/Error'; // Import the Error icon from Material-UI
+import useData from '../hooks/useData';
+import { App } from '../services/appService';
+import HeaderToolbar from '../common/Toolbar/HeaderToolbar';
+import FormModal from '../common/FormModal';
+import PaginationButtons from '../common/PaginationButtons';
 
 interface Props {
   onSet: (id: string) => void;
@@ -27,9 +28,9 @@ const Application = ({ onSet, onSetName }: Props) => {
   const [selectedAppId, setSelectedAppId] = useState<string>();
   const [open, setOpen] = useState(false);
   const [openAddModal, setOpenAddModal] = useState<boolean>(false);
-  const [searchInput, setSearchInput] = useState<string>("");
-  const [sort, setSort] = useState<string>("asc");
-  const [sortby, setSortby] = useState<string>("name");
+  const [searchInput, setSearchInput] = useState<string>('');
+  const [sort, setSort] = useState<string>('asc');
+  const [sortby, setSortby] = useState<string>('name');
   const [previousPage, setPreviousPage] = useState<number | null>(null);
   const [active, setActive] = useState<boolean>(true);
 
@@ -40,7 +41,7 @@ const Application = ({ onSet, onSetName }: Props) => {
     isLoading,
   } = useData(
     page,
-    "applications",
+    'applications',
     active,
     undefined,
     searchInput,
@@ -59,11 +60,11 @@ const Application = ({ onSet, onSetName }: Props) => {
 
   const getSlideDirection = () => {
     if (previousPage === null) {
-      return "left"; // Initial render, slide from the left
+      return 'left'; // Initial render, slide from the left
     } else if (page > previousPage) {
-      return "left"; // Navigating to the next page, slide from the right
+      return 'left'; // Navigating to the next page, slide from the right
     } else {
-      return "right"; // Navigating to the previous page, slide from the left
+      return 'right'; // Navigating to the previous page, slide from the left
     }
   };
 
@@ -83,26 +84,26 @@ const Application = ({ onSet, onSetName }: Props) => {
         md={4}
         lg={3}
         key={index}
-        display="grid"
-        gridAutoFlow="column"
+        display='grid'
+        gridAutoFlow='column'
       >
         <Paper
           elevation={8}
           sx={{
             padding: 1,
-            backgroundColor: "#EEEEEE",
+            backgroundColor: '#EEEEEE',
             borderRadius: 4,
-            display: "flex",
-            minHeight: "15vw",
-            flexDirection: "column",
-            justifyContent: "center",
-            minWidth: "15vw",
+            display: 'flex',
+            minHeight: '15vw',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            minWidth: '15vw',
           }}
         >
-          <Skeleton animation="wave" variant="text" width="60%" />
-          <Skeleton animation="wave" variant="text" width="80%" />
-          <Skeleton animation="wave" variant="text" width="60%" />
-          <Skeleton animation="wave" variant="text" width="80%" />
+          <Skeleton animation='wave' variant='text' width='60%' />
+          <Skeleton animation='wave' variant='text' width='80%' />
+          <Skeleton animation='wave' variant='text' width='60%' />
+          <Skeleton animation='wave' variant='text' width='80%' />
         </Paper>
       </Grid>
     ));
@@ -118,11 +119,11 @@ const Application = ({ onSet, onSetName }: Props) => {
     return (
       <Alert
         iconMapping={{
-          error: <ErrorIcon fontSize="large" />, // Customize the error icon size
+          error: <ErrorIcon fontSize='large' />, // Customize the error icon size
         }}
-        severity="error"
-        variant="outlined"
-        sx={{ marginTop: "20px" }}
+        severity='error'
+        variant='outlined'
+        sx={{ marginTop: '20px' }}
       >
         <AlertTitle>Error</AlertTitle>
         Unable to Fetch Apps<strong> {error.message}</strong>
@@ -133,7 +134,7 @@ const Application = ({ onSet, onSetName }: Props) => {
   return (
     <>
       <HeaderToolbar
-        title={"applications".toUpperCase()}
+        title={'applications'.toUpperCase()}
         onSet={setSearchInput}
         setSort={setSort}
         setSortby={setSortby}
@@ -150,12 +151,12 @@ const Application = ({ onSet, onSetName }: Props) => {
         spacing={3}
         sx={{
           marginTop: 0.05,
-          paddingLeft: "40px",
+          paddingLeft: '40px',
         }}
       >
         {apps?.applications?.length === 0 && (
           <Grid item xs={12}>
-            <Alert severity="info" sx={{ marginTop: "20px" }}>
+            <Alert severity='info' sx={{ marginTop: '20px' }}>
               No Items Found
             </Alert>
           </Grid>
@@ -175,8 +176,8 @@ const Application = ({ onSet, onSetName }: Props) => {
               sm={6}
               md={4}
               lg={3}
-              display="grid"
-              gridAutoFlow="column"
+              display='grid'
+              gridAutoFlow='column'
               key={app._id}
             >
               <Tile
@@ -197,19 +198,37 @@ const Application = ({ onSet, onSetName }: Props) => {
             </Grid>
           </Slide>
         ))}
+
         <PaginationButtons
           currentPage={page}
           totalPages={apps.pagination?.totalPages}
           setPage={handlePageChange}
         />
       </Grid>
+      {apps?.pagination?.totalCount > 0 && (
+        <Typography
+          variant='subtitle1'
+          component='div'
+          sx={{
+            marginRight: '40px',
+            marginTop: '6px',
+            display: 'flex',
+            justifyContent: 'flex-end', // Align to the right
+            alignItems: 'center', // Vertically center the text
+            color: '#2196F3',
+            textAlign: 'center',
+          }}
+        >
+          <strong>TOTAL APPLICATIONS: {apps?.pagination?.totalCount}</strong>
+        </Typography>
+      )}
 
       <FormModal
         open={openAddModal}
         setOpen={setOpenAddModal}
-        title="Add"
+        title='Add'
         page={page}
-        entityName="applications"
+        entityName='applications'
         finalPage={apps.pagination?.totalPages || 1}
         setPage={setPage}
       />
