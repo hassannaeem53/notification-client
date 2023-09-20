@@ -97,7 +97,8 @@ const Buttons = ({
     //deleteApp.mutate({ id: selectedEntity._id, entity: { is_deleted: true } });
   };
 
-  const handleCloseDialog = () => {
+  const handleCloseDialog = (e) => {
+    e.stopPropagation();
     setOpenDialog(false);
   };
 

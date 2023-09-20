@@ -140,6 +140,7 @@ const HeaderToolbar: React.FC<HeaderToolbarProps> = ({
           </Typography>
           {parentName && (
             <div
+              className='large-sort'
               style={{
                 height: '20px',
                 borderLeft: '1px solid white',
@@ -153,6 +154,7 @@ const HeaderToolbar: React.FC<HeaderToolbarProps> = ({
               variant='h6'
               component='div'
               sx={{ flexGrow: 1, color: '#d3d3d3' }}
+              className='large-sort'
             >
               {parentName}
             </Typography>
@@ -166,6 +168,7 @@ const HeaderToolbar: React.FC<HeaderToolbarProps> = ({
             display: 'flex',
             alignItems: 'center',
             marginRight: '16px',
+            marginLeft: '16px',
             backgroundColor: 'rgba(255, 255, 255, 0.1)', // Search box background color
             borderRadius: '4px', // Search box border radius
             padding: '4px 8px', // Search box padding
@@ -224,18 +227,11 @@ const HeaderToolbar: React.FC<HeaderToolbarProps> = ({
             {ascendingOrder ? (
               <Tooltip title='Descending'>
                 <div>
-                  <SortIcon
-                    sx={{
-                      marginLeft: '16px',
-                      cursor: 'pointer',
-                      transform: 'rotate(180deg)',
-                    }}
-                    onClick={toggleSortingOrder}
-                  />
                   <ArrowUpward
                     sx={{
                       cursor: 'pointer',
                       transform: 'rotate(180deg)',
+                      marginTop: '8px',
                     }}
                     onClick={toggleSortingOrder}
                     fontSize='small'
@@ -245,12 +241,8 @@ const HeaderToolbar: React.FC<HeaderToolbarProps> = ({
             ) : (
               <Tooltip title='Ascending'>
                 <div>
-                  <SortIcon
-                    sx={{ marginLeft: '16px', cursor: 'pointer' }}
-                    onClick={toggleSortingOrder}
-                  />
                   <ArrowUpward
-                    sx={{ cursor: 'pointer' }}
+                    sx={{ cursor: 'pointer', marginTop: '8px' }}
                     onClick={toggleSortingOrder}
                     fontSize='small'
                   />
