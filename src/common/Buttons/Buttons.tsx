@@ -1,5 +1,5 @@
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 import {
   Alert,
   Box,
@@ -14,14 +14,14 @@ import {
   DialogContentText,
   DialogTitle,
   Button,
-} from '@mui/material';
+} from "@mui/material";
 
-import { useEffect, useState } from 'react';
-import FormModal from '../FormModal';
-import { App } from '../../services/appService';
-import useModifyData from '../../hooks/useModifyData';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from "react";
+import FormModal from "../FormModal";
+import { App } from "../../services/appService";
+import useModifyData from "../../hooks/useModifyData";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import { useNavigate } from "react-router-dom";
 
 export interface Entity {
   _id: string;
@@ -88,7 +88,7 @@ const Buttons = ({
     (page: number | undefined) => {
       setPage(page || 1);
       setSelectedApp && setSelectedApp(undefined);
-      entity === 'events' && setEventId && setEventId(undefined);
+      entity === "events" && setEventId && setEventId(undefined);
     }
   );
   const onDelete = (e) => {
@@ -114,11 +114,11 @@ const Buttons = ({
     sort,
     sortBy,
     parentId,
-    () => {
+    (page: number) => {
       setChecked(!checked);
       setPage(page || 1);
       setSelectedApp && setSelectedApp(undefined);
-      entity === 'events' && setEventId && setEventId(undefined);
+      entity === "events" && setEventId && setEventId(undefined);
     }
   );
 
@@ -135,7 +135,7 @@ const Buttons = ({
 
   const onEdit = (e) => {
     e.stopPropagation();
-    if (entity === 'events' || entity === 'applications') setOpen(true);
+    if (entity === "events" || entity === "applications") setOpen(true);
     else
       navigate(`/notification-preview/${selectedEntity._id}`, {
         state: { entity: selectedEntity },
@@ -165,29 +165,29 @@ const Buttons = ({
     <>
       <Box
         sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
         }}
       >
-        <ButtonGroup size='medium' aria-label='medium button group' sx={styles}>
-          <Tooltip title='Active Status'>
+        <ButtonGroup size="medium" aria-label="medium button group" sx={styles}>
+          <Tooltip title="Active Status">
             <Switch
               checked={checked}
               onClick={onToggle}
               //color='primary'
-              size='medium'
-              checkedIcon={<CheckCircleIcon color='primary' />}
+              size="medium"
+              checkedIcon={<CheckCircleIcon color="primary" />}
             />
           </Tooltip>
-          <Tooltip title='Edit'>
-            <IconButton color='inherit' onClick={onEdit}>
-              <EditIcon color='action' />
+          <Tooltip title="Edit">
+            <IconButton color="inherit" onClick={onEdit}>
+              <EditIcon color="action" />
             </IconButton>
           </Tooltip>
-          <Tooltip title='Delete'>
-            <IconButton color='inherit' onClick={onDelete}>
-              <DeleteIcon color='error' />
+          <Tooltip title="Delete">
+            <IconButton color="inherit" onClick={onDelete}>
+              <DeleteIcon color="error" />
             </IconButton>
           </Tooltip>
         </ButtonGroup>
@@ -195,7 +195,7 @@ const Buttons = ({
       <FormModal
         open={open}
         setOpen={setOpen}
-        title='Edit'
+        title="Edit"
         selectedEntity={selectedEntity}
         page={page}
         entityName={entity}
@@ -210,13 +210,13 @@ const Buttons = ({
       <Dialog
         open={openDialog}
         onClose={handleCloseDialog}
-        aria-labelledby='alert-dialog-title'
-        aria-describedby='alert-dialog-description'
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id='alert-dialog-title'>{'Delete'}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{"Delete"}</DialogTitle>
         <DialogContent>
-          <DialogContentText id='alert-dialog-description'>
-            Are you sure you want to delete this{' '}
+          <DialogContentText id="alert-dialog-description">
+            Are you sure you want to delete this{" "}
             {entity.substring(0, entity.length - 1)}?
           </DialogContentText>
         </DialogContent>
@@ -237,14 +237,14 @@ const Buttons = ({
         open={reqError !== undefined}
         autoHideDuration={5000}
         onClose={handleCloseAlert}
-        message={reqError || ''}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        message={reqError || ""}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
         <Alert
           onClose={handleCloseAlert}
-          severity='error'
-          variant='filled'
-          sx={{ width: '100%' }}
+          severity="error"
+          variant="filled"
+          sx={{ width: "100%" }}
         >
           {reqError}
         </Alert>

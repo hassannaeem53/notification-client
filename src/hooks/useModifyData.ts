@@ -50,7 +50,17 @@ const useModifyData = <T>(
         onUpdate && onUpdate(page);
       }
 
-      if (!variables.entity.is_deleted) onUpdate && onUpdate();
+      //for handling toggle
+      if (
+        !variables.entity.is_deleted &&
+        context?.previousData[entityName]?.length !== 1
+      )
+        onUpdate && onUpdate(page);
+      else if (
+        !variables.entity.is_deleted &&
+        context?.previousData[entityName]?.length == 1
+      )
+        onUpdate && onUpdate(page - 1);
 
       queryClient.invalidateQueries({ queryKey: invalidateQueryKey });
     },
