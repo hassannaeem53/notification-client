@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+// import axios from 'axios';
 import { DataFunc, SuggestionDataItem } from 'react-mentions';
+import apiClient from '../services/apiClient';
 
 const useFetchTags = () => {
   const [tags, setTags] = useState<SuggestionDataItem[] | DataFunc>([]);
@@ -10,7 +11,7 @@ const useFetchTags = () => {
   useEffect(() => {
     const fetchTagsFromDatabase = async () => {
       try {
-        const tagsResponse = await axios.get('http://localhost:3000/api/tags');
+        const tagsResponse = await apiClient.get('/tags');
         const tags = tagsResponse.data;
 
         const tagData = tags.map((tag) => ({

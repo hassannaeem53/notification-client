@@ -17,6 +17,7 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ErrorIcon from '@mui/icons-material/Error'; // Import the Error icon from Material-UI
 import HeaderToolbar from '../common/Toolbar/HeaderToolbar';
+import apiClient from '../services/apiClient';
 
 interface Event {
   _id: string;
@@ -47,8 +48,8 @@ const EventsGrid = () => {
       page: page, // Use the page state variable here
     };
 
-    return axios
-      .get<PaginationResponse>('http://localhost:3000/api/events', {
+    return apiClient
+      .get<PaginationResponse>('/events', {
         params: queryParams,
       })
       .then((res) => res.data);
