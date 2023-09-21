@@ -137,6 +137,7 @@ const Application = ({ onSet, onSetName, applicationId }: Props) => {
         setSort={setSort}
         setSortby={setSortby}
         setOpenAddModal={setOpenAddModal}
+        setPage={setPage}
         active={active}
         onSetActive={() => {
           setActive(!active);

@@ -125,6 +125,7 @@ const DataGrid: React.FC<DataGridProps> = ({
           setActive(!active);
           setPage(1);
         }}
+        setPage={setPage}
       />
       <Container
         style={{ marginTop: "20px", paddingLeft: "20px", paddingRight: "20px" }}
