@@ -1,6 +1,5 @@
 import axios from 'axios';
-
-const API_BASE_URL = 'http://localhost:3000/'; // Replace with your actual API base URL
+import apiClient from './apiClient';
 
 // Create a function to send a POST request to create a notification
 
@@ -14,10 +13,7 @@ interface NotificationData {
 const createNotification = async (notificationData: NotificationData) => {
   try {
     notificationData.eventId = '64e5b480047e075f9012e089';
-    const response = await axios.post(
-      `${API_BASE_URL}api/notifications`,
-      notificationData
-    );
+    const response = await apiClient.post('/notifications', notificationData);
 
     if (response.status === 201) {
       // Notification created successfully
