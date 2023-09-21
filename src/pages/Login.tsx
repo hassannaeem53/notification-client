@@ -36,7 +36,7 @@ const Login = () => {
 
   const [reqError, setReqError] = useState<string>();
 
-  const emailSchema = z.string().email();
+  const emailSchema = z.string().email('Please enter a valid email');
 
   const navigate = useNavigate();
 

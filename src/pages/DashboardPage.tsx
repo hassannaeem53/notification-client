@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, Grid } from '@mui/material';
+import { Alert, Grid, Container } from '@mui/material';
 import Application from '../containers/Application';
 import DataGrid from '../common/DataGrid/DataGrid'; // Import the DataGrid component
 import apiClient from '../services/apiClient';
@@ -25,6 +25,7 @@ const Dashboard = () => {
   const [eventId, setEventId] = useSessionStorage('redirectEventId', ''); // Add the eventId state variable
   const [eventName, setEventName] = useState<string>(''); // Add the eventName state variable
   const [eventDataAvailable, setEventDataAvailable] = useState<boolean>(false);
+  const [appDataAvailable, setAppDataAvailable] = useState<boolean>(false);
 
   useEffect(() => {
     if (applicationId && !state?.redirectEventId) {
@@ -33,33 +34,6 @@ const Dashboard = () => {
     }
   }, [applicationId]);
 
-  const fetchEvents = async (page: number) => {
-    const queryParams = {
-      applicationId: applicationId,
-      page: page, // Use the page state variable here
-    };
-
-    return apiClient
-      .get('/events', {
-        params: queryParams,
-      })
-      .then((res) => res.data);
-  };
-
-  // Function to fetch notifications data
-  const fetchNotifications = async (page: number) => {
-    const queryParams = {
-      eventId: eventId,
-      page: page, // Use the page state variable here
-    };
-
-    return apiClient
-      .get('/notifications', {
-        params: queryParams,
-      })
-      .then((res) => res.data);
-  };
-
   return (
     <Grid container spacing={2} sx={{ padding: 1, minHeight: '100vh' }}>
       <Grid item sm={12}>
@@ -67,6 +41,7 @@ const Dashboard = () => {
           onSet={(id) => setApplicationId(id)}
           onSetName={setApplicationName}
           applicationId={applicationId}
+          setAppDataAvailable={setAppDataAvailable}
         />
       </Grid>
 
@@ -112,12 +87,17 @@ const Dashboard = () => {
           )}
         </>
       ) : (
-        // Render a message or component when applicationId is not set
-        <Grid item xs={12}>
-          <Alert severity='info' sx={{ marginTop: '20px', fontSize: '1.2rem' }}>
-            Please select an Application to view Events.
-          </Alert>
-        </Grid>
+        appDataAvailable && (
+          // Render a message or component when applicationId is not set
+          <Grid item xs={12}>
+            <Alert
+              severity='info'
+              sx={{ marginTop: '20px', fontSize: '1.2rem' }}
+            >
+              Please select an Application to view Events.
+            </Alert>
+          </Grid>
+        )
       )}
     </Grid>
   );

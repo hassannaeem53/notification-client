@@ -6,6 +6,10 @@ import {
   CircularProgress,
   Snackbar,
   Alert,
+  Dialog,
+  DialogContent,
+  DialogActions,
+  DialogContentText,
 } from '@mui/material';
 import * as z from 'zod';
 import {
@@ -56,6 +60,16 @@ const NotificationForm: React.FC<Props> = ({
   const { tags: tagData } = useFetchTags();
   const [successSnackbarOpen, setSuccessSnackbarOpen] = useState(false);
 
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const openDialog = () => {
+    setIsDialogOpen(true);
+  };
+
+  const closeDialog = () => {
+    setIsDialogOpen(false);
+  };
+
   useEffect(() => {
     entityData && onChange(entityData);
   }, [entityData, onChange]);
@@ -86,6 +100,25 @@ const NotificationForm: React.FC<Props> = ({
       }, 5000);
     }
   }, [status.success]);
+
+  useEffect(() => {
+    const confirmationMessage =
+      'You have unsaved changes. Are you sure you want to leave?';
+
+    const handleBeforeUnload = (e) => {
+      // Display the confirmation message when the user tries to reload or close the page
+      e.preventDefault();
+      e.returnValue = confirmationMessage; // For Chrome and Firefox
+      return confirmationMessage; // For other browsers
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      // Remove the event listener when the component unmounts
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -119,21 +152,6 @@ const NotificationForm: React.FC<Props> = ({
       } else {
         await createNotification(inputData, false);
       }
-
-      // Reset the form data on successful submission
-      // setFormData((prevData) => ({
-      //   ...prevData,
-      //   name: '',
-      //   description: '',
-      //   templatebody: '',
-      //   templatesubject: '',
-      // }));
-
-      // Set form submission status to true
-
-      // Redirect or navigate to a different page if needed
-      // window.location.href = "/";
-      console.log('status', status);
       // if (status.success) {
       navigate('/', {
         state: {
@@ -153,8 +171,8 @@ const NotificationForm: React.FC<Props> = ({
         setValidationError(errorMessage);
       } else {
         // Handle other errors (e.g., API error or general error)
-        setValidationError(error.message);
-        setApiError(error.message);
+        setValidationError(error.response.data.message);
+        setApiError(error.response.data.message);
       }
 
       // Set form submission status to false
@@ -177,7 +195,7 @@ const NotificationForm: React.FC<Props> = ({
   return (
     <>
       <Paper elevation={3} style={{ padding: '20px' }}>
-        <form onSubmit={handleSubmit} style={{ height: '470px' }}>
+        <form onSubmit={handleSubmit} style={{ height: '500px' }}>
           <TextField
             label='Notification Name'
             variant='outlined'
@@ -219,8 +237,83 @@ const NotificationForm: React.FC<Props> = ({
                 })
               }
               readOnly={false}
-              placeholder='Template Body'
+              placeholder='Template Body*'
               required
+              // customSuggestionsContainer={(props) => (
+              //   <Paper
+              //     elevation={3}
+              //     style={{
+              //       position: 'absolute',
+              //       zIndex: 1,
+              //       marginTop: '10px',
+              //       width: '100%', // Allow the suggestions container to take full width
+              //       overflow: 'auto',
+              //       maxHeight: '200px',
+              //     }}
+              //   >
+              //     {props}
+              //   </Paper>
+              //)}
+              style={{
+                padding: 2,
+                width: '100%',
+                background: '#F5FAFF',
+                resize: 'vertical',
+
+                control: {
+                  backgroundColor: '#F5FAFF',
+                  lineHeight: '20px',
+                  color: '#071B2F',
+                  padding: '8px 12px',
+                  borderRadius: '5px',
+                  border: '1px solid #98CDFF',
+                  boxShadow: 'none',
+                  '&:hover': {
+                    borderColor: '#98CDFF',
+                  },
+                  minHeight: '12rem',
+                },
+                highlighter: {
+                  overflow: 'auto',
+                },
+
+                marginTop: '10px',
+
+                '&multiLine': {
+                  highlighter: {
+                    padding: 9,
+                  },
+                  input: {
+                    padding: 9,
+                    minHeight: 63,
+                    outline: 0,
+                    border: 0,
+                  },
+                },
+
+                suggestions: {
+                  list: {
+                    backgroundColor: 'white',
+                    border: '1px solid rgba(0,0,0,0.15)',
+                    fontSize: '15px',
+                    fontWeight: 400,
+                    lineHeight: '20px',
+                    color: '#071B2F',
+                    overflow: 'auto',
+                    maxHeight: 200,
+                    position: 'absolute',
+                    zIndex: 1,
+                  },
+
+                  item: {
+                    padding: '5px 15px',
+                    borderBottom: '1px solid rgba(0,0,0,0.15)',
+                    '&focused': {
+                      backgroundColor: '#cee4e5',
+                    },
+                  },
+                },
+              }}
             >
               <Mention
                 trigger='{{'
@@ -237,7 +330,7 @@ const NotificationForm: React.FC<Props> = ({
             style={{
               display: 'flex',
               justifyContent: 'center',
-              marginTop: '20px',
+              marginTop: '50px',
             }}
           >
             <Button
@@ -252,17 +345,44 @@ const NotificationForm: React.FC<Props> = ({
               variant='contained'
               color='error'
               type='button'
-              onClick={() =>
-                navigate('/', {
-                  state: {
-                    redirectApplicationId: applicationId,
-                    redirectEventId: eventId,
-                  },
-                })
-              }
+              onClick={() => {
+                openDialog();
+              }}
             >
               Cancel
             </Button>
+            <Dialog open={isDialogOpen} onClose={closeDialog}>
+              <DialogContent>
+                <DialogContentText id='alert-dialog-description'>
+                  You have unsaved changes! Are you sure you want to proceed?
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button
+                  variant='contained'
+                  color='primary'
+                  type='button'
+                  onClick={() => {
+                    navigate('/', {
+                      state: {
+                        redirectApplicationId: applicationId,
+                        redirectEventId: eventId,
+                      },
+                    });
+                  }}
+                >
+                  Yes
+                </Button>
+                <Button
+                  variant='contained'
+                  color='error'
+                  type='button'
+                  onClick={closeDialog}
+                >
+                  No
+                </Button>
+              </DialogActions>
+            </Dialog>
           </div>
         </form>
       </Paper>

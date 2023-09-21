@@ -35,7 +35,7 @@ const NotificationPreview: React.FC<Props> = ({ formData }) => {
     >
       <div
         style={{
-          height: '470px',
+          height: '500px',
           overflowY: 'auto',
         }}
       >
