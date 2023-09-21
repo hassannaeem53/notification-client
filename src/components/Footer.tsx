@@ -16,33 +16,31 @@ const iconStyle = {
 };
 
 const containerStyle = {
-  //   minHeight: '100vh', // Set container height to 100% of viewport height
   display: 'flex',
-  flexDirection: 'column', // Arrange children in a column
-  marginTop: '16px', // Push footer to the bottom of the page
+  flexDirection: 'column',
+  marginTop: '16px',
 };
 
 const contentStyle = {
-  flex: 1, // Allow content to grow and push footer down
+  flex: 1,
 };
 
 const Footer = () => {
   return (
     <div style={containerStyle}>
-      <div style={contentStyle}>
-        {/* Your page content goes here */}
-        {/* Adjust content height as needed */}
-      </div>
+      <div style={contentStyle}></div>
       <footer style={footerStyle}>
         <Container maxWidth='lg'>
           <Grid container spacing={2} alignItems='center'>
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={6} sm={6}>
               <Typography variant='body1'>© 2023 GoSaas Inc</Typography>
             </Grid>
-            <Grid item xs={12} sm={6} container justifyContent='flex-end'>
-              <FacebookIcon style={iconStyle} />
-              <TwitterIcon style={iconStyle} />
-              <LinkedInIcon style={iconStyle} />
+            <Grid item xs={6} sm={6}>
+              <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <FacebookIcon style={iconStyle} />
+                <TwitterIcon style={iconStyle} />
+                <LinkedInIcon style={iconStyle} />
+              </div>
             </Grid>
           </Grid>
         </Container>
