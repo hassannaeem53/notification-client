@@ -257,7 +257,7 @@ const NotificationForm: React.FC<Props> = ({
               style={{
                 padding: 2,
                 width: '100%',
-                background: '#F5FAFF',
+                //background: '#F5FAFF',
                 resize: 'vertical',
 
                 control: {

@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Alert, Grid, Container } from '@mui/material';
 import Application from '../containers/Application';
 import DataGrid from '../common/DataGrid/DataGrid'; // Import the DataGrid component
-import apiClient from '../services/apiClient';
-import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 import { useSessionStorage } from 'usehooks-ts';
 
