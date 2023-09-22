@@ -8,13 +8,7 @@
 
 .custom-mention {
   padding: 8px 12px;
-  background-color: #f0f0f0;
+  /* background-color: #f0f0f0; */
   border-radius: 4px;
   cursor: pointer;
-}
-.custom-mention.selected {
-  background-color: #f0f0f0;
-}
-.custom-mention:hover {
-  background-color: #e0e0e0;
 }

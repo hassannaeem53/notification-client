@@ -112,18 +112,24 @@ const HeaderToolbar: React.FC<HeaderToolbarProps> = ({
       sx={{
         width: '100%',
         marginTop: '20px',
-        backgroundColor: '#2196F3', // Blue background color
+        backgroundColor: '#1565C0', // Blue background color
         color: 'white', // Text color
-        borderRadius: '8px', // Border radius
-        boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)', // Box shadow
-        padding: '8px 16px', // Padding
+        borderRadius: '12px', // Border radius
+        boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.2)', // Box shadow
+        padding: '10px 20px', // Padding
         alignItems: 'center', // Center items vertically
         justifyContent: 'space-between', // Space evenly
         '& .MuiInputBase-input': {
           color: 'white', // Input text color
+          border: '2px solid #64B5F6', // Input border
+          borderRadius: '6px', // Input border radius
+          padding: '8px', // Input padding
         },
         '& .MuiSelect-root': {
           color: 'white', // Select text color
+          background: '#2196F3', // Blue background for the Select
+          borderRadius: '6px', // Select border radius
+          padding: '8px', // Select padding
         },
         '& .MuiSelect-icon': {
           color: 'white', // Select icon color
@@ -173,7 +179,7 @@ const HeaderToolbar: React.FC<HeaderToolbarProps> = ({
             alignItems: 'center',
             marginRight: '16px',
             marginLeft: '16px',
-            backgroundColor: 'rgba(255, 255, 255, 0.1)', // Search box background color
+            //backgroundColor: 'rgba(255, 255, 255, 0.1)', // Search box background color
             borderRadius: '4px', // Search box border radius
             padding: '4px 8px', // Search box padding
           }}
@@ -195,12 +201,14 @@ const HeaderToolbar: React.FC<HeaderToolbarProps> = ({
         </div>
         {/* Filter Dropdown */}
         <div className='small-medium-sort'>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
+          <div
+            style={{ display: 'flex', alignItems: 'center', paddingTop: '5px' }}
+          >
             <Tooltip title='Sort By'>
               <IconButton
                 onClick={handleFilterClick} // Open filter menu on button click
                 color='primary'
-                sx={{ marginLeft: '16px' }}
+                sx={{ marginLeft: '6px' }}
               >
                 <SortByAlpha />
               </IconButton>
@@ -265,7 +273,13 @@ const HeaderToolbar: React.FC<HeaderToolbarProps> = ({
           </div>
         </div>
         <div className='large-sort'>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              paddingTop: '5px',
+            }}
+          >
             <Tooltip title='Sort By'>
               <Select
                 label='Filter'
