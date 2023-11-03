@@ -1,0 +1,19 @@
+/* Styles for large screens (greater than or equal to 1024px) */
+@media (min-width: 1024px) {
+  .large-sort {
+    display: block; /* Display on large screens */
+  }
+  .small-medium-sort {
+    display: none; /* Hide on large screens */
+  }
+}
+
+/* Styles for medium and small screens (less than 1024px) */
+@media (max-width: 1023px) {
+  .large-sort {
+    display: none; /* Hide on medium and small screens */
+  }
+  .small-medium-sort {
+    display: block; /* Display on medium and small screens */
+  }
+}

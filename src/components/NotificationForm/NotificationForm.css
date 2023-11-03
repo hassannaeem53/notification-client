@@ -1,0 +1,14 @@
+/* YourComponent.css */
+.custom-mentions-input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 4px;
+  height: 170px;
+}
+
+.custom-mention {
+  padding: 8px 12px;
+  /* background-color: #f0f0f0; */
+  border-radius: 4px;
+  cursor: pointer;
+}
